@@ -30,6 +30,11 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
+  "pnpm": {
+    "overrides": {
+      "source-map-js@<1.2.2": ">=1.2.2"
+    }
+  },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",
     "@testing-library/dom": "^10.4.2",
