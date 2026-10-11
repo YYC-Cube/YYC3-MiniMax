@@ -1,0 +1,55 @@
+name: YYC³ Quality Gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality-gates:
+    name: 安全扫描 · Lint · 类型 · 依赖图 · 覆盖率 · 构建
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # gitleaks 全历史扫描需要完整提交图
+          fetch-depth: 0
+
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (eslint)
+        run: pnpm lint
+
+      - name: Type gate (tsc --noEmit)
+        run: pnpm typecheck
+
+      - name: Dead code & deps (knip)
+        run: pnpm knip
+
+      - name: Circular dependencies (madge)
+        run: pnpm madge:circular
+
+      - name: Unit tests with coverage gate (vitest)
+        run: pnpm test:coverage
+
+      - name: Production build
+        run: pnpm build

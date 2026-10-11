@@ -1,0 +1,29 @@
+node_modules/
+dist/
+build/
+coverage/
+.pnpm-store/
+.cache/
+.env*
+.vite/
+vite.config.*.timestamp-*
+*.tsbuildinfo
+*-debug.log*
+logs/
+*.log
+.claude-replay.*
+.tmp-*
+/.figma/design-context/
+
+# Platform-managed agentplat state, not project source. In the
+# client-initiated single-repo workspace layout (make's `Path: "."` spec) the
+# repo root IS the workspace root, so these land inside this repo rather than
+# beside it.
+/.plugins/
+/.opencode-skills/
+/.mimosa/
+/.v2c/
+/.video_agent/
+
+# 团队内部资料（含 openclaw identity/密钥形态配置样本），不入远程仓库（gitleaks 31 项告警源）
+docs/YYC3-团队通用-标准规范/

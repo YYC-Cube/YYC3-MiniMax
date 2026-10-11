@@ -1,0 +1,90 @@
+/**
+ * file: Footer.tsx
+ * description: 底部状态栏 · NAS 存储/任务队列/在线率遥测摘要
+ * author: YanYuCloudCube Team
+ * version: v1.0.0
+ * created: 2026-10-11
+ * updated: 2026-10-11
+ * status: active
+ * tags: [component],[ui],[status]
+ *
+ * brief: 指挥舱底栏：存储健康度、队列深度与家族在线率
+ *
+ * dependencies: react, lucide-react
+ * exports: Footer
+ */
+
+import React from 'react';
+import { HardDrive, Server, Zap, ArrowRight, ShieldCheck } from 'lucide-react';
+
+interface FooterProps {
+  currentView: 'P1' | 'P2' | 'P3' | 'P4' | 'P5';
+  onNavigate: (view: 'P1' | 'P2' | 'P3' | 'P4' | 'P5') => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ currentView, onNavigate }) => {
+  return (
+    <footer className="h-9 px-6 border-t border-[#00F0FF]/20 bg-[#0E1018]/90 backdrop-blur-md flex items-center justify-between select-none relative z-30 text-xs">
+      {/* Left: NAS path /mnt/nas */}
+      <div className="flex items-center space-x-3 text-[#9BA3B4]">
+        <div className="flex items-center space-x-1.5 bg-[#0A0A0A]/60 px-2 py-0.5 rounded border border-white/10">
+          <HardDrive size={12} className="text-[#00F0FF]" />
+          <span className="font-mono-num text-[11px] text-white">/mnt/nas/yyc3_pipeline</span>
+          <span className="text-[10px] text-[#00FF88] flex items-center space-x-1 pl-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88]" />
+            <span>万兆 NFSv4.2 挂载</span>
+          </span>
+        </div>
+        <span className="text-[11px] text-[#9BA3B4]/60">|</span>
+        <span className="text-[11px] text-[#9BA3B4]">单一事实源集群: TrueNAS Enterprise</span>
+      </div>
+
+      {/* Middle: Task Queue Count */}
+      <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
+          <Server size={12} className="text-[#BF00FF]" />
+          <span className="text-[#9BA3B4] text-[11px]">全流程活跃任务:</span>
+          <span className="font-mono-num font-bold text-white bg-[#BF00FF]/20 px-2 py-0.5 rounded text-[11px] border border-[#BF00FF]/40 text-glow-purple">
+            42 Active
+          </span>
+          <span className="text-[11px] text-[#9BA3B4] font-mono-num">
+            (流水线并行: 6 / 积压: 6)
+          </span>
+        </div>
+
+        {/* Quick jump CTA based on current view */}
+        {currentView === 'P1' && (
+          <button
+            onClick={() => onNavigate('P2')}
+            className="flex items-center space-x-1 text-[11px] text-[#00F0FF] hover:text-white bg-[#00F0FF]/15 hover:bg-[#00F0FF]/30 px-2.5 py-0.5 rounded transition-all border border-[#00F0FF]/40 cursor-pointer"
+          >
+            <span>进入漫剧工业化生产台</span>
+            <ArrowRight size={11} />
+          </button>
+        )}
+        {currentView === 'P2' && (
+          <button
+            onClick={() => onNavigate('P3')}
+            className="flex items-center space-x-1 text-[11px] text-[#BF00FF] hover:text-white bg-[#BF00FF]/15 hover:bg-[#BF00FF]/30 px-2.5 py-0.5 rounded transition-all border border-[#BF00FF]/40 cursor-pointer"
+          >
+            <span>查看 ReAct-C 九步编排视图</span>
+            <ArrowRight size={11} />
+          </button>
+        )}
+      </div>
+
+      {/* Right: 8 Agent Online Rate */}
+      <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-1.5 bg-[#00FF88]/10 px-2 py-0.5 rounded border border-[#00FF88]/30">
+          <Zap size={11} className="text-[#00FF88]" />
+          <span className="text-[#9BA3B4] text-[11px]">8 Agent 在线率:</span>
+          <span className="font-mono-num font-bold text-[#00FF88] text-[11px]">100% (8/8 在线)</span>
+        </div>
+        <div className="flex items-center space-x-1 text-[11px] text-[#9BA3B4]">
+          <ShieldCheck size={12} className="text-[#00F0FF]" />
+          <span>合规校验: PASS</span>
+        </div>
+      </div>
+    </footer>
+  );
+};

@@ -1,0 +1,301 @@
+/**
+ * file: index.css
+ * description: 全局样式 · Tailwind v4 入口/霓虹主题变量/动效 keyframes
+ * author: YanYuCloudCube Team
+ * version: v1.0.0
+ * created: 2026-10-11
+ * updated: 2026-10-11
+ * status: active
+ * tags: [style],[theme],[global]
+ *
+ * brief: 指挥舱霓虹主题单一来源；全局动效 keyframes 集中声明
+ *
+ * details:
+ * - Tailwind v4 经 @import 引入（无 tailwind.config）
+ * - CSS 变量霓虹色板（cyan/purple/pink/green/gold/blue/silver）
+ * - glass-panel / noise-overlay / command-bg 主题工具层
+ * - 全站动画 keyframes（fadeIn/fade-in-up/particle-flow 等）
+ *
+ * dependencies: tailwindcss v4
+ * notes: 由 main.tsx 引入；新增动画类名必须与 keyframes 成对出现
+ */
+
+/* 字体本地化（@fontsource-variable）：零公网依赖，内网/离线可用；fontsource 默认 font-display: swap */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+@import '@fontsource-variable/noto-sans-sc';
+
+@import 'tailwindcss';
+
+:root {
+  --neon-cyan: #00f0ff;
+  --neon-purple: #bf00ff;
+  --neon-pink: #ff006e;
+  --neon-green: #00ff88;
+  --neon-gold: #ffd700;
+  --neon-blue: #00bfff;
+  --neon-silver: #c0c0c0;
+  --text-primary: #ffffff;
+  --text-secondary: #9ba3b4;
+  --panel-bg: rgba(16, 18, 28, 0.76);
+  --panel-border: 1px solid rgba(0, 240, 255, 0.25);
+  --font-inter: 'Inter Variable', 'Inter', 'Noto Sans SC Variable', 'Noto Sans SC', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', monospace;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0a0a0a;
+  color: #ffffff;
+  font-family: var(--font-inter);
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Background Noise and Radial Nebula Glow */
+.command-bg {
+  background-color: #0a0a0a;
+  background-image:
+    radial-gradient(circle at 50% 45%, rgba(191, 0, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 191, 255, 0.06) 0%, transparent 55%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    32px 32px,
+    32px 32px;
+}
+
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Monospace font utility */
+.font-mono-num {
+  font-family: var(--font-mono);
+  font-feature-settings:
+    'tnum' on,
+    'zero' on;
+}
+
+/* Panel glass and border styling */
+.glass-panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 240, 255, 0.22);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.45),
+    0 0 12px 0 rgba(191, 0, 255, 0.12);
+}
+
+.glass-panel-subtle {
+  background: rgba(14, 16, 24, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-hover {
+  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  border-color: rgba(0, 240, 255, 0.45);
+  box-shadow:
+    0 10px 36px 0 rgba(0, 0, 0, 0.6),
+    0 0 16px 0 rgba(191, 0, 255, 0.25);
+}
+
+/* Glow effects matching constraint:外发光 blur 8–16px */
+.glow-cyan {
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+}
+.glow-cyan-sm {
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+.glow-purple {
+  box-shadow: 0 0 14px rgba(191, 0, 255, 0.5);
+}
+.glow-pink {
+  box-shadow: 0 0 14px rgba(255, 0, 110, 0.55);
+}
+.glow-green {
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.65);
+}
+.text-glow-purple {
+  text-shadow: 0 0 12px rgba(191, 0, 255, 0.65);
+}
+.text-glow-pink {
+  text-shadow: 0 0 10px rgba(255, 0, 110, 0.65);
+}
+.text-glow-green {
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.65);
+}
+
+/* Animations specified in prompt */
+@keyframes pulse-breath {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes slow-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes reverse-slow-rotate {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes alert-flash {
+  0%,
+  100% {
+    border-color: rgba(255, 0, 110, 0.85);
+    box-shadow: 0 0 16px rgba(255, 0, 110, 0.7);
+    transform: translateX(0);
+  }
+  25% {
+    border-color: rgba(255, 0, 110, 0.3);
+    box-shadow: none;
+    transform: translateX(-2px);
+  }
+  75% {
+    border-color: rgba(255, 0, 110, 0.95);
+    box-shadow: 0 0 20px rgba(255, 0, 110, 0.8);
+    transform: translateX(2px);
+  }
+}
+
+@keyframes cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes float-widget {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.animate-pulse-breath {
+  animation: pulse-breath 2s infinite ease-in-out;
+}
+
+.animate-slow-rotate {
+  animation: slow-rotate 60s linear infinite;
+}
+
+.animate-medium-rotate {
+  animation: slow-rotate 25s linear infinite;
+}
+
+.animate-reverse-rotate {
+  animation: reverse-slow-rotate 40s linear infinite;
+}
+
+.animate-alert-flash {
+  animation: alert-flash 0.5s ease-in-out infinite;
+}
+
+.animate-cursor {
+  animation: cursor-blink 0.8s infinite;
+}
+
+.animate-bounce-subtle {
+  animation: float-widget 2.4s ease-in-out infinite;
+}
+
+/* View transition fade (used by App.tsx animate-[fadeIn_*]) */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Card / message entrance (used by inline animation: 'fade-in-up *') */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pipeline connector particle flowing left -> right across the 20px arrow slot */
+@keyframes particle-flow-cw {
+  0% {
+    left: -2px;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    left: 22px;
+    opacity: 0;
+  }
+}
+
+/* Custom scrollbars for inner log and chat panels */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.2);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 240, 255, 0.5);
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<!--
+  file: index.html
+  description: HTML 壳 · #root 挂载点与站点元信息挂载目标
+  author: YanYuCloudCube Team
+  version: v1.0.0
+  created: 2026-10-11
+  updated: 2026-10-11
+  status: active
+  tags: [html],[shell],[entry]
+
+  notes: title/lang/图标由 vite.config.ts 依 site.json 构建期注入
+-->
+<html lang="<!-- figma:lang -->">
+  <head>
+    <!-- figma:head-start -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><!-- figma:title --></title>
+    <!-- figma:head-end -->
+  </head>
+  <body>
+    <!-- figma:body-start -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <!-- figma:body-end -->
+  </body>
+</html>
