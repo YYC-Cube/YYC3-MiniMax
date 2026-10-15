@@ -14,10 +14,17 @@
  */
 
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    // 与 tsconfig paths / Next 默认对齐：src/app 等源码使用 @/ 别名导入（Next.js 16 迁移）
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
   test: {
     environment: 'happy-dom',
     include: ['tests/**/*.test.{ts,tsx}'],
@@ -33,9 +40,6 @@ export default defineConfig({
       // 且 coverage-v8 rolldown 对未导入 JSX 文件 remap 会 PARSE_ERROR，见 P2 验收），业务视图不受影响
       exclude: [
         'src/vite-env.d.ts',
-        'src/index.css',
-        'src/app/globals.css',
-        'src/main.tsx',
         'src/services/pwa.ts',
         'src/app/**',
         'src/**/.DS_Store',

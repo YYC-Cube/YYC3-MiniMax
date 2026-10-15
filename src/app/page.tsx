@@ -1,32 +1,32 @@
 /**
  * file: app/page.tsx
- * description: 根路由 · P1 家庭中枢视图挂载
+ * description: 根路由 · P1 家庭中枢（时钟环）
  * author: YanYuCloudCube Team
- * version: v0.1.0
+ * version: v1.0.0
  * created: 2026-10-15
  * updated: 2026-10-15
- * status: wip
+ * status: active
  * tags: [app-router],[page],[p1]
  *
- * brief: P1 最小壳（'use client' 保守策略：视图树整体客户端，见清单 §5.5）；P3 拆分五路由后重构
+ * brief: 静态导出首页；onSelectAgent 唤起 W1，onNavigate 走指挥链路由
  *
- * dependencies: P1FamilyCenter
+ * dependencies: P1FamilyCenter, CommandCenterContext
  */
 
 'use client'
 
 import { P1FamilyCenter } from '@/views/P1FamilyCenter'
-import { useState } from 'react'
+import { useCommandCenter } from './CommandCenterContext'
 
 export default function Page() {
-  // P1 最小壳：Agent 选中态本地暂存；P3 拆五路由后上移 CommandCenterContext
-  const [, setActiveAgentId] = useState<string | null>(null)
+  const { setActiveAgentId, setIsWidgetOpen, navigate } = useCommandCenter()
   return (
     <P1FamilyCenter
-      onSelectAgent={setActiveAgentId}
-      onNavigate={() => {
-        /* 路由桥接在 P3 接入；当前最小壳仅承载 P1 视图 */
+      onSelectAgent={(id) => {
+        setActiveAgentId(id)
+        setIsWidgetOpen(true)
       }}
+      onNavigate={navigate}
     />
   )
 }

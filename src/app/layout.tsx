@@ -1,21 +1,28 @@
 /**
  * file: app/layout.tsx
- * description: 根布局 · 站点元信息 12 项映射（迁移自 index.html + site.json，见评估清单 §5.2）
+ * description: 根布局 · 站点元信息 12 项映射 + 指挥舱 Provider/Shell 挂载
  * author: YanYuCloudCube Team
- * version: v1.0.0
+ * version: v1.1.0
  * created: 2026-10-15
  * updated: 2026-10-15
  * status: active
  * tags: [app-router],[layout],[metadata]
  *
- * brief: Metadata/Viewport API 声明式 head；Bootstrap 副作用引导；全局样式单一入口
+ * brief: Metadata/Viewport API 声明式 head；CommandCenterProvider（五态）→ CommandShell（全局壳）
  *
- * dependencies: next, globals.css, Bootstrap
+ * details:
+ * - UniversalWidget 由 CommandShell 挂载，跨路由唯一实例
+ * - LegacyViewBridge 处理 ?view= 旧深链（PWA 快捷方式/历史外链）
+ *
+ * dependencies: next, globals.css, Bootstrap, CommandCenterContext, CommandShell
  */
 
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import { Bootstrap } from './Bootstrap'
+import { CommandCenterProvider } from './CommandCenterContext'
+import { CommandShell } from './CommandShell'
+import { LegacyViewBridge } from './LegacyViewBridge'
 import './globals.css'
 
 const SITE_TITLE = 'YYC³ AI FAMILY · 漫剧工业化指挥中心'
@@ -58,7 +65,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="zh-CN">
       <body>
         <Bootstrap />
-        {children}
+        <CommandCenterProvider>
+          <CommandShell>{children}</CommandShell>
+        </CommandCenterProvider>
+        <LegacyViewBridge />
       </body>
     </html>
   )

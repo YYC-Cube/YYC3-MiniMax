@@ -1,16 +1,20 @@
 /**
  * file: Header.tsx
- * description: 顶部导航 · 实时时钟/视图切换/全局状态灯
+ * description: 顶部导航 · 实时时钟/路由导航（Next Link 化）/全局状态灯
  * author: YanYuCloudCube Team
- * version: v1.0.0
+ * version: v2.0.0
  * created: 2026-10-11
- * updated: 2026-10-11
+ * updated: 2026-10-15
  * status: active
- * tags: [component],[ui],[layout]
+ * tags: [component],[ui],[navigation]
  *
  * brief: 指挥舱顶栏：品牌标识、P1-P5 导航、系统时间与在线状态
  *
- * dependencies: react, lucide-react
+ * details:
+ * - Next.js 16 迁移：onViewChange 回调 → Link 路由跳转；currentView props → usePathname 派生
+ * - scaleMode 切换仍走 CommandCenterContext（非路由语义）
+ *
+ * dependencies: react, next/link, next/navigation, lucide-react
  * exports: Header
  */
 
@@ -23,23 +27,28 @@ import {
   Sparkles,
   Workflow
 } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { VIEW_PATHS, type ViewId } from '@/app/CommandCenterContext';
 import { BrandMark } from './BrandMark';
 import { PwaInstallButton } from './PwaInstallButton';
 
 interface HeaderProps {
-  currentView: 'P1' | 'P2' | 'P3' | 'P4' | 'P5';
-  onViewChange: (view: 'P1' | 'P2' | 'P3' | 'P4' | 'P5') => void;
   scaleMode: 'fit' | '1080p';
   onToggleScaleMode: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  currentView,
-  onViewChange,
-  scaleMode,
-  onToggleScaleMode,
-}) => {
+const NAV_ITEMS: Array<{ id: ViewId; label: string; sub: string; icon: typeof Sparkles }> = [
+  { id: 'P1', label: 'P1 时钟环中心', sub: 'AI Family', icon: Sparkles },
+  { id: 'P2', label: 'P2 漫剧生产台', sub: '六阶段流水线', icon: Workflow },
+  { id: 'P3', label: 'P3 ReAct-C 编排', sub: '九步闭环', icon: Radio },
+  { id: 'P4', label: 'P4 算力监控台', sub: '双DGX+Mac+NAS', icon: Cpu },
+  { id: 'P5', label: 'P5 质检与安全', sub: '门禁与脱敏', icon: ShieldAlert },
+];
+
+export const Header: React.FC<HeaderProps> = ({ scaleMode, onToggleScaleMode }) => {
+  const pathname = usePathname();
   const [timeStr, setTimeStr] = useState<string>('00:00:00');
 
   useEffect(() => {
@@ -55,20 +64,12 @@ export const Header: React.FC<HeaderProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  const navItems = [
-    { id: 'P1' as const, label: 'P1 时钟环中心', sub: 'AI Family', icon: Sparkles },
-    { id: 'P2' as const, label: 'P2 漫剧生产台', sub: '六阶段流水线', icon: Workflow },
-    { id: 'P3' as const, label: 'P3 ReAct-C 编排', sub: '九步闭环', icon: Radio },
-    { id: 'P4' as const, label: 'P4 算力监控台', sub: '双DGX+Mac+NAS', icon: Cpu },
-    { id: 'P5' as const, label: 'P5 质检与安全', sub: '门禁与脱敏', icon: ShieldAlert },
-  ];
-
   return (
     <header className="h-14 px-6 border-b border-[#00F0FF]/25 bg-[#10121C]/85 backdrop-blur-md flex items-center justify-between select-none relative z-40">
-      {/* Left: YYC³ Branding */}
+      {/* Left: YYC³ Branding（→ 根路由） */}
       <div className="flex items-center space-x-3.5">
-        <div
-          onClick={() => onViewChange('P1')}
+        <Link
+          href={VIEW_PATHS.P1}
           className="cursor-pointer group flex items-center space-x-2.5"
         >
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#FF006E] p-[1.5px] shadow-[0_0_12px_rgba(0,240,255,0.4)] group-hover:shadow-[0_0_16px_rgba(191,0,255,0.7)] transition-all">
@@ -89,18 +90,18 @@ export const Header: React.FC<HeaderProps> = ({
               8 拟人化 Agent 协同 · 工业化漫剧指挥中心
             </span>
           </div>
-        </div>
+        </Link>
       </div>
 
-      {/* Middle: 5 Screen Navigation Tabs */}
+      {/* Middle: 5 Screen Navigation Tabs（路由跳转 + pathname 高亮） */}
       <nav className="flex items-center space-x-1.5 bg-[#0D0F18]/90 p-1 rounded-xl border border-white/10 shadow-inner">
-        {navItems.map((item) => {
-          const isActive = currentView === item.id;
+        {NAV_ITEMS.map((item) => {
+          const isActive = pathname === VIEW_PATHS[item.id];
           const Icon = item.icon;
           return (
-            <button
+            <Link
               key={item.id}
-              onClick={() => onViewChange(item.id)}
+              href={VIEW_PATHS[item.id]}
               className={`relative px-3.5 py-1.5 rounded-lg flex items-center space-x-2 text-xs font-medium transition-all duration-200 cursor-pointer ${isActive
                 ? 'bg-gradient-to-r from-[#00F0FF]/20 to-[#BF00FF]/20 text-white border border-[#00F0FF]/50 shadow-[0_0_12px_rgba(0,240,255,0.25)]'
                 : 'text-[#9BA3B4] hover:text-white hover:bg-white/5 border border-transparent'
@@ -111,7 +112,7 @@ export const Header: React.FC<HeaderProps> = ({
               {isActive && (
                 <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-[#00F0FF] via-[#BF00FF] to-[#FF006E] rounded-full" />
               )}
-            </button>
+            </Link>
           );
         })}
       </nav>

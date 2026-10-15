@@ -1,28 +1,36 @@
 /**
  * file: Footer.tsx
- * description: 底部状态栏 · NAS 存储/任务队列/在线率遥测摘要
+ * description: 底部状态栏 · NAS 存储/任务队列/在线率遥测摘要 + 路由 CTA
  * author: YanYuCloudCube Team
- * version: v1.0.0
+ * version: v2.0.0
  * created: 2026-10-11
- * updated: 2026-10-11
+ * updated: 2026-10-15
  * status: active
  * tags: [component],[ui],[status]
  *
- * brief: 指挥舱底栏：存储健康度、队列深度与家族在线率
+ * brief: 指挥舱底栏：存储健康度、队列深度、家族在线率与视图快捷跳转
  *
- * dependencies: react, lucide-react
+ * details:
+ * - Next.js 16 迁移：onNavigate 回调 → CommandCenterContext.navigate（编程式路由）
+ * - currentView props → usePathname 派生
+ *
+ * dependencies: react, next/navigation, lucide-react, CommandCenterContext
  * exports: Footer
  */
 
+import { ArrowRight, HardDrive, Server, ShieldCheck, Zap } from 'lucide-react';
 import React from 'react';
-import { HardDrive, Server, Zap, ArrowRight, ShieldCheck } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { useCommandCenter, type ViewId } from '@/app/CommandCenterContext';
 
-interface FooterProps {
-  currentView: 'P1' | 'P2' | 'P3' | 'P4' | 'P5';
-  onNavigate: (view: 'P1' | 'P2' | 'P3' | 'P4' | 'P5') => void;
-}
+export const Footer: React.FC = () => {
+  const pathname = usePathname();
+  const { navigate } = useCommandCenter();
 
-export const Footer: React.FC<FooterProps> = ({ currentView, onNavigate }) => {
+  /** pathname → ViewId（视图 CTA 依赖） */
+  const currentView = (Object.entries(VIEW_PATH_MAP).find(([, p]) => p === pathname)?.[0] ??
+    'P1') as ViewId;
+
   return (
     <footer className="h-9 px-6 border-t border-[#00F0FF]/20 bg-[#0E1018]/90 backdrop-blur-md flex items-center justify-between select-none relative z-30 text-xs">
       {/* Left: NAS path /mnt/nas */}
@@ -55,7 +63,7 @@ export const Footer: React.FC<FooterProps> = ({ currentView, onNavigate }) => {
         {/* Quick jump CTA based on current view */}
         {currentView === 'P1' && (
           <button
-            onClick={() => onNavigate('P2')}
+            onClick={() => navigate('P2')}
             className="flex items-center space-x-1 text-[11px] text-[#00F0FF] hover:text-white bg-[#00F0FF]/15 hover:bg-[#00F0FF]/30 px-2.5 py-0.5 rounded transition-all border border-[#00F0FF]/40 cursor-pointer"
           >
             <span>进入漫剧工业化生产台</span>
@@ -64,7 +72,7 @@ export const Footer: React.FC<FooterProps> = ({ currentView, onNavigate }) => {
         )}
         {currentView === 'P2' && (
           <button
-            onClick={() => onNavigate('P3')}
+            onClick={() => navigate('P3')}
             className="flex items-center space-x-1 text-[11px] text-[#BF00FF] hover:text-white bg-[#BF00FF]/15 hover:bg-[#BF00FF]/30 px-2.5 py-0.5 rounded transition-all border border-[#BF00FF]/40 cursor-pointer"
           >
             <span>查看 ReAct-C 九步编排视图</span>
@@ -87,4 +95,13 @@ export const Footer: React.FC<FooterProps> = ({ currentView, onNavigate }) => {
       </div>
     </footer>
   );
+};
+
+/** pathname 反查表（Footer 内部用；与 CommandCenterContext.VIEW_PATHS 同源） */
+const VIEW_PATH_MAP: Record<ViewId, string> = {
+  P1: '/',
+  P2: '/p2/',
+  P3: '/p3/',
+  P4: '/p4/',
+  P5: '/p5/',
 };
