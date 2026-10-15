@@ -30,12 +30,20 @@ export default function Error({
 
   useEffect(() => {
     const tid = createTraceId()
-    setTraceId(tid)
     telemetry.error('ui.render_error', {
       message: error.message,
       traceId: tid,
       data: { digest: error.digest, label: '路由段渲染异常' },
     })
+    // traceId 经微任务派发：telemetry 同步上报不变，UI 更新错开同步 setState
+    // （React Compiler 规则：effect 内禁同步 setState 级联；错误边界为冷路径，延迟不可感知）
+    let cancelled = false
+    queueMicrotask(() => {
+      if (!cancelled) setTraceId(tid)
+    })
+    return () => {
+      cancelled = true
+    }
   }, [error])
 
   return (

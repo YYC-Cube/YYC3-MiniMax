@@ -53,10 +53,13 @@ export const P3ReActWorkflow: React.FC<P3ReActWorkflowProps> = ({
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
 
-  // 选中态跟随活跃步（原 updater 内副作用改由单一数据流同步）
-  useEffect(() => {
+  // 选中态跟随活跃步：render 期派生（React 官方 prop→state 同步模式，取代 effect 内同步
+  // setState）；手动点选/下一步后，下一次活跃步推进仍会覆盖选中——与原 effect 行为一致
+  const [prevActiveIndex, setPrevActiveIndex] = useState<number | null>(null);
+  if (activeStepIndex !== prevActiveIndex) {
+    setPrevActiveIndex(activeStepIndex);
     setSelectedStepIndex(activeStepIndex);
-  }, [activeStepIndex]);
+  }
 
   // 回环演示定时器：卸载清理 + 重复触发防叠（诊断 #7）
   const loopbackTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);

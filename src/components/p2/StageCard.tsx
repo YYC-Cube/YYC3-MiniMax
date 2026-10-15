@@ -14,11 +14,11 @@
  * exports: StageCard
  */
 
+import type { LucideIcon } from 'lucide-react';
 import { ArrowRight, BookOpen, Clapperboard, FileCode2, Image as ImageIcon, Repeat, Video } from 'lucide-react';
-import React from 'react';
-import { AgentAvatar } from '../AgentAvatar';
 import { AGENTS } from '../../data/agents';
 import type { AgentId, PipelineStage, PipelineStageId } from '../../types';
+import { AgentAvatar } from '../AgentAvatar';
 import { StatusLight } from './StatusLight';
 
 interface StageCardProps {
@@ -33,22 +33,15 @@ interface StageCardProps {
   onOpenDetail: (id: PipelineStageId) => void;
 }
 
-function getStageIcon(id: PipelineStageId) {
-  switch (id) {
-    case 'novel':
-      return BookOpen;
-    case 'storyboard':
-      return FileCode2;
-    case 'image':
-      return ImageIcon;
-    case 'video':
-      return Video;
-    case 'render':
-      return Clapperboard;
-    case 'ops':
-      return Repeat;
-  }
-}
+/** 阶段图标映射（模块级常量：组件身份稳定，规避 render 期创建组件的 Compiler 规则违例） */
+const STAGE_ICONS: Record<PipelineStageId, LucideIcon> = {
+  novel: BookOpen,
+  storyboard: FileCode2,
+  image: ImageIcon,
+  video: Video,
+  render: Clapperboard,
+  ops: Repeat,
+};
 
 const STATUS_LABEL: Record<PipelineStage['status'], string> = {
   completed: '已达成',
@@ -66,7 +59,7 @@ export function StageCard({
   onSelectAgent,
   onOpenDetail,
 }: StageCardProps) {
-  const Icon = getStageIcon(stage.id);
+  const Icon = STAGE_ICONS[stage.id];
   const isRunning = stage.status === 'running';
 
   return (

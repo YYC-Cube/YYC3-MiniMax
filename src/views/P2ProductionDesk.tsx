@@ -60,13 +60,15 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
   const gateTestTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Sync selected stage with prop if provided
-  useEffect(() => {
-    if (highlightedStageId) {
-      setSelectedStageId(highlightedStageId);
-      setActiveTabId(highlightedStageId);
-      setIsDetailDrawerOpen(true);
-    }
-  }, [highlightedStageId]);
+  // render 期派生模式（React 官方 prop→state 同步写法，取代 effect 内同步 setState）：
+  // undefined 哨兵保证挂载即携带高亮时首渲染照常触发（W1 引用卡跳转直达打开抽屉）
+  const [prevHighlighted, setPrevHighlighted] = useState<PipelineStageId | null | undefined>(undefined);
+  if (highlightedStageId && highlightedStageId !== prevHighlighted) {
+    setPrevHighlighted(highlightedStageId);
+    setSelectedStageId(highlightedStageId);
+    setActiveTabId(highlightedStageId);
+    setIsDetailDrawerOpen(true);
+  }
 
   // 卸载清理：门禁测试定时器（防止卸载后 setState）
   useEffect(() => {

@@ -44,6 +44,14 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   // Next.js 官方规则集（原生扁平配置；置于自定义规则前，后者优先）
   ...nextConfigs,
+  // 静态导出（images.unoptimized=true）下 next/image 无优化收益；全站唯一 <img> 为品牌
+  // 固定资产（BrandMark，显式宽高 + decoding），规则前提不成立——关闭并注明依据
+  {
+    files: ['**/*.{ts,tsx,js,mjs,cjs}'],
+    rules: {
+      '@next/next/no-img-element': 'off',
+    },
+  },
   // 纯 JS 文件不适用 TS 语义规则（v8 no-unused-vars 对 JS 值位置误报 "only used as a type"）
   {
     files: ['**/*.{js,mjs,cjs}'],
@@ -59,12 +67,12 @@ export default tseslint.config(
     rules: {
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-      // compiler 系新规则（v6+）迁移期降 warn：修复需重构 W1/StageCard 核心，
-      // 超出"行为等价"迁移边界；启用 React Compiler 时一并修复（见评估清单 §7）
-      'react-hooks/set-state-in-effect': 'warn',
-      'react-hooks/purity': 'warn',
-      'react-hooks/refs': 'warn',
-      'react-hooks/static-components': 'warn',
+      // compiler 系规则已全量修复且 React Compiler 已启用（next.config reactCompiler:true）
+      // ——升回 error 门禁，新增代码必须符合 Rules of React
+      'react-hooks/set-state-in-effect': 'error',
+      'react-hooks/purity': 'error',
+      'react-hooks/refs': 'error',
+      'react-hooks/static-components': 'error',
       // 未使用变量以 TS 语义为准：前缀 _ 视为有意保留
       '@typescript-eslint/no-unused-vars': [
         'error',

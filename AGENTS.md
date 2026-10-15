@@ -54,5 +54,5 @@ Tailwind CSS v4 通过 **@tailwindcss/postcss**（postcss.config.mjs）接入。
 - Use double quotes for strings containing apostrophes (`"We're here to help"`), or escape them in single-quoted strings. An unescaped apostrophe in a single-quoted string breaks the build.
 - Ensure JSX tags are closed and braces are balanced.
 - 页面组件在 page.tsx 中默认导出；业务组件用具名导出。
-- 门禁：`pnpm typecheck && pnpm lint && pnpm knip && pnpm test:coverage && pnpm build`（0 error，覆盖率棘轮 ≥93%）
-- react-hooks compiler 系规则（set-state-in-effect/purity/refs/static-components）当前为 warn 迁移态，新增代码勿扩大违反面。
+- 门禁：`pnpm typecheck && pnpm lint && pnpm knip && pnpm test:coverage && pnpm build`（0 error 0 warning，覆盖率棘轮 ≥93%）
+- React Compiler 已启用（next.config `reactCompiler: true`），compiler 系规则（set-state-in-effect/purity/refs/static-components）为 error 门禁——新增代码必须符合 Rules of React，禁止 render 期写 ref / effect 内同步 setState / render 期创建组件。

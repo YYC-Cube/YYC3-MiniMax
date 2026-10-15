@@ -75,6 +75,16 @@ const INITIAL_MESSAGES: ChatMessage[] = [
   },
 ];
 
+/** 构造用户消息（模块域：Date.now/new Date 为非纯调用，禁止出现在组件渲染域内） */
+function createUserMessage(text: string): ChatMessage {
+  return {
+    id: `usr-${Date.now()}`,
+    sender: 'user',
+    timestamp: new Date().toLocaleTimeString('zh-CN', { hour12: false }),
+    text,
+  };
+}
+
 export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
   activeAgentId,
   onSelectAgent,
@@ -104,25 +114,6 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
 
   const handleSendRef = useRef<(text?: string) => void>(() => undefined);
 
-  // Handle external command from P2 log stream or other pages
-  // latest-ref 模式：effect 只依赖 externalCommand（对象身份每次派发必变），无闭包陷阱
-  useEffect(() => {
-    if (externalCommand) {
-      handleSendRef.current(externalCommand.text);
-      if (onClearExternalCommand) {
-        onClearExternalCommand();
-      }
-    }
-  }, [externalCommand, onClearExternalCommand]);
-
-  // Scroll to bottom on new message
-  useEffect(() => {
-    if (isOpen) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-      setUnreadCount(0);
-    }
-  }, [messages, isOpen]);
-
   // 卸载清理：思考中回复定时器（防止卸载后 setState/泄漏）
   const replyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
@@ -135,14 +126,7 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
     const text = (textToSend || inputText).trim();
     if (!text) return;
 
-    const userMsg: ChatMessage = {
-      id: `usr-${Date.now()}`,
-      sender: 'user',
-      timestamp: new Date().toLocaleTimeString('zh-CN', { hour12: false }),
-      text,
-    };
-
-    appendMessage(userMsg);
+    appendMessage(createUserMessage(text));
     if (!textToSend) setInputText('');
     setIsThinking(true);
 
@@ -168,8 +152,36 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
     }, 700);
   };
 
-  // 保持 latest-ref 指向最新闭包（inputText/selectedAgent/isMergedMode 等状态）
-  handleSendRef.current = handleSend;
+  // 保持 latest-ref 指向最新闭包（inputText/selectedAgent/isMergedMode 等状态）。
+  // ref 写入放 effect（Compiler 规则禁 render 期写 ref）；本 effect 声明在外部指令 effect
+  // 之前，同一 commit 内先赋值后消费——挂载即派发的外部指令也能拿到新鲜闭包
+  useEffect(() => {
+    handleSendRef.current = handleSend;
+  });
+
+  // Handle external command from P2 log stream or other pages
+  // latest-ref 模式：effect 只依赖 externalCommand（对象身份每次派发必变），无闭包陷阱
+  useEffect(() => {
+    if (externalCommand) {
+      handleSendRef.current(externalCommand.text);
+      if (onClearExternalCommand) {
+        onClearExternalCommand();
+      }
+    }
+  }, [externalCommand, onClearExternalCommand]);
+
+  // Scroll to bottom on new message
+  useEffect(() => {
+    if (isOpen) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, isOpen]);
+
+  // 开箱即清未读（事件语义：随开箱动作清零，取代原 effect 内同步 setState——Compiler 规则合规）
+  const handleToggleOpen = () => {
+    if (!isOpen) setUnreadCount(0);
+    onToggleOpen();
+  };
 
   const handleChipClick = (chipText: string) => {
     handleSend(chipText);
@@ -180,7 +192,7 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
       {/* Collapsed State: 56x56 Pulsing Sphere */}
       {!isOpen && (
         <div
-          onClick={onToggleOpen}
+          onClick={handleToggleOpen}
           className="relative w-14 h-14 rounded-full cursor-pointer group flex items-center justify-center transition-transform hover:scale-105 active:scale-95 animate-bounce-subtle"
           title="展开 Universal Agent AI 浮窗"
         >
@@ -243,14 +255,14 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
 
               {/* Minimize/Close button */}
               <button
-                onClick={onToggleOpen}
+                onClick={handleToggleOpen}
                 className="p-1 rounded text-[#9BA3B4] hover:text-white hover:bg-white/10 transition-colors"
                 title="收起浮窗"
               >
                 <Minimize2 size={13} />
               </button>
               <button
-                onClick={onToggleOpen}
+                onClick={handleToggleOpen}
                 className="p-1 rounded text-[#9BA3B4] hover:text-[#FF006E] hover:bg-white/10 transition-colors"
                 title="关闭"
               >

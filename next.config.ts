@@ -26,6 +26,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  // React Compiler（稳定版）：自动记忆化，前提全仓符合 Rules of React
+  // （compiler 系 lint 规则已全量修复并升回 error 门禁，见 eslint.config.js）
+  reactCompiler: true,
 }
 
 export default nextConfig
