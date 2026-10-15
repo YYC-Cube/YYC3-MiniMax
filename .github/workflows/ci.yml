@@ -1,4 +1,4 @@
-name: YYC³ Quality Gates
+name: YYC³ Quality Gates & Pages Deploy
 
 on:
   push:
@@ -6,9 +6,16 @@ on:
   pull_request:
     branches: [main]
 
+# 部署互斥：同分支新推送自动取消在途流水线，避免 Pages 竞态覆盖
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   quality-gates:
     name: 安全扫描 · Lint · 类型 · 依赖图 · 覆盖率 · 构建
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,3 +60,64 @@ jobs:
 
       - name: Production build
         run: pnpm build
+
+  deploy-pages:
+    name: GitHub Pages 自动部署（minimax.yyc3.top）
+    needs: quality-gates
+    # 仅 main 分支直推触发部署；PR 只跑质量门禁
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Production build
+        run: pnpm build
+
+      - name: 产物检测（检测无误后方可部署）
+        run: |
+          set -e
+          for f in CNAME index.html manifest.webmanifest sw.js \
+                   yyc3-icons/brand/favicon-32.png; do
+            test -s "dist/$f" || { echo "::error::dist/$f 缺失或为空"; exit 1; }
+          done
+          if grep -q 'noindex' dist/index.html; then
+            echo "::error::生产产物包含 noindex，阻止公开站点收录"
+            exit 1
+          fi
+          echo "产物检测通过：CNAME / index.html / manifest / sw.js / favicon 就绪，无 noindex"
+
+      - name: Configure Pages（自愈启用，幂等）
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

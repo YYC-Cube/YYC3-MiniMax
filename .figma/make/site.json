@@ -6,7 +6,7 @@
     "icon": "/yyc3-icons/brand/favicon-32.png"
   },
   "robots": {
-    "index": false
+    "index": true
   },
   "accessibility": {
     "addBypassLinks": false,

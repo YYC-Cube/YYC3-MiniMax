@@ -2,9 +2,9 @@
 file: README.md
 description: "YYC³ AI FAMILY 漫剧工业化指挥中心 · 项目总览与快速开始"
 author: "YanYuCloudCube Team <admin@0379.email>"
-version: v1.2.0
+version: v1.2.1
 created: 2026-10-11
-updated: 2026-10-12
+updated: 2026-10-15
 status: stable
 tags:
   - project
@@ -48,6 +48,8 @@ keywords:
 ![pnpm](https://img.shields.io/badge/pnpm-10.34-F69220?logo=pnpm&logoColor=white)
 ![Node 22+](https://img.shields.io/badge/Node-22%2B-339933?logo=nodedotjs&logoColor=white)
 ![License MIT](https://img.shields.io/badge/License-MIT-00F0FF.svg)
+[![YYC³ Quality Gates & Pages Deploy](https://github.com/YYC-Cube/YYC3-MiniMax/actions/workflows/ci.yml/badge.svg)](https://github.com/YYC-Cube/YYC3-MiniMax/actions/workflows/ci.yml)
+![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-自动部署-2088FF?logo=github&logoColor=white)
 
 </div>
 
@@ -56,6 +58,17 @@ keywords:
 > **_Words Initiate Quadrants, Language Serves as Core for Future_**
 > _万象归元于云枢 | 深栈智启新纪元_
 > **_All things converge in cloud pivot; Deep stacks ignite a new era of intelligence_**
+
+---
+
+## 仓库信息
+
+| 项 | 值 |
+| -- | -- |
+| **GitHub 主仓** | <https://github.com/YYC-Cube/YYC3-MiniMax> |
+| **线上地址（Pages）** | <https://minimax.yyc3.top>（自定义域，HTTPS 强制） |
+| **内网镜像（GitBucket）** | <http://192.168.3.45:8080/git/root/YYC3-MiniMax> |
+| **远程名约定** | `github` = GitHub 主仓 · `origin` = 内网镜像 |
 
 ---
 
@@ -84,14 +97,14 @@ keywords:
 ## 功能矩阵
 
 | 视图　　　 | 名称　　　　　　 | 核心能力　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
-| ------------ | ------------------ | -------------------------------------------------------------------------------------------------- |
-| **P1**　　 | 时钟环中心　　　 | 8 Agent 时钟位分布、真实走时三针（时/分/秒差异化长短配色）、数字时间与星期、全息连线、悬浮档案卡　 |
+| ------------| ------------------| --------------------------------------------------------------------------------------------------|
+| **P1**　　 | 时钟环中心　　　 | 8 Agent 时钟位分布、真实走时三针（时/分/秒差异化长短配色）、数字时间与星期、全息连线、悬浮档案卡 |
 | **P2**　　 | 漫剧生产台　　　 | 六阶段流水线卡片阵列、实时事件流（LIVE/SIM 双模）、产能 KPI 带、12 字段分镜 Schema、门禁失败模拟 |
-| **P3**　　 | ReAct-C 编排　　 | 九步闭环环形视图（ResizeObserver 全视口自适应）、Step7→Step5 回环演示、Token/耗时遥测、自动轮播　 |
-| **P4**　　 | 算力监控台　　　 | 4 节点拓扑（DGX×2/Mac/NAS）、GPU/显存/RoCE/NAS 四象限遥测、告警事件队列　　　　　　　　　　　　　 |
-| **P5**　　 | 质检与安全　　　 | 四大门禁状态灯、分镜质检队列（通过/打回）、PII 脱敏前后对比、宗师终审报告　　　　　　　　　　　　 |
-| **W1**　　 | Universal Widget | 全局 AI 浮窗（响应式）、8 Agent 秒切、指令语义路由、引用卡跨页跳转、统一品牌标识　　　　　　　　　 |
-| **Mobile** | PWA 移动版　　　 | < 768px 自动切换：家族/流水线/ReAct/算力/质安五视图实时数据，可安装、离线开屏、安全区适配　　　　 |
+| **P3**　　 | ReAct-C 编排　　 | 九步闭环环形视图（ResizeObserver 全视口自适应）、Step7→Step5 回环演示、Token/耗时遥测、自动轮播　|
+| **P4**　　 | 算力监控台　　　 | 4 节点拓扑（DGX×2/Mac/NAS）、GPU/显存/RoCE/NAS 四象限遥测、告警事件队列　　　　　　　　　　　　　|
+| **P5**　　 | 质检与安全　　　 | 四大门禁状态灯、分镜质检队列（通过/打回）、PII 脱敏前后对比、宗师终审报告　　　　　　　　　　　　|
+| **W1**　　 | Universal Widget | 全局 AI 浮窗（响应式）、8 Agent 秒切、指令语义路由、引用卡跨页跳转、统一品牌标识　　　　　　　　 |
+| **Mobile** | PWA 移动版　　　 | < 768px 自动切换：家族/流水线/ReAct/算力/质安五视图实时数据，可安装、离线开屏、安全区适配　　　　|
 
 ### AI Family 家族档案
 
@@ -229,7 +242,7 @@ YYC3-MiniMax/
 │   ├── index.css                # Tailwind v4 入口 + 霓虹主题 + keyframes
 │   └── main.tsx                 # React 挂载入口 + SW 注册
 ├── tests/                       # Vitest 单测（数据完整性/事件流/组件/PWA）
-├── .github/workflows/ci.yml     # CI 四重质量门禁
+├── .github/workflows/ci.yml     # CI 质量门禁 + GitHub Pages 自动部署
 ├── docs/                        # 团队规范 + 会话工作文档
 ├── .figma/make/site.json        # 站点元信息（标题/语言/SEO/图标）
 ├── vite.config.ts               # Vite 8 配置（@ 别名 → src）
@@ -252,18 +265,48 @@ YYC3-MiniMax/
 
 ## 仓库标签 / 关键词（Topics）
 
-仓库托管平台（GitBucket Topics / GitHub Topics）建议配置以下标签，与本文档 YAML 标头、`package.json` `keywords` 三处保持同一真源：
+仓库标签三处同一真源：本文档 YAML 标头 / `package.json` `keywords` / GitHub Topics（已通过 API 写入）。
+GitHub Topics 命名规范：全小写、连字符分词、不超过 20 个标签、单个标签 ≤ 50 字符。
 
 | 分类 | 标签 |
 | ---- | ---- |
 | 技术栈 | `react` · `vite` · `typescript` · `tailwindcss` · `vitest` · `pnpm` |
-| 形态 | `pwa` · `service-worker` · `spa` · `offline-first` · `responsive` |
-| 领域 | `ai-agent` · `multi-agent-orchestration` · `react-c` · `rag` · `computer-use` |
+| 形态 | `pwa` · `service-worker` · `spa` · `offline-first` |
+| 领域 | `ai-agent` · `multi-agent-orchestration` · `react-c` |
 | 场景 | `command-center` · `realtime-dashboard` · `data-visualization` · `svg-animation` |
-| 品牌/组织 | `yyc3` · `yanyucloudcube` · `ai-family` |
+| 平台/品牌 | `github-pages` · `ai-family` · `yyc3` |
 
-> 平台设置入口：GitBucket 仓库页 → Settings → Topics；GitHub 仓库页 → About ⚙ → Topics。
-> 命名规范：全小写、连字符分词、不超过 20 个标签、单个标签 ≤ 50 字符。
+> GitHub 仓库页 → About ⚙ 可查看已配置的 Topics；内网 GitBucket 镜像按同一清单手动同步。
+
+---
+
+## 部署设计（GitHub Pages 全链路闭环）
+
+```
+push main ──► 质量门禁（gitleaks/lint/tsc/knip/madge/vitest+coverage/build）
+              │ 全绿后
+              ▼
+         deploy-pages 作业
+              ├─ 重新生产构建（custom domain ⇒ base: '/'）
+              ├─ 产物检测：CNAME / index.html / manifest / sw.js / favicon
+              │            存在且非空 + 无 noindex（检测无误后放行）
+              ├─ configure-pages（enablement: true，幂等自愈启用）
+              ├─ upload-pages-artifact ─► deploy-pages（OIDC，无长期密钥）
+              ▼
+        https://minimax.yyc3.top（自定义域 · HTTPS 强制）
+```
+
+| 设计项 | 配置 | 说明 |
+| ------ | ---- | ---- |
+| 自定义域 | `public/CNAME` → `minimax.yyc3.top` | 随构建产物进入 `dist/`，GitHub Pages 读取后绑定自定义域 |
+| DNS | `CNAME minimax.yyc3.top → YYC-Cube.github.io` | 已在云 DNS 生效（Pages 已识别自定义域） |
+| HTTPS | Enforce HTTPS 已开启 | 证书由 GitHub 自动签发续期 |
+| 构建模式 | `build_type: workflow` | Pages 数据源为 Actions 工作流，非分支推送 |
+| 触发条件 | `push main` 且质量门禁全绿 | PR 只跑门禁不部署，防未审产物上线 |
+| 部署互斥 | `concurrency: ci-{ref}` | 新推送自动取消在途部署，避免竞态覆盖 |
+| 鉴权 | OIDC + `pages:write` / `id-token:write` | 零长期密钥，token 权限最小化 |
+
+> SPA 注意事项：本站为纯前端 SPA（无客户端路由子路径），无需 404 回退；如未来引入路由，需追加 404.html 重定向方案。
 
 ---
 
@@ -276,6 +319,7 @@ YYC3-MiniMax/
 - [x] PWA 移动版（< 768px 自动切换五视图实时数据、可安装、离线开屏、安全区适配）
 - [x] 全端图标与品牌单一真源（yyc3-icons + brand/ 套件：favicon/apple-touch/maskable）
 - [x] P1 真实走时时钟（时分秒三针）+ P3 九步环全视口自适应
+- [x] GitHub 仓库化 + Pages 自动部署闭环（质量门禁 → 产物检测 → minimax.yyc3.top）
 - [ ] W1 接入真实 LLM 网关（多模型路由）
 - [ ] P4 接入 Prometheus / node_exporter 真实遥测
 - [ ] Agent 编排内核落地（core/ 端口适配器 + 九步状态机，替换模拟数据层）
@@ -296,11 +340,12 @@ YYC3-MiniMax/
 
 ## 变更历史
 
-| 版本   | 日期       | 变更内容                                                         | 作者                |
+| 版本 | 日期 | 变更内容 | 作者 |
 | ------ | ---------- | ---------------------------------------------------------------- | ------------------- |
+| v1.2.1 | 2026-10-15 | GitHub 仓库化：主仓地址/Topics 标签体系（20 项）/Pages 自动部署 CI（产物检测+OIDC+CNAME）/robots 收录修正 | YanYuCloudCube Team |
 | v1.2.0 | 2026-10-12 | P1 真实三针时钟；P3 全视口自适应；PWA（manifest/SW/安装）落地；品牌图标单一真源；README YAML 标头修复与标签体系 | YanYuCloudCube Team |
-| v1.1.0 | 2026-10-11 | 新增 WS 事件流/vitest+CI/移动端降级/全端图标；合规标头标尾        | YanYuCloudCube Team |
-| v1.0.0 | 2026-10-11 | 初始版本：五视图原型交付、审计修复、开发者文档五件套              | YanYuCloudCube Team |
+| v1.1.0 | 2026-10-11 | 新增 WS 事件流/vitest+CI/移动端降级/全端图标；合规标头标尾 | YanYuCloudCube Team |
+| v1.0.0 | 2026-10-11 | 初始版本：五视图原型交付、审计修复、开发者文档五件套 | YanYuCloudCube Team |
 
 ---
 

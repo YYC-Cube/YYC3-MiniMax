@@ -1,7 +1,7 @@
 {
   "name": "yyc3-ai-family-command-center",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.2.1",
   "type": "module",
   "packageManager": "pnpm@10.34.3",
   "description": "YYC³ AI FAMILY 漫剧工业化指挥中心 · 8 Agent 协同 / ReAct-C 九步闭环 / PWA",
@@ -10,19 +10,27 @@
     "vite",
     "typescript",
     "tailwindcss",
+    "vitest",
+    "pnpm",
     "pwa",
     "service-worker",
+    "spa",
+    "offline-first",
     "ai-agent",
     "multi-agent-orchestration",
     "react-c",
     "command-center",
     "realtime-dashboard",
+    "data-visualization",
+    "svg-animation",
+    "github-pages",
+    "ai-family",
     "yyc3"
   ],
-  "homepage": "http://192.168.3.45:8080/git/root/YYC3-MiniMax",
+  "homepage": "https://minimax.yyc3.top",
   "repository": {
     "type": "git",
-    "url": "http://192.168.3.45:8080/git/root/YYC3-MiniMax.git"
+    "url": "https://github.com/YYC-Cube/YYC3-MiniMax.git"
   },
   "license": "MIT",
   "scripts": {
@@ -41,7 +49,8 @@
   "knip": {
     "ignoreExportsUsedInFile": true,
     "ignore": [
-      "docs/**"
+      "docs/**",
+      "public/sw.js"
     ]
   },
   "dependencies": {
