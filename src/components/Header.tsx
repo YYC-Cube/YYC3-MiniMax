@@ -14,11 +14,11 @@
  * - Next.js 16 迁移：onViewChange 回调 → Link 路由跳转；currentView props → usePathname 派生
  * - scaleMode 切换仍走 CommandCenterContext（非路由语义）
  *
- * dependencies: react, next/link, next/navigation, lucide-react
+ * dependencies: react, next/link, next/navigation, lucide-react, context/navigation
  * exports: Header
  */
 
-import { VIEW_PATHS, type ViewId } from '@/context/CommandCenterContext';
+import { VIEW_PATHS, type ViewId } from '@/context/navigation';
 import {
   Activity,
   Cpu,

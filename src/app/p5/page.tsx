@@ -10,16 +10,16 @@
  *
  * brief: 底部导航（P2/P3）走指挥链
  *
- * dependencies: P5QualitySecurity, CommandCenterContext
+ * dependencies: P5QualitySecurity, context/navigation
  */
 
 'use client'
 
 import { P5QualitySecurity } from '@/views/P5QualitySecurity'
-import { useCommandCenter } from '../../context/CommandCenterContext'
+import { useNavigation } from '../../context/navigation'
 
 export default function Page() {
-  const { navigate } = useCommandCenter()
+  const { navigate } = useNavigation()
   return (
     <P5QualitySecurity
       onNavigateToP2={() => navigate('P2')}

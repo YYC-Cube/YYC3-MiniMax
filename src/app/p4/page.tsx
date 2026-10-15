@@ -10,16 +10,16 @@
  *
  * brief: 三向告警路由（P5/P2/P3）走指挥链
  *
- * dependencies: P4OpsMonitoring, CommandCenterContext
+ * dependencies: P4OpsMonitoring, context/navigation
  */
 
 'use client'
 
 import { P4OpsMonitoring } from '@/views/P4OpsMonitoring'
-import { useCommandCenter } from '../../context/CommandCenterContext'
+import { useNavigation } from '../../context/navigation'
 
 export default function Page() {
-  const { navigate } = useCommandCenter()
+  const { navigate } = useNavigation()
   return (
     <P4OpsMonitoring
       onNavigateToP5={() => navigate('P5')}

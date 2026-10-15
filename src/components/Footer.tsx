@@ -14,21 +14,21 @@
  * - Next.js 16 迁移：onNavigate 回调 → CommandCenterContext.navigate（编程式路由）
  * - currentView props → usePathname 派生
  *
- * dependencies: react, next/navigation, lucide-react, CommandCenterContext
+ * dependencies: react, next/navigation, lucide-react, context/navigation
  * exports: Footer
  */
 
-import { useCommandCenter, type ViewId } from '@/context/CommandCenterContext';
+import { useNavigation, VIEW_PATHS, type ViewId } from '@/context/navigation';
 import { ArrowRight, HardDrive, Server, ShieldCheck, Zap } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
 export const Footer: React.FC = () => {
   const pathname = usePathname();
-  const { navigate } = useCommandCenter();
+  const { navigate } = useNavigation();
 
-  /** pathname → ViewId（视图 CTA 依赖） */
-  const currentView = (Object.entries(VIEW_PATH_MAP).find(([, p]) => p === pathname)?.[0] ??
+  /** pathname → ViewId（视图 CTA 依赖，反查 navigation 单一事实源） */
+  const currentView = (Object.entries(VIEW_PATHS).find(([, p]) => p === pathname)?.[0] ??
     'P1') as ViewId;
 
   return (
@@ -95,13 +95,4 @@ export const Footer: React.FC = () => {
       </div>
     </footer>
   );
-};
-
-/** pathname 反查表（Footer 内部用；与 CommandCenterContext.VIEW_PATHS 同源） */
-const VIEW_PATH_MAP: Record<ViewId, string> = {
-  P1: '/',
-  P2: '/p2/',
-  P3: '/p3/',
-  P4: '/p4/',
-  P5: '/p5/',
 };
