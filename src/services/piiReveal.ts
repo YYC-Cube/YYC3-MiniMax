@@ -17,13 +17,13 @@
  * - 每次调取自动产生 audit.pii.reveal.request 审计事件（含 traceId）
  *
  * 生产后端要求（接口配合，缺一不可）：
- * 1. 接口契约: GET {VITE_PII_REVEAL_API}/{logId} → 200 { raw: string }，403 拒绝
+ * 1. 接口契约: GET {NEXT_PUBLIC_PII_REVEAL_API}/{logId} → 200 { raw: string }，403 拒绝
  * 2. RBAC: 服务端校验"安全员"角色（前端隐藏入口不构成权限控制）
  * 3. 服务端审计: 落库 who/when/logId/审批链，与前端遥测事件可经 traceId 关联
  * 4. 限流: 单账号限次（防批量导出），响应不缓存（Cache-Control: no-store）
  * 5. 凭证: 同源 Cookie 或短时票据，禁止长期 token 暴露于查询串
  *
- * SIM 模式（未配置 VITE_PII_REVEAL_API 时）：
+ * SIM 模式（未配置 NEXT_PUBLIC_PII_REVEAL_API 时）：
  * 返回本地演示原文并显式标注。生产环境必须配置接口后删除 DEMO_RAW 映射。
  *
  * dependencies: telemetry

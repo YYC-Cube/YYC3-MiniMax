@@ -189,7 +189,7 @@ P2 事件流内置高可用双模客户端 [src/services/eventStream.ts](./src/s
 
 ```bash
 # .env.local（可选）配置真实网关后自动切换 LIVE 模式
-VITE_EVENT_STREAM_URL=wss://gateway.yyc3.local/agent-events
+NEXT_PUBLIC_EVENT_STREAM_URL=wss://gateway.yyc3.local/agent-events
 ```
 
 - **LIVE 模式**：连接 WebSocket 实时流，断线指数退避重连（≤ 5 次，上限 30s）

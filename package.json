@@ -50,9 +50,6 @@
     "ignore": [
       "docs/**",
       "public/sw.js"
-    ],
-    "ignoreDependencies": [
-      "eslint-config-next"
     ]
   },
   "dependencies": {
