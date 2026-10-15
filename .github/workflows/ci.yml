@@ -24,10 +24,13 @@ jobs:
           # gitleaks 全历史扫描需要完整提交图
           fetch-depth: 0
 
-      - name: Secret scan (gitleaks)
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Secret scan (gitleaks · 全量历史)
+        # 直装 gitleaks 全量扫描：不依赖增量缓存基线（缓存指向的旧提交
+        # 在 force-push 后会失效，导致 gitleaks-action 无法解析扫描区间）
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/gitleaks/gitleaks/v8.24.3/scripts/install.sh \
+            | sh -s -- -b /usr/local/bin v8.24.3
+          gitleaks detect --source . --redact --exit-code 2 --verbose
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
