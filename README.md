@@ -1,16 +1,35 @@
 ---
 file: README.md
-description: YYC³ AI FAMILY 漫剧工业化指挥中心 · 项目总览与快速开始
-author: YanYuCloudCube Team <admin@0379.email>
-version: v1.1.0
+description: "YYC³ AI FAMILY 漫剧工业化指挥中心 · 项目总览与快速开始"
+author: "YanYuCloudCube Team <admin@0379.email>"
+version: v1.2.0
 created: 2026-10-11
-updated: 2026-10-11
+updated: 2026-10-12
 status: stable
-tags: [project],[overview],[frontend]
+tags:
+  - project
+  - overview
+  - frontend
+  - pwa
+  - ai-agent
+  - command-center
 category: general
 language: zh-CN
 license: MIT
-copyright: Copyright (c) 2026 YanYuCloudCube Team
+copyright: "Copyright (c) 2026 YanYuCloudCube Team"
+keywords:
+  - react
+  - vite
+  - typescript
+  - tailwindcss
+  - pwa
+  - service-worker
+  - ai-agent
+  - multi-agent-orchestration
+  - react-c
+  - command-center
+  - realtime-dashboard
+  - yyc3
 ---
 
 <div align="center">
@@ -26,7 +45,7 @@ copyright: Copyright (c) 2026 YanYuCloudCube Team
 ![TypeScript 5.9](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
 ![Tailwind CSS v4](https://img.shields.io/badge/TailwindCSS-v4-06B6D4?logo=tailwindcss&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Vitest-5-6E9F18?logo=vitest&logoColor=white)
-![pnpm](https://img.shields.io/badge/pnpm-11-F69220?logo=pnpm&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-10.34-F69220?logo=pnpm&logoColor=white)
 ![Node 22+](https://img.shields.io/badge/Node-22%2B-339933?logo=nodedotjs&logoColor=white)
 ![License MIT](https://img.shields.io/badge/License-MIT-00F0FF.svg)
 
@@ -53,7 +72,9 @@ copyright: Copyright (c) 2026 YanYuCloudCube Team
 - **三重安全防线**：PII 三级脱敏、密钥零入库（AST 静态阻断）、数字盲水印
 - **混合算力拓扑**：双 DGX（8×H100 ×2）+ Mac Studio M4 Max + TrueNAS 万兆单一事实源
 - **实时事件流**：WebSocket 接驳 + 断线降级模拟（高可用双模）
-- **全端覆盖**：桌面指挥舱 + 移动端精简视图 + 全平台图标（Android/iOS/Web/macOS/watchOS）
+- **真实走时时钟环**：P1 时分秒三针 1s ticking（真实角度公式/差异化长短配色）+ 中心数字时间与星期
+- **PWA 可安装**：manifest + Service Worker（离线开屏/外壳缓存）+ 多端品牌图标，桌面与移动一键安装
+- **全端覆盖**：桌面指挥舱 + PWA 移动版五视图 + 全平台图标（Android/iOS/Web/macOS/watchOS）
 
 > 「**_Words Initiate Quadrants, Language Serves as Core for the Future_**」
 > 「**_All things converge in cloud pivot; Deep stacks ignite a new era of intelligence_**」
@@ -62,15 +83,15 @@ copyright: Copyright (c) 2026 YanYuCloudCube Team
 
 ## 功能矩阵
 
-| 视图 | 名称 | 核心能力 |
-| ---- | ---- | -------- |
-| **P1** | 时钟环中心 | 8 Agent 时钟位分布、全息连线粒子流、悬浮档案卡 |
-| **P2** | 漫剧生产台 | 六阶段流水线卡片阵列、实时事件流（LIVE/SIM 双模）、产能 KPI 带、12 字段分镜 Schema、门禁失败模拟 |
-| **P3** | ReAct-C 编排 | 九步闭环环形视图、Step7→Step5 回环演示、Token/耗时遥测、自动轮播 |
-| **P4** | 算力监控台 | 4 节点拓扑（DGX×2/Mac/NAS）、GPU/显存/RoCE/NAS 四象限遥测、告警事件队列 |
-| **P5** | 质检与安全 | 四大门禁状态灯、分镜质检队列（通过/打回）、PII 脱敏前后对比、宗师终审报告 |
-| **W1** | Universal Widget | 全局 AI 浮窗（响应式）、8 Agent 秒切、指令语义路由、引用卡跨页跳转 |
-| **Mobile** | 移动端降级视图 | < 768px 自动切换：家族/流水线/ReAct/算力/质安五卡精简呈现，W1 闭环保持可用 |
+| 视图　　　 | 名称　　　　　　 | 核心能力　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
+| ------------ | ------------------ | -------------------------------------------------------------------------------------------------- |
+| **P1**　　 | 时钟环中心　　　 | 8 Agent 时钟位分布、真实走时三针（时/分/秒差异化长短配色）、数字时间与星期、全息连线、悬浮档案卡　 |
+| **P2**　　 | 漫剧生产台　　　 | 六阶段流水线卡片阵列、实时事件流（LIVE/SIM 双模）、产能 KPI 带、12 字段分镜 Schema、门禁失败模拟 |
+| **P3**　　 | ReAct-C 编排　　 | 九步闭环环形视图（ResizeObserver 全视口自适应）、Step7→Step5 回环演示、Token/耗时遥测、自动轮播　 |
+| **P4**　　 | 算力监控台　　　 | 4 节点拓扑（DGX×2/Mac/NAS）、GPU/显存/RoCE/NAS 四象限遥测、告警事件队列　　　　　　　　　　　　　 |
+| **P5**　　 | 质检与安全　　　 | 四大门禁状态灯、分镜质检队列（通过/打回）、PII 脱敏前后对比、宗师终审报告　　　　　　　　　　　　 |
+| **W1**　　 | Universal Widget | 全局 AI 浮窗（响应式）、8 Agent 秒切、指令语义路由、引用卡跨页跳转、统一品牌标识　　　　　　　　　 |
+| **Mobile** | PWA 移动版　　　 | < 768px 自动切换：家族/流水线/ReAct/算力/质安五视图实时数据，可安装、离线开屏、安全区适配　　　　 |
 
 ### AI Family 家族档案
 
@@ -94,8 +115,9 @@ copyright: Copyright (c) 2026 YanYuCloudCube Team
 | 框架 | React 19 + TypeScript 5.9（strict） | 函数组件 + Hooks，零运行时样式依赖 |
 | 构建 | Vite 8 + `@vitejs/plugin-react` | 246ms 冷启 / 300ms 生产构建 |
 | 样式 | Tailwind CSS v4（`@tailwindcss/vite`） | 原子类 + CSS 变量霓虹主题（无 tailwind.config） |
-| 图标 | lucide-react + yyc3-icons 全端图标集 | favicon 源自 `public/yyc3-icons/Web App/` |
+| 图标 | lucide-react + yyc3-icons 全端图标集 | 品牌单一真源 `public/yyc3-icons/brand/`（favicon/apple-touch/maskable） |
 | 可视化 | 原生 SVG | 时钟环 / 九步环 / 遥测曲线 / 环形仪表，零图表库 |
+| PWA | Web App Manifest + Service Worker | 可安装/离线开屏/外壳预缓存/快捷方式深链，见 `public/sw.js` |
 | 实时流 | 原生 WebSocket + 指数退避重连 | `src/services/eventStream.ts`，无后端自动降级模拟 |
 | 测试 | Vitest 5 + happy-dom + Testing Library | 数据完整性 / 服务层 / 组件三类单测 |
 | 质量 | `tsc --noEmit` + vitest + oxfmt + GitHub Actions | 四重门禁 |
@@ -170,35 +192,43 @@ VITE_EVENT_STREAM_URL=wss://gateway.yyc3.local/agent-events
 ```
 YYC3-MiniMax/
 ├── public/
+│   ├── manifest.webmanifest     # PWA 清单（图标/快捷方式/standalone）
+│   ├── sw.js                    # Service Worker（外壳缓存/离线回退/SWR）
 │   ├── yyc3-family.png          # 文档顶图 / 品牌全家福
-│   └── yyc3-icons/              # 全员全端图标源（Android/iOS/Web/macOS/watchOS）
+│   └── yyc3-icons/
+│       ├── brand/               # 品牌图标套件（favicon/192/512/maskable/apple-touch）
+│       └── Android/iOS/Web App/macOS/watchOS/  # 全员全端图标源
 ├── src/
 │   ├── components/
-│   │   ├── Header.tsx           # 顶部导航 + 实时时钟 + 全局状态灯
+│   │   ├── Header.tsx           # 顶部导航 + 实时时钟 + 全局状态灯 + PWA 安装
 │   │   ├── Footer.tsx           # 底部状态栏（NAS/任务队列/在线率）
 │   │   ├── AgentAvatar.tsx      # Agent 头像（光环/脉冲环/状态 LED）
+│   │   ├── BrandMark.tsx        # 品牌标识单一真源（全局 logo 统一引用）
+│   │   ├── PwaInstallButton.tsx # PWA 安装按钮（beforeinstallprompt）
 │   │   └── UniversalWidget.tsx  # W1 全局 AI 浮窗（响应式）
 │   ├── views/
-│   │   ├── P1FamilyCenter.tsx   # P1 时钟环中心
+│   │   ├── P1FamilyCenter.tsx   # P1 时钟环中心（真实走时三针）
 │   │   ├── P2ProductionDesk.tsx # P2 漫剧生产台
-│   │   ├── P3ReActWorkflow.tsx  # P3 ReAct-C 九步编排
+│   │   ├── P3ReActWorkflow.tsx  # P3 ReAct-C 九步编排（全视口自适应）
 │   │   ├── P4OpsMonitoring.tsx  # P4 算力监控台
 │   │   ├── P5QualitySecurity.tsx# P5 质检与安全
-│   │   └── MobileFallback.tsx   # 移动端降级视图（< 768px）
+│   │   └── MobileFallback.tsx   # PWA 移动版五视图（< 768px）
 │   ├── services/
-│   │   └── eventStream.ts       # WebSocket 事件流客户端（降级模拟/重连/规范化）
+│   │   ├── eventStream.ts       # WebSocket 事件流客户端（降级模拟/重连/规范化）
+│   │   └── pwa.ts               # Service Worker 注册（仅生产环境）
 │   ├── hooks/
-│   │   └── useMediaQuery.ts     # 响应式媒体查询 Hook
+│   │   ├── useMediaQuery.ts     # 响应式媒体查询 Hook
+│   │   └── usePwaInstall.ts     # PWA 安装能力 Hook
 │   ├── data/                    # 高保真模拟数据层（单一事实源）
 │   │   ├── agents.ts            # 8 Agent 档案
 │   │   ├── pipeline.ts          # 六阶段 + KPI + 12 字段 Schema
 │   │   ├── reactSteps.ts        # ReAct-C 九步定义
 │   │   └── logs.ts / opsData.ts / qualityData.ts
 │   ├── types/index.ts           # 全局类型定义
-│   ├── App.tsx                  # 视图路由 + 移动端分支 + 跨页交互编排
+│   ├── App.tsx                  # 视图路由 + 移动端分支 + PWA 深链
 │   ├── index.css                # Tailwind v4 入口 + 霓虹主题 + keyframes
-│   └── main.tsx                 # React 挂载入口
-├── tests/                       # Vitest 单测（数据完整性/事件流/组件）
+│   └── main.tsx                 # React 挂载入口 + SW 注册
+├── tests/                       # Vitest 单测（数据完整性/事件流/组件/PWA）
 ├── .github/workflows/ci.yml     # CI 四重质量门禁
 ├── docs/                        # 团队规范 + 会话工作文档
 ├── .figma/make/site.json        # 站点元信息（标题/语言/SEO/图标）
@@ -220,17 +250,35 @@ YYC3-MiniMax/
 
 ---
 
+## 仓库标签 / 关键词（Topics）
+
+仓库托管平台（GitBucket Topics / GitHub Topics）建议配置以下标签，与本文档 YAML 标头、`package.json` `keywords` 三处保持同一真源：
+
+| 分类 | 标签 |
+| ---- | ---- |
+| 技术栈 | `react` · `vite` · `typescript` · `tailwindcss` · `vitest` · `pnpm` |
+| 形态 | `pwa` · `service-worker` · `spa` · `offline-first` · `responsive` |
+| 领域 | `ai-agent` · `multi-agent-orchestration` · `react-c` · `rag` · `computer-use` |
+| 场景 | `command-center` · `realtime-dashboard` · `data-visualization` · `svg-animation` |
+| 品牌/组织 | `yyc3` · `yanyucloudcube` · `ai-family` |
+
+> 平台设置入口：GitBucket 仓库页 → Settings → Topics；GitHub 仓库页 → About ⚙ → Topics。
+> 命名规范：全小写、连字符分词、不超过 20 个标签、单个标签 ≤ 50 字符。
+
+---
+
 ## 路线图 Roadmap
 
 - [x] P1-P5 五大视图 + W1 全局浮窗原型闭环
 - [x] ReAct-C 九步闭环可视化（含 Step7 回环模拟）
 - [x] WebSocket 事件流客户端接驳（断线重连 + 无后端自动降级模拟流）
 - [x] vitest 单测 + GitHub Actions CI 质量门禁（tsc/test/build 三段）
-- [x] 移动端降级视图（< 768px 自动切换，W1 浮窗响应式适配）
-- [x] 全端图标体系（yyc3-icons：Android/iOS/Web App/macOS/watchOS）
+- [x] PWA 移动版（< 768px 自动切换五视图实时数据、可安装、离线开屏、安全区适配）
+- [x] 全端图标与品牌单一真源（yyc3-icons + brand/ 套件：favicon/apple-touch/maskable）
+- [x] P1 真实走时时钟（时分秒三针）+ P3 九步环全视口自适应
 - [ ] W1 接入真实 LLM 网关（多模型路由）
 - [ ] P4 接入 Prometheus / node_exporter 真实遥测
-- [ ] Agent 编排后端落地（替换模拟数据层）
+- [ ] Agent 编排内核落地（core/ 端口适配器 + 九步状态机，替换模拟数据层）
 
 ---
 
@@ -240,8 +288,9 @@ YYC3-MiniMax/
 > comics and short films, enabling real-time collaboration among eight
 > anthropomorphic AI agents — six-stage pipeline, ReAct-C nine-step closed
 > loop, dual hard quality gates (consistency ≥ 80%, SyncNet ≥ 0.75),
-> three-tier PII masking, resilient WebSocket event streaming and a
-> mobile-degraded view.
+> three-tier PII masking, resilient WebSocket event streaming, a real-ticking
+> analog clock ring and an installable PWA with offline shell (mobile-first
+> responsive views).
 
 ---
 
@@ -249,6 +298,7 @@ YYC3-MiniMax/
 
 | 版本   | 日期       | 变更内容                                                         | 作者                |
 | ------ | ---------- | ---------------------------------------------------------------- | ------------------- |
+| v1.2.0 | 2026-10-12 | P1 真实三针时钟；P3 全视口自适应；PWA（manifest/SW/安装）落地；品牌图标单一真源；README YAML 标头修复与标签体系 | YanYuCloudCube Team |
 | v1.1.0 | 2026-10-11 | 新增 WS 事件流/vitest+CI/移动端降级/全端图标；合规标头标尾        | YanYuCloudCube Team |
 | v1.0.0 | 2026-10-11 | 初始版本：五视图原型交付、审计修复、开发者文档五件套              | YanYuCloudCube Team |
 

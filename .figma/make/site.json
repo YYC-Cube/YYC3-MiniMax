@@ -1,9 +1,9 @@
 {
   "title": "YYC³ AI FAMILY · 漫剧工业化指挥中心",
-  "description": "This immersive command center streamlines the industrial production of comics and short films, enabling real-time collaboration among eight AI agents for efficient project management.",
+  "description": "8 拟人化 Agent 协同的漫剧工业化生产指挥中心 · ReAct-C 九步闭环，支持 PWA 离线开屏与多端安装",
   "language": "zh-CN",
   "icons": {
-    "icon": "/yyc3-icons/Web%20App/favicon-32.png"
+    "icon": "/yyc3-icons/brand/favicon-32.png"
   },
   "robots": {
     "index": false

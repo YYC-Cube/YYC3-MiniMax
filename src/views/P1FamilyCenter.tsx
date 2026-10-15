@@ -8,17 +8,63 @@
  * status: active
  * tags: [component],[view],[p1]
  *
- * brief: 家族中枢视图：SVG 时钟环布局与成员交互入口
+ * brief: 家族中枢视图：真实走时时钟环（时分秒三针）+ 中心数字时间/日期 + 8 Agent 时钟位交互
  *
  * dependencies: react, lucide-react, types, data/agents, components/AgentAvatar
  * exports: P1FamilyCenter
  */
 
 import { ArrowRight, Cpu, Sparkles } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AgentAvatar } from '../components/AgentAvatar';
 import { AGENTS } from '../data/agents';
 import { AgentId } from '../types';
+
+// ======== 真实时钟逻辑（复用自 docs/AIFamilyPage.tsx 设计基准） ========
+
+/** 1 秒 setInterval 走时，卸载清理 */
+function useRealTimeClock(): Date {
+  const [time, setTime] = useState(() => new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  return time;
+}
+
+/** 舞台缩放因子：900 viewBox 设计稿 → 实际渲染尺寸，用于中心字号自适应 */
+function useStageScale(ref: React.RefObject<HTMLDivElement | null>): number {
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const update = () => setScale(Math.min(el.clientWidth, el.clientHeight) / 900);
+    update();
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(update);
+      ro.observe(el);
+      return () => ro.disconnect();
+    }
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, [ref]);
+  return scale;
+}
+
+const DAY_LABELS = ['日', '一', '二', '三', '四', '五', '六'] as const;
+
+/** yy/mm/dd + 星期（周末粉色） */
+function formatDateInfo(date: Date): { dateStr: string; dayLabel: string; isWeekend: boolean } {
+  const yy = String(date.getFullYear()).slice(2);
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const dayIdx = date.getDay(); // 0=日, 6=六
+  return {
+    dateStr: `${yy}/${mm}/${dd}`,
+    dayLabel: DAY_LABELS[dayIdx],
+    isWeekend: dayIdx === 0 || dayIdx === 6,
+  };
+}
 
 interface P1FamilyCenterProps {
   onSelectAgent: (id: AgentId) => void;
@@ -48,9 +94,43 @@ export const P1FamilyCenter: React.FC<P1FamilyCenterProps> = ({
 }) => {
   const [hoveredAgentId, setHoveredAgentId] = useState<AgentId | null>(null);
 
+  const stageRef = useRef<HTMLDivElement>(null);
+  const scale = useStageScale(stageRef);
+
+  // 真实时钟：1 秒走时
+  const time = useRealTimeClock();
+  const hours = time.getHours() % 12;
+  const minutes = time.getMinutes();
+  const seconds = time.getSeconds();
+  // 三针角度公式（-90 使 0° 指向 12:00，与 CLOCK_MEMBERS 角度约定一致）
+  const hourAngle = ((hours * 30 + minutes * 0.5 - 90) * Math.PI) / 180;
+  const minuteAngle = ((minutes * 6 + seconds * 0.1 - 90) * Math.PI) / 180;
+  const secondAngle = ((seconds * 6 - 90) * Math.PI) / 180;
+  const timeStr = time.toLocaleTimeString('zh-CN', { hour12: false });
+  const { dateStr, dayLabel, isWeekend } = formatDateInfo(time);
+
   const cx = 450;
   const cy = 450;
   const radius = 295; // Radius to avatar centers
+
+  // 三针真实钟表比例（以表盘半径 R=295 为基准，长度/尾锤各不相同）
+  // 时针：最短最粗（0.42R，尾锤 0.06R）
+  const hourLen = radius * 0.42;
+  const hourTail = radius * 0.06;
+  // 分针：中等（0.58R，尾锤 0.08R）
+  const minuteLen = radius * 0.58;
+  const minuteTail = radius * 0.08;
+  // 秒针：最细最长（0.7R，长尾锤 0.16R + 轴后配重圆点）
+  const secondLen = radius * 0.7;
+  const secondTail = radius * 0.16;
+
+  /** 单根指针的路径点（含尾锤），角度已含 -90 的 12:00 偏移 */
+  const handLine = (angle: number, len: number, tail: number) => ({
+    x1: cx - tail * Math.cos(angle),
+    y1: cy - tail * Math.sin(angle),
+    x2: cx + len * Math.cos(angle),
+    y2: cy + len * Math.sin(angle),
+  });
 
   // Generate 60 ticks for the clock dial
   const ticks = Array.from({ length: 60 }).map((_, i) => {
@@ -76,7 +156,10 @@ export const P1FamilyCenter: React.FC<P1FamilyCenterProps> = ({
       </div>
 
       {/* Main Clock Stage Canvas */}
-      <div className="relative w-[900px] h-[900px] flex items-center justify-center max-w-full max-h-[85vh] aspect-square">
+      <div
+        ref={stageRef}
+        className="relative w-[900px] h-[900px] flex items-center justify-center max-w-full max-h-[85vh] aspect-square"
+      >
         {/* SVG Dial Elements: Dial Ticks, Holographic Lines, Particles */}
         <svg
           viewBox="0 0 900 900"
@@ -174,34 +257,118 @@ export const P1FamilyCenter: React.FC<P1FamilyCenterProps> = ({
               </g>
             );
           })}
+
+          {/* 真实走时三针：时针最短最粗(青) / 分针中等(冰白) / 秒针最细最长(品红+尾锤)，1s ticking */}
+          <g>
+            {/* 时针 */}
+            <line
+              {...handLine(hourAngle, hourLen, hourTail)}
+              stroke="#00F0FF"
+              strokeOpacity={0.75}
+              strokeWidth={5}
+              strokeLinecap="round"
+            />
+            {/* 分针 */}
+            <line
+              {...handLine(minuteAngle, minuteLen, minuteTail)}
+              stroke="#D6FBFF"
+              strokeOpacity={0.7}
+              strokeWidth={3}
+              strokeLinecap="round"
+            />
+            {/* 秒针：带长尾锤与轴后配重圆点 */}
+            <line
+              {...handLine(secondAngle, secondLen, secondTail)}
+              stroke="#FF006E"
+              strokeOpacity={0.9}
+              strokeWidth={1.6}
+              strokeLinecap="round"
+              style={{ filter: 'drop-shadow(0 0 4px rgba(255,0,110,0.55))' }}
+            />
+            <circle
+              cx={cx - (secondTail - 12) * Math.cos(secondAngle)}
+              cy={cy - (secondTail - 12) * Math.sin(secondAngle)}
+              r={5}
+              fill="none"
+              stroke="#FF006E"
+              strokeWidth={1.6}
+              strokeOpacity={0.9}
+            />
+            {/* 中心轴帽（同比缩小：外环品红 + 内芯青） */}
+            <circle cx={cx} cy={cy} r={4.2} fill="#0A0A0A" stroke="#00F0FF" strokeWidth={1.4} />
+            <circle cx={cx} cy={cy} r={1.8} fill="#FF006E" />
+          </g>
         </svg>
 
-        {/* Center YYC³ Logo: 120x120, Neon Blue-Purple Pulse, 60s slow rotating outer indicator ring */}
-        <div className="absolute z-20 flex flex-col items-center justify-center">
-          {/* 60s Slow Rotating Outer Indicator Ring */}
-          <div className="w-[180px] h-[180px] rounded-full border border-[#00F0FF]/30 border-t-[#BF00FF] border-r-transparent animate-slow-rotate absolute flex items-center justify-center pointer-events-none">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#00F0FF] absolute -top-1.5 shadow-[0_0_10px_#00F0FF]" />
-            <div className="w-2 h-2 rounded-full bg-[#BF00FF] absolute -bottom-1 shadow-[0_0_10px_#BF00FF]" />
-          </div>
+        {/* Center YYC³ Logo + 真实走时数字时间：
+            150px 慢旋指示环 + 102px 品牌核心（点击进入 P2），下方 HH:MM:SS + yy/mm/dd 星期。
+            中心圆随三针真实比例同比缩小（0.82），避免遮挡指针尾锤 */}
+        <div className="absolute z-20 flex flex-col items-center pointer-events-none">
+          <div className="relative" style={{ width: 150, height: 150 }}>
+            {/* 60s Slow Rotating Outer Indicator Ring */}
+            <div className="absolute inset-0 rounded-full border border-[#00F0FF]/30 border-t-[#BF00FF] border-r-transparent animate-slow-rotate flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#00F0FF] absolute -top-1.5 shadow-[0_0_10px_#00F0FF]" />
+              <div className="w-2 h-2 rounded-full bg-[#BF00FF] absolute -bottom-1 shadow-[0_0_10px_#BF00FF]" />
+            </div>
 
-          {/* 120x120 Core Logo */}
-          <div
-            onClick={() => onNavigate('P2')}
-            className="w-[124px] h-[124px] rounded-2xl p-[2px] bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#FF006E] shadow-[0_0_24px_rgba(0,240,255,0.5),0_0_40px_rgba(191,0,255,0.3)] animate-pulse-breath cursor-pointer group hover:scale-105 transition-all"
-            title="点击快速进入漫剧生产指挥台"
-          >
-            <div className="w-full h-full bg-[#0A0A0A] rounded-[14px] flex flex-col items-center justify-center relative overflow-hidden border border-white/10">
-              <span className="font-mono-num font-black text-2xl tracking-tighter bg-gradient-to-r from-[#00F0FF] via-[#BF00FF] to-white bg-clip-text text-transparent">
-                YYC³
-              </span>
-              <span className="text-[9px] text-[#9BA3B4] font-medium tracking-widest mt-1">
-                AI FAMILY
-              </span>
-              <div className="flex items-center space-x-1 mt-1 text-[8px] text-[#00FF88] font-mono-num">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-ping" />
-                <span>ACTIVE</span>
+            {/* 124x124 Core Logo */}
+            <div
+              onClick={() => onNavigate('P2')}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[102px] h-[102px] rounded-xl p-[2px] bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#FF006E] shadow-[0_0_20px_rgba(0,240,255,0.5),0_0_32px_rgba(191,0,255,0.3)] animate-pulse-breath cursor-pointer pointer-events-auto group hover:scale-105 transition-all"
+              title="点击快速进入漫剧生产指挥台"
+            >
+              <div className="w-full h-full bg-[#0A0A0A] rounded-[10px] flex flex-col items-center justify-center relative overflow-hidden border border-white/10">
+                <span className="font-mono-num font-black text-xl tracking-tighter bg-gradient-to-r from-[#00F0FF] via-[#BF00FF] to-white bg-clip-text text-transparent">
+                  YYC³
+                </span>
+                <span className="text-[8px] text-[#9BA3B4] font-medium tracking-widest mt-0.5">
+                  AI FAMILY
+                </span>
+                <div className="flex items-center space-x-1 mt-0.5 text-[7px] text-[#00FF88] font-mono-num">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-ping" />
+                  <span>ACTIVE</span>
+                </div>
               </div>
             </div>
+          </div>
+
+          {/* 数字时间 HH:MM:SS（1s ticking，字号随舞台缩放自适应） */}
+          <span
+            className="font-mono-num font-bold text-center whitespace-nowrap"
+            style={{
+              fontSize: Math.max(11, Math.round(18 * scale)),
+              color: '#00F0FF',
+              textShadow: '0 0 10px rgba(0,240,255,0.4)',
+              letterSpacing: '2px',
+            }}
+          >
+            {timeStr}
+          </span>
+
+          {/* yy/mm/dd + 星期（周末粉色霓虹） */}
+          <div
+            className="font-mono-num flex items-center justify-center gap-1 whitespace-nowrap"
+            style={{ marginTop: '3px' }}
+          >
+            <span
+              style={{
+                fontSize: Math.max(9, Math.round(12 * scale)),
+                color: 'rgba(0,240,255,0.4)',
+                letterSpacing: '1px',
+              }}
+            >
+              {dateStr}
+            </span>
+            <span
+              style={{
+                fontSize: Math.max(9, Math.round(12 * scale)),
+                color: isWeekend ? '#FF006E' : 'rgba(0,240,255,0.4)',
+                textShadow: isWeekend ? '0 0 6px rgba(255,0,110,0.4)' : 'none',
+                letterSpacing: '1px',
+              }}
+            >
+              {dayLabel}
+            </span>
           </div>
         </div>
 

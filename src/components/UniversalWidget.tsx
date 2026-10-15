@@ -16,7 +16,6 @@
 
 import {
   ArrowUpRight,
-  Bot,
   Layers,
   Minimize2,
   Paperclip,
@@ -30,6 +29,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { resolveAgentReply } from '../services/agentReply';
 import { AgentId, ChatMessage } from '../types';
 import { AgentAvatar } from './AgentAvatar';
+import { BrandMark } from './BrandMark';
 
 interface UniversalWidgetProps {
   activeAgentId: AgentId;
@@ -190,9 +190,7 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
           {/* Main sphere body */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#0A0A0A] p-[2px] shadow-[0_0_20px_rgba(0,240,255,0.6)]">
             <div className="w-full h-full rounded-full bg-[#0A0A0A] flex items-center justify-center relative overflow-hidden">
-              <span className="font-mono-num font-black text-sm tracking-tighter bg-gradient-to-r from-[#00F0FF] via-[#BF00FF] to-white bg-clip-text text-transparent">
-                Y³
-              </span>
+              <BrandMark size={34} quiet />
               <div className="absolute inset-0 bg-radial from-transparent via-[#00F0FF]/10 to-transparent" />
             </div>
           </div>
@@ -218,8 +216,8 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
           <div className="h-12 px-4 bg-[#0E1018]/95 border-b border-white/10 flex items-center justify-between cursor-move">
             <div className="flex items-center space-x-2">
               <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#00F0FF] to-[#BF00FF] p-[1px]">
-                <div className="w-full h-full bg-[#0A0A0A] rounded-[5px] flex items-center justify-center">
-                  <Bot size={13} className="text-[#00F0FF]" />
+                <div className="w-full h-full bg-[#0A0A0A] rounded-[5px] flex items-center justify-center p-[1px]">
+                  <BrandMark size={20} quiet />
                 </div>
               </div>
               <span className="font-mono-num font-bold text-xs text-white tracking-wide">

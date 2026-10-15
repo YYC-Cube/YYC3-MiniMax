@@ -1,0 +1,60 @@
+{
+  "name": "YYC³ AI FAMILY · 漫剧工业化指挥中心",
+  "short_name": "YYC³ 指挥舱",
+  "description": "8 拟人化 Agent 协同的漫剧工业化生产指挥中心 · ReAct-C 九步闭环",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "categories": ["productivity", "business", "entertainment"],
+  "icons": [
+    {
+      "src": "/yyc3-icons/brand/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/yyc3-icons/brand/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/yyc3-icons/brand/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/yyc3-icons/brand/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "P1 家族时钟环",
+      "short_name": "P1 中枢",
+      "url": "/?view=P1",
+      "icons": [{ "src": "/yyc3-icons/brand/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "P2 漫剧生产台",
+      "short_name": "P2 生产",
+      "url": "/?view=P2",
+      "icons": [{ "src": "/yyc3-icons/brand/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "P3 ReAct-C 编排",
+      "short_name": "P3 编排",
+      "url": "/?view=P3",
+      "icons": [{ "src": "/yyc3-icons/brand/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

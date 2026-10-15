@@ -15,8 +15,10 @@
  */
 
 import { Cpu, GitBranch, Radio, ShieldAlert, Sparkles, Workflow } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AgentAvatar } from '../components/AgentAvatar';
+import { BrandMark } from '../components/BrandMark';
+import { PwaInstallButton } from '../components/PwaInstallButton';
 import { AGENT_LIST } from '../data/agents';
 import { OPS_NODES } from '../data/opsData';
 import { KPI_METRICS, PIPELINE_STAGES } from '../data/pipeline';
@@ -51,36 +53,59 @@ function pct(value: number, max: number): number {
 export const MobileFallback: React.FC<MobileFallbackProps> = ({ onSelectAgent }) => {
   const [tab, setTab] = useState<MobileTab>('family');
 
+  // 顶栏实时走时（1s ticking，与 P1/Header 同源真实时钟）
+  const [timeStr, setTimeStr] = useState<string>('');
+  useEffect(() => {
+    const tick = () => setTimeStr(new Date().toLocaleTimeString('zh-CN', { hour12: false }));
+    tick();
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const consistencyKpi = KPI_METRICS.find((k) => k.id === 'consistency_score');
   const syncnetKpi = KPI_METRICS.find((k) => k.id === 'syncnet_score');
 
   return (
-    <div className="w-full h-[100dvh] overflow-y-auto bg-[#0A0A0A] command-bg relative">
+    <div
+      className="w-full h-[100dvh] overflow-y-auto bg-[#0A0A0A] command-bg relative"
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+    >
       <div className="noise-overlay" />
 
-      {/* Brand Header */}
+      {/* Brand Header（安全区适配 + 真实品牌 logo + 实时时钟 + PWA 安装） */}
       <header className="sticky top-0 z-20 px-4 py-3 glass-panel border-b border-[#00F0FF]/20 backdrop-blur-xl">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#00F0FF] to-[#BF00FF] flex items-center justify-center text-[11px] font-black text-black">
-              Y³
-            </span>
-            <div>
-              <h1 className="text-sm font-bold text-white leading-none">AI FAMILY 指挥中心</h1>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center space-x-2 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#FF006E] p-[1.5px] shadow-[0_0_10px_rgba(0,240,255,0.4)] shrink-0">
+              <div className="w-full h-full bg-[#0A0A0A] rounded-[6.5px] flex items-center justify-center p-[3px]">
+                <BrandMark size={26} quiet />
+              </div>
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-sm font-bold text-white leading-none truncate">AI FAMILY 指挥中心</h1>
               <p className="text-[10px] text-[#9BA3B4] mt-0.5">YanYuCloudCube · 言启象限</p>
             </div>
           </div>
-          <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/40">
-            移动端精简视图
-          </span>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="hidden min-[420px]:inline px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/40">
+              PWA 移动版
+            </span>
+            <PwaInstallButton variant="mobile" />
+            {timeStr && (
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono-num font-bold text-[#00F0FF] bg-[#0A0A0A]/80 border border-[#00F0FF]/30">
+                {timeStr}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Tab Bar */}
-        <nav className="flex items-center space-x-1 mt-2.5 overflow-x-auto">
+        <nav className="flex items-center space-x-1 mt-2.5 overflow-x-auto" aria-label="移动版五大视图切换">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               onClick={() => setTab(id)}
+              aria-pressed={tab === id}
               className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-md text-[11px] font-medium whitespace-nowrap transition-colors ${tab === id
                 ? 'bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/40'
                 : 'text-[#9BA3B4] border border-transparent hover:text-white'
@@ -93,7 +118,10 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({ onSelectAgent })
         </nav>
       </header>
 
-      <main className="px-3 pt-3 pb-28 space-y-2.5 relative z-10">
+      <main
+        className="px-3 pt-3 pb-28 space-y-2.5 relative z-10"
+        style={{ paddingBottom: 'calc(7rem + env(safe-area-inset-bottom))' }}
+      >
         {/* 家族：成员列表 */}
         {tab === 'family' && (
           <div className="space-y-2">

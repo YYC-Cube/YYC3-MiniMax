@@ -18,11 +18,15 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { registerServiceWorker } from './services/pwa'
 import { installGlobalErrorHooks } from './services/telemetry'
 import './index.css'
 
 // 全局兜底：未捕获异常/Promise 拒绝统一进入结构化遥测（含 traceId）
 installGlobalErrorHooks()
+
+// PWA：生产环境注册 Service Worker（离线开屏 + 应用外壳缓存）
+registerServiceWorker()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

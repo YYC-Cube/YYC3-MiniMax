@@ -192,9 +192,9 @@ describe('UniversalWidget（W1 浮窗）', () => {
     return { props, unmount: utils.unmount };
   }
 
-  it('收起态：Y³ 球体 + 初始未读徽标 1，点击展开回调', () => {
+  it('收起态：品牌 logo 球体 + 初始未读徽标 1，点击展开回调', () => {
     const { props } = renderWidget({ isOpen: false });
-    expect(screen.getByText('Y³')).toBeTruthy();
+    expect(screen.getByAltText('YYC³ 言语云')).toBeTruthy();
     expect(screen.getByText('1')).toBeTruthy();
     fireEvent.click(screen.getByTitle('展开 Universal Agent AI 浮窗'));
     expect(props.onToggleOpen).toHaveBeenCalledTimes(1);

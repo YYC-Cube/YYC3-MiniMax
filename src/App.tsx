@@ -33,8 +33,18 @@ import { P3ReActWorkflow } from './views/P3ReActWorkflow';
 import { P4OpsMonitoring } from './views/P4OpsMonitoring';
 import { P5QualitySecurity } from './views/P5QualitySecurity';
 
+type ViewId = 'P1' | 'P2' | 'P3' | 'P4' | 'P5';
+const VIEW_IDS: ViewId[] = ['P1', 'P2', 'P3', 'P4', 'P5'];
+
+/** PWA 快捷方式深链：?view=P2 → 直达对应视图 */
+function initialViewFromUrl(): ViewId {
+  if (typeof window === 'undefined') return 'P1';
+  const v = new URLSearchParams(window.location.search).get('view');
+  return v && (VIEW_IDS as string[]).includes(v) ? (v as ViewId) : 'P1';
+}
+
 export default function App() {
-  const [currentView, setCurrentView] = useState<'P1' | 'P2' | 'P3' | 'P4' | 'P5'>('P1');
+  const [currentView, setCurrentView] = useState<ViewId>(initialViewFromUrl);
   const [activeAgentId, setActiveAgentId] = useState<AgentId>('tianshu');
   const [isWidgetOpen, setIsWidgetOpen] = useState<boolean>(false);
   const [highlightedStageId, setHighlightedStageId] = useState<PipelineStageId | null>(null);
