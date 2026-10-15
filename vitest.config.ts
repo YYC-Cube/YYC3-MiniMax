@@ -45,12 +45,12 @@ export default defineConfig({
         'src/**/.DS_Store',
       ],
       reporter: ['text', 'html'],
-      // 覆盖率棘轮：App 编排层集成测试后基线上调（94.1/89.6/92.9/95.2），仅升不降
+      // 覆盖率棘轮：观测闭环批次（metric/降级快照）后基线上调（实测 94.69/87.91/93.43/96.58），仅升不降
       thresholds: {
-        lines: 92,
+        lines: 96,
         branches: 87,
-        functions: 90,
-        statements: 93,
+        functions: 93,
+        statements: 94,
       },
     },
   },
