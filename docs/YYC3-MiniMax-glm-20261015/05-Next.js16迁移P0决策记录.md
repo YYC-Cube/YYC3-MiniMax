@@ -76,7 +76,7 @@ $ npm view next@latest peerDependencies.engines --json
 | # | 清单/P0 假设 | 实测 | 最终决策 |
 | - | ------------ | ---- | -------- |
 | D4 | P0 备选：FlatCompat 转换 next/core-web-vitals | **eslint-config-next@16.4+ 原生导出扁平配置数组**；FlatCompat 转换路径触发 config-validator 循环引用崩溃（ESLint 10） | 弃用 FlatCompat，直接 import + 拍平展开；卸载 @eslint/eslintrc |
-| D5 | 评估清单 §7：compiler 系规则（set-state-in-effect/purity/refs/static-components）随 React Compiler 处理 | 接入后 9 处 error（W1 时钟渲染/StageCard 动态组件等，均属既有代码模式） | 迁移期降 warn（0 error 门禁保持），与 React Compiler 启用合并修复，不在行为等价迁移中重构 |
+| D5 | 评估清单 §7：compiler 系规则（set-state-in-effect/purity/refs/static-components）随 React Compiler 处理 | 接入后 9 处 error（W1 时钟渲染/StageCard 动态组件等，均属既有代码模式） | ✅ **已闭环**（7742918）：9 处全修复（useSyncExternalStore/render 期派生/模块域提取/latest-ref effect 化/图标映射）+ 规则升回 error + `reactCompiler: true` 启用，产物含 useMemoCache 记忆化标记 |
 | D6 | TS 语义 no-unused-vars 通配全仓 | typescript-eslint v8 对纯 JS 文件（eslint.config.js/postcss/sw.js）值位置误报 "only used as a type" | JS 文件块单独关闭该规则 |
 | D7 | Next 静态导出无 redirects() | `/?view=` 旧深链（PWA 快捷方式/外链）需兼容 | LegacyViewBridge 客户端 replace 桥接 + manifest 快捷方式升级真路由直达（少一跳） |
 | D8 | sw.js 单页缓存（v1） | 多路由下缓存键错配会"离线串页" | SW v2：五路由文档预缓存 + pathname 归一化导航缓存 + activate 清 v1 |
