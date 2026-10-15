@@ -54,7 +54,7 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
   const [isAlertFlashing, setIsAlertFlashing] = useState(false);
   const [gateFailureModal, setGateFailureModal] = useState(false);
   const { logs, streamMode, prependLog } = useAgentEventStream({
-    url: import.meta.env.VITE_EVENT_STREAM_URL,
+    url: process.env.NEXT_PUBLIC_EVENT_STREAM_URL,
   });
 
   const gateTestTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);

@@ -41,19 +41,19 @@
     {
       "name": "P1 家族时钟环",
       "short_name": "P1 中枢",
-      "url": "/?view=P1",
+      "url": "/",
       "icons": [{ "src": "/yyc3-icons/brand/icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "P2 漫剧生产台",
       "short_name": "P2 生产",
-      "url": "/?view=P2",
+      "url": "/p2/",
       "icons": [{ "src": "/yyc3-icons/brand/icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "P3 ReAct-C 编排",
       "short_name": "P3 编排",
-      "url": "/?view=P3",
+      "url": "/p3/",
       "icons": [{ "src": "/yyc3-icons/brand/icon-192.png", "sizes": "192x192" }]
     }
   ]

@@ -4,7 +4,8 @@
  */
 
 export function registerServiceWorker(): void {
-  if (!import.meta.env.PROD) return;
+  // Next.js：NODE_ENV 由构建管线注入（next build → production），等价 Vite import.meta.env.PROD
+  if (process.env.NODE_ENV !== 'production') return;
   if (!('serviceWorker' in navigator)) return;
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch((err) => {

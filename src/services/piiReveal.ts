@@ -36,8 +36,8 @@ export interface PiiRawPayload {
   raw: string;
 }
 
-/** 受控接口地址（构建时注入） */
-const ENDPOINT = import.meta.env.VITE_PII_REVEAL_API;
+/** 受控接口地址（构建时注入；Next.js 约定 NEXT_PUBLIC_ 前缀变量内联到客户端） */
+const ENDPOINT = process.env.NEXT_PUBLIC_PII_REVEAL_API;
 
 /**
  * SIM 演示原文映射（仅本地开发/演示用）。

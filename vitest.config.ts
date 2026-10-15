@@ -39,7 +39,7 @@ export default defineConfig({
       // src/app/** 整体为 Next 约定层（layout/page/error/not-found/Bootstrap 均为框架胶水，
       // 且 coverage-v8 rolldown 对未导入 JSX 文件 remap 会 PARSE_ERROR，见 P2 验收），业务视图不受影响
       exclude: [
-        'src/vite-env.d.ts',
+        'src/env.d.ts',
         'src/services/pwa.ts',
         'src/app/**',
         'src/**/.DS_Store',
