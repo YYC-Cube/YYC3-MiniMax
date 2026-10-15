@@ -13,6 +13,7 @@ vite.config.*.timestamp-*
 *-debug.log*
 logs/
 *.log
+.DS_Store
 .claude-replay.*
 .tmp-*
 /.figma/design-context/
