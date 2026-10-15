@@ -118,15 +118,15 @@ jobs:
           echo "产物检测通过：CNAME / 五路由 / 404 / manifest / sw.js / favicon 就绪，无 noindex"
 
       - name: Configure Pages（自愈启用，幂等）
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
         with:
           enablement: true
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: out
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
