@@ -113,8 +113,10 @@ export interface OpsNode {
   linkType: string;
   status: 'online' | 'warn' | 'critical';
   gpuUtil: number; // 0 - 100
-  vramUsed: number; // in GB
-  vramTotal: number;
+  memKind: 'vram' | 'storage'; // 指标语义：显存占用 / 存储容量池
+  memUsed: number; // 与 memUnit 同单位
+  memTotal: number;
+  memUnit: 'GB' | 'TB';
   tempC: number;
 }
 

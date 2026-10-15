@@ -108,7 +108,15 @@ describe('data layer integrity', () => {
     for (const node of OPS_NODES) {
       expect(node.gpuUtil).toBeGreaterThanOrEqual(0);
       expect(node.gpuUtil).toBeLessThanOrEqual(100);
-      expect(node.vramUsed).toBeLessThanOrEqual(node.vramTotal);
+      expect(node.memUsed).toBeLessThanOrEqual(node.memTotal);
+    }
+  });
+
+  it('内存指标单位契约：memUnit 与 memKind 语义一致（显存 GB / 存储 TB）', () => {
+    for (const node of OPS_NODES) {
+      expect(['GB', 'TB']).toContain(node.memUnit);
+      if (node.memKind === 'storage') expect(node.memUnit).toBe('TB');
+      else expect(node.memUnit).toBe('GB');
     }
   });
 

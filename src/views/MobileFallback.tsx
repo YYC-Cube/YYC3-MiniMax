@@ -251,12 +251,12 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({ onSelectAgent })
                     <span className="text-[9px] font-mono-num text-[#9BA3B4] w-16 text-right">{node.gpuUtil}%</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-[9px] text-[#5A6478] w-8">VRAM</span>
+                    <span className="text-[9px] text-[#5A6478] w-8">{node.memKind === 'storage' ? 'DISK' : 'VRAM'}</span>
                     <div className="flex-1 h-1 rounded-full bg-white/10 overflow-hidden">
-                      <div className="h-full bg-[#BF00FF]" style={{ width: `${pct(node.vramUsed, node.vramTotal)}%` }} />
+                      <div className="h-full bg-[#BF00FF]" style={{ width: `${pct(node.memUsed, node.memTotal)}%` }} />
                     </div>
                     <span className="text-[9px] font-mono-num text-[#9BA3B4] w-16 text-right">
-                      {node.vramUsed}/{node.vramTotal}G
+                      {node.memUsed}/{node.memTotal}{node.memUnit}
                     </span>
                   </div>
                 </div>

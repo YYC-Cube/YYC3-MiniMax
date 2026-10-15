@@ -80,14 +80,14 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
           <div className="space-y-2.5">
             {OPS_NODES.map((node) => {
               const isWarning = node.status === 'warn';
-              const vramPct = Math.round((node.vramUsed / node.vramTotal) * 100);
+              const memPct = Math.round((node.memUsed / node.memTotal) * 100);
 
               return (
                 <div
                   key={node.id}
                   className={`p-3 rounded-xl bg-[#0A0D18]/90 border transition-all ${isWarning
-                      ? 'border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]'
-                      : 'border-white/10 hover:border-[#00F0FF]/40'
+                    ? 'border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]'
+                    : 'border-white/10 hover:border-[#00F0FF]/40'
                     }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
@@ -131,16 +131,16 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
 
                     <div className="bg-black/40 p-2 rounded-lg border border-white/5">
                       <div className="flex justify-between text-[#9BA3B4] mb-1">
-                        <span>{node.id.includes('45') ? '存储容量池' : '显存占用'}</span>
-                        <span className={`font-mono-num font-bold ${vramPct > 90 ? 'text-[#FF006E]' : 'text-[#BF00FF]'}`}>
-                          {node.vramUsed} / {node.vramTotal} {node.id.includes('45') ? 'TB' : 'GB'}
+                        <span>{node.memKind === 'storage' ? '存储容量池' : '显存占用'}</span>
+                        <span className={`font-mono-num font-bold ${memPct > 90 ? 'text-[#FF006E]' : 'text-[#BF00FF]'}`}>
+                          {node.memUsed} / {node.memTotal} {node.memUnit}
                         </span>
                       </div>
                       <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
                         <div
-                          className={`h-full rounded-full ${vramPct > 90 ? 'bg-[#FF006E]' : 'bg-[#BF00FF]'
+                          className={`h-full rounded-full ${memPct > 90 ? 'bg-[#FF006E]' : 'bg-[#BF00FF]'
                             }`}
-                          style={{ width: `${vramPct}%` }}
+                          style={{ width: `${memPct}%` }}
                         />
                       </div>
                     </div>
@@ -372,20 +372,20 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                 <div
                   key={alt.id}
                   className={`p-3 rounded-xl border text-xs transition-all ${isCrit
-                      ? 'bg-[#FF006E]/10 border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]'
-                      : isEvt
-                        ? 'bg-[#00F0FF]/10 border-[#00F0FF]/30'
-                        : 'bg-[#00FF88]/10 border-[#00FF88]/30'
+                    ? 'bg-[#FF006E]/10 border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]'
+                    : isEvt
+                      ? 'bg-[#00F0FF]/10 border-[#00F0FF]/30'
+                      : 'bg-[#00FF88]/10 border-[#00FF88]/30'
                     }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center space-x-1.5">
                       <span
                         className={`font-mono-num text-[9px] font-bold px-1.5 py-0.2 rounded ${isCrit
-                            ? 'bg-[#FF006E] text-white'
-                            : isEvt
-                              ? 'bg-[#00F0FF]/30 text-[#00F0FF]'
-                              : 'bg-[#00FF88]/30 text-[#00FF88]'
+                          ? 'bg-[#FF006E] text-white'
+                          : isEvt
+                            ? 'bg-[#00F0FF]/30 text-[#00F0FF]'
+                            : 'bg-[#00FF88]/30 text-[#00FF88]'
                           }`}
                       >
                         {alt.level}
@@ -407,8 +407,8 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                     <button
                       onClick={() => handleAlertAction(alt)}
                       className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1 cursor-pointer transition-all ${isCrit
-                          ? 'bg-[#FF006E] hover:bg-[#FF006E]/80 text-white shadow-[0_0_8px_#FF006E]'
-                          : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
+                        ? 'bg-[#FF006E] hover:bg-[#FF006E]/80 text-white shadow-[0_0_8px_#FF006E]'
+                        : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
                         }`}
                     >
                       <span>{alt.actionText}</span>

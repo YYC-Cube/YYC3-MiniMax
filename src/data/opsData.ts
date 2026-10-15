@@ -28,8 +28,10 @@ export const OPS_NODES: OpsNode[] = [
     linkType: '万兆 NFS / RoCE 200G',
     status: 'warn', // Memory high
     gpuUtil: 84,
-    vramUsed: 76.2,
-    vramTotal: 80.0,
+    memKind: 'vram',
+    memUsed: 76.2,
+    memTotal: 80.0,
+    memUnit: 'GB',
     tempC: 68,
   },
   {
@@ -41,8 +43,10 @@ export const OPS_NODES: OpsNode[] = [
     linkType: '万兆 NFS / RoCE 200G',
     status: 'online',
     gpuUtil: 58,
-    vramUsed: 49.6,
-    vramTotal: 80.0,
+    memKind: 'vram',
+    memUsed: 49.6,
+    memTotal: 80.0,
+    memUnit: 'GB',
     tempC: 59,
   },
   {
@@ -54,8 +58,10 @@ export const OPS_NODES: OpsNode[] = [
     linkType: '2.5G SSH 控制面',
     status: 'online',
     gpuUtil: 42,
-    vramUsed: 68.4,
-    vramTotal: 128.0,
+    memKind: 'vram',
+    memUsed: 68.4,
+    memTotal: 128.0,
+    memUnit: 'GB',
     tempC: 48,
   },
   {
@@ -67,8 +73,10 @@ export const OPS_NODES: OpsNode[] = [
     linkType: '万兆 SMB / NFSv4.2',
     status: 'online',
     gpuUtil: 0,
-    vramUsed: 78.4, // used TB
-    vramTotal: 100.0, // total TB
+    memKind: 'storage',
+    memUsed: 78.4,
+    memTotal: 100.0,
+    memUnit: 'TB',
     tempC: 38,
   },
 ];
