@@ -27,8 +27,9 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['src/**'],
-      // src/main.tsx 为 DOM 挂载入口（createRoot + 全局钩子安装），排除出统计口径
-      exclude: ['src/vite-env.d.ts', 'src/index.css', 'src/main.tsx'],
+      // 引导胶水排除出统计口径：main.tsx 为 DOM 挂载入口（createRoot + 全局钩子安装），
+      // services/pwa.ts 为仅生产环境的 SW 注册（navigator.serviceWorker 在 happy-dom 不可测）
+      exclude: ['src/vite-env.d.ts', 'src/index.css', 'src/main.tsx', 'src/services/pwa.ts'],
       reporter: ['text', 'html'],
       // 覆盖率棘轮：App 编排层集成测试后基线上调（94.1/89.6/92.9/95.2），仅升不降
       thresholds: {
