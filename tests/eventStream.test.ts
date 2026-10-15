@@ -17,6 +17,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AGENTS } from '../src/data/agents';
 import { createEventStream, normalizeIncomingEvent, type EventStreamMode } from '../src/services/eventStream';
+import { addTelemetrySink, type TelemetryEvent } from '../src/services/telemetry';
+import type { LogItem } from '../src/types';
 
 describe('normalizeIncomingEvent', () => {
   it('规范化完整消息', () => {
@@ -88,7 +90,7 @@ describe('createEventStream 降级模拟流', () => {
     handle.close();
 
     for (const call of onEvent.mock.calls) {
-      const log = call[0];
+      const log = call[0] as LogItem;
       expect(AGENTS[log.agentId]).toBeDefined();
       expect(typeof log.message).toBe('string');
       expect(log.message.length).toBeGreaterThan(0);
@@ -230,6 +232,22 @@ describe('createEventStream WebSocket 接驳（LIVE 模式）', () => {
     expect(onEvent.mock.calls[0][0].agentId).toBe('tianshu');
     expect(onEvent.mock.calls[0][0].message).toBe('对象通道消息');
     handle.close();
+  });
+
+  it('非法入站消息告警携带 traceId（结构化一致）', () => {
+    const captured: TelemetryEvent[] = [];
+    const off = addTelemetrySink((e) => captured.push(e));
+    const onEvent = vi.fn();
+    const handle = createEventStream({ url: WS_URL, onEvent, intervalMs: 1e9 });
+    const ws = MockWebSocket.instances[0];
+    ws.onopen?.();
+
+    ws.onmessage?.({ data: JSON.stringify({ agentId: 'tianshu' }) });
+
+    off();
+    handle.close();
+    const invalid = captured.find((e) => e.event === 'event_stream.invalid_message');
+    expect(invalid?.traceId).toBeTruthy();
   });
 
   it('非法消息静默丢弃且不中断链路', () => {

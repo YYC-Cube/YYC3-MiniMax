@@ -31,7 +31,7 @@ import { StageTabs } from '../components/p2/StageTabs';
 import { KPI_METRICS, PIPELINE_STAGES } from '../data/pipeline';
 import { GATES, formatGatePercent } from '../domain/constants';
 import { useAgentEventStream } from '../hooks/useAgentEventStream';
-import { telemetry } from '../services/telemetry';
+import { createTraceId, telemetry } from '../services/telemetry';
 import type { AgentId, LogItem, PipelineStageId } from '../types';
 
 interface P2ProductionDeskProps {
@@ -117,6 +117,7 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
       agentName: '元启·天枢',
       level: 'ACT',
       message: `接收控制台快捷指令: "${text}"，已派发至 ReAct-C 执行器。`,
+      traceId: createTraceId(),
     };
     prependLog(newLog);
   };

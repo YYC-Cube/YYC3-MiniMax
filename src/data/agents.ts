@@ -13,9 +13,11 @@
  * exports: AGENTS, AGENT_LIST
  */
 
-import { AgentInfo } from '../types';
+import { GATES, formatGateDecimal, formatGatePercent } from '../domain/constants';
+import { AgentId, AgentInfo } from '../types';
 
-export const AGENTS: Record<string, AgentInfo> = {
+/** 8 位成员档案映射：键为 AgentId 字符串字面量全集，取值穷尽由类型系统保证 */
+export const AGENTS: Record<AgentId, AgentInfo> = {
   tianshu: {
     id: 'tianshu',
     name: '元启·天枢',
@@ -58,7 +60,7 @@ export const AGENTS: Record<string, AgentInfo> = {
     angleDeg: 90, // Right
     status: 'online',
     lastActive: '4秒前',
-    role: '多模态质量门禁把控，严格核验人物一致性≥80%与事实溯源，≤2轮质量复检',
+    role: `多模态质量门禁把控，严格核验人物一致性${formatGatePercent(GATES.CONSISTENCY)}与事实溯源，≤${GATES.MAX_REVIEW_ROUNDS}轮质量复检`,
     description: '严谨求真的质检大师，确保画面特征、音画质感不漂移。',
     primaryStage: '图像生成 (阶段③) & 成片质检',
     model: 'qwen-2.5-max-eval',
@@ -122,7 +124,7 @@ export const AGENTS: Record<string, AgentInfo> = {
     angleDeg: 270, // Left
     status: 'online',
     lastActive: '15秒前',
-    role: '实时监测 SyncNet 音画对齐 (目标≥0.75)，预估全网短剧受众留存与爆款概率',
+    role: `实时监测 SyncNet 音画对齐 (目标${formatGateDecimal(GATES.SYNCNET)})，预估全网短剧受众留存与爆款概率`,
     description: '洞悉未来的风向标，用指标概率为每一帧镜头赋能商业竞争力。',
     primaryStage: '视频合成 (阶段④) & 运营反哺 (阶段⑥)',
     model: 'nemotron-4-340b',

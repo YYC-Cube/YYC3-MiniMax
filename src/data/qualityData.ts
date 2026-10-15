@@ -11,12 +11,14 @@
  * brief: 分镜质检、PII 三级脱敏审计与终审报告样本（全虚构）
  *
  *         样本安全约定（诊断 #20）：PII 原文均为"文档保留格式/必然校验失败"的假数据——
- *         手机号 138-0000-0000（全零占位段）、密钥 sk-DEMO-0000000000（零熵）、
+ *         手机号 138-0000-0000（全零占位段）、密钥（零熵掩码占位）、
  *         证件号 110101199002299590（1990-02-29 为非法日期，校验位必错）。
  *         均无法通过任何真实 PII/凭据格式校验，可被 gitleaks 默认规则直接放行。
  *
  * exports: AUDIT_STORYBOARDS, PII_AUDIT_LOGS, MASTER_REVIEW
  */
+
+import { GATES } from '../domain/constants';
 
 export interface StoryboardAuditItem {
   id: string;
@@ -92,7 +94,7 @@ export const AUDIT_STORYBOARDS: StoryboardAuditItem[] = [
     status: 'pending',
     thumbPrompt: '百叶窗斜射阴影 / 礼帽风衣 / 面部阴影过重导致瞳孔识别失真',
     reviewRound: 1,
-    rejectReason: '面部特征相似度 68% 未达 80% 门禁，瞳距与下颌线偏离标准资产图谱。',
+    rejectReason: `面部特征相似度 68% 未达 ${GATES.CONSISTENCY}% 门禁，瞳距与下颌线偏离标准资产图谱。`,
   },
   {
     id: 'sb-104',
@@ -143,7 +145,7 @@ export const PII_AUDIT_LOGS: PIILogItem[] = [
     time: '14:21:40',
     stageName: '视频合成 (阶段④)',
     entityType: '内网IP/密钥',
-    maskedSnippet: 'API_ENDPOINT=10.253.*.*:****; KEY=sk-DEMO-**********',
+    maskedSnippet: 'API_ENDPOINT=**.**.*.*:****; KEY=****（掩码占位）',
     action: '拦截并告警',
     guardAgent: '智云·守护',
   },

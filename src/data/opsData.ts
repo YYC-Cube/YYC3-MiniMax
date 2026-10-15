@@ -10,6 +10,9 @@
  *
  * brief: DGX×2/Mac/NAS 节点遥测与告警事件（全虚构样本）
  *
+ * 安全约定：节点地址一律采用 RFC 5737 文档保留段（192.0.2.0/24 TEST-NET-1），
+ * 非真实可路由内网地址，避免客户端 bundle 泄露内部网络拓扑
+ *
  * exports: OPS_NODES, SYSTEM_ALERTS
  */
 
@@ -21,7 +24,7 @@ export const OPS_NODES: OpsNode[] = [
     name: 'yyc3-101 DGX GB10',
     role: '主推理节点 (vLLM 72B / Flux-Pro)',
     hardware: '8× NVIDIA H100 80GB SXM5',
-    ip: '10.12.0.101',
+    ip: '192.0.2.101',
     linkType: '万兆 NFS / RoCE 200G',
     status: 'warn', // Memory high
     gpuUtil: 84,
@@ -34,7 +37,7 @@ export const OPS_NODES: OpsNode[] = [
     name: 'yyc3-102 DGX GB10',
     role: '能力支撑与安全审计 (三件套)',
     hardware: '8× NVIDIA H100 80GB SXM5',
-    ip: '10.12.0.102',
+    ip: '192.0.2.102',
     linkType: '万兆 NFS / RoCE 200G',
     status: 'online',
     gpuUtil: 58,
@@ -47,7 +50,7 @@ export const OPS_NODES: OpsNode[] = [
     name: 'yyc3-22 Mac Studio M4',
     role: '全局调度中枢 + VideoToolbox 硬件压制',
     hardware: 'Apple M4 Max 128GB Unified',
-    ip: '10.12.0.22',
+    ip: '192.0.2.22',
     linkType: '2.5G SSH 控制面',
     status: 'online',
     gpuUtil: 42,
@@ -60,7 +63,7 @@ export const OPS_NODES: OpsNode[] = [
     name: 'yyc3-45 NAS 存储阵列',
     role: '/mnt/nas 单一事实源 (全流程共享)',
     hardware: 'TrueNAS Enterprise RAID1/6 192TB',
-    ip: '10.12.0.45',
+    ip: '192.0.2.45',
     linkType: '万兆 SMB / NFSv4.2',
     status: 'online',
     gpuUtil: 0,

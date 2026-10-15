@@ -76,6 +76,12 @@ describe('WebSocket × P2 生产台 集成链路', () => {
     vi.useRealTimers();
   });
 
+  it('日志行透传 traceId（生成即上屏，闭合链路断点）', () => {
+    window.localStorage.clear();
+    renderP2();
+    expect(screen.getByText('#1a2b3c4d')).toBeTruthy();
+  });
+
   it('未配置网关：SIM 徽章渲染，模拟流按节拍注入日志行', () => {
     renderP2();
 

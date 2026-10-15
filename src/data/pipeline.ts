@@ -13,7 +13,8 @@
  * exports: PIPELINE_STAGES, KPI_METRICS, STORYBOARD_12_FIELDS
  */
 
-import { PipelineStage, KPIMetric } from '../types';
+import { GATES, formatGateDecimal, formatGatePercent } from '../domain/constants';
+import { KPIMetric, PipelineStage } from '../types';
 
 export const PIPELINE_STAGES: PipelineStage[] = [
   {
@@ -61,7 +62,7 @@ export const PIPELINE_STAGES: PipelineStage[] = [
     passRate: '91.4%',
     progress: 74,
     leadAgents: ['lingyun', 'zongshi'],
-    keySchemaOrGate: '一致性门禁 ≥ 80%',
+    keySchemaOrGate: `一致性门禁 ${formatGatePercent(GATES.CONSISTENCY)}`,
     description: 'Flux 高清原画扩散，面部特征网格比对与 LoRA 风格锁定，严格门禁过滤。',
   },
   {
@@ -77,7 +78,7 @@ export const PIPELINE_STAGES: PipelineStage[] = [
     passRate: '93.0%',
     progress: 58,
     leadAgents: ['wanwu', 'xianzhi'],
-    keySchemaOrGate: 'SyncNet 唇形吻合 ≥ 0.75',
+    keySchemaOrGate: `SyncNet 唇形吻合 ${formatGateDecimal(GATES.SYNCNET)}`,
     description: 'VideoToolbox 硬件加速渲染，多段动作插帧与对白音视频毫米级同步。',
   },
   {

@@ -99,10 +99,11 @@ export const telemetry = {
   /**
    * 审计事件：记录"谁在何时对什么做了什么"（what=action，whom=target，可选 detail）
    * 事件名规约 audit.{action}；data 携带 action/target 平铺字段，便于采集端直接检索
+   * traceId 可外部传入（关联同链路的业务事件）；缺省时本地生成，保证审计事件永不缺链
    */
-  audit: (action: string, target: string, detail?: Record<string, unknown>) =>
+  audit: (action: string, target: string, detail?: Record<string, unknown>, traceId?: string) =>
     emit('info', `audit.${action}`, {
-      traceId: createTraceId(),
+      traceId: traceId ?? createTraceId(),
       data: { action, target, ...detail },
     }),
 };

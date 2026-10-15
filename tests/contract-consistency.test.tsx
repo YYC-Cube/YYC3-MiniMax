@@ -17,6 +17,7 @@ import { describe, expect, it } from 'vitest';
 import { GateFailureModal } from '../src/components/p2/GateFailureModal';
 import { PIPELINE_STAGES } from '../src/data/pipeline';
 import { AUDIT_STORYBOARDS, PII_AUDIT_LOGS } from '../src/data/qualityData';
+import { REACT_STEPS } from '../src/data/reactSteps';
 import { formatGateDecimal, formatGatePercent, GATES } from '../src/domain/constants';
 import { resolveAgentReply } from '../src/services/agentReply';
 import { P5QualitySecurity } from '../src/views/P5QualitySecurity';
@@ -42,6 +43,23 @@ describe('门禁规则一致性（GATES 单源）', () => {
       expect(log).not.toHaveProperty('rawSnippet');
       expect(log.maskedSnippet.length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('阈值文案单一事实源（data 层无独立字面量）', () => {
+  it('pipeline 阶段门禁文案由 GATES 派生', () => {
+    const imageStage = PIPELINE_STAGES.find((s) => s.id === 'image');
+    const videoStage = PIPELINE_STAGES.find((s) => s.id === 'video');
+    expect(imageStage?.keySchemaOrGate).toBe(`一致性门禁 ${formatGatePercent(GATES.CONSISTENCY)}`);
+    expect(videoStage?.keySchemaOrGate).toBe(`SyncNet 唇形吻合 ${formatGateDecimal(GATES.SYNCNET)}`);
+  });
+
+  it('质检打回文案与 ReAct 步骤描述由 GATES 派生', () => {
+    const sb103 = AUDIT_STORYBOARDS.find((s) => s.id === 'sb-103');
+    expect(sb103?.rejectReason).toContain(`${GATES.CONSISTENCY}% 门禁`);
+
+    const zongshiStep = REACT_STEPS.find((s) => s.agentId === 'zongshi' && s.step === 7);
+    expect(zongshiStep?.description).toContain(formatGatePercent(GATES.CONSISTENCY));
   });
 });
 

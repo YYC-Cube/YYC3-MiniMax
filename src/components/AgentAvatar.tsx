@@ -47,7 +47,7 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
   className = '',
   onClick,
 }) => {
-  const agent = AGENTS[agentId] || AGENTS.tianshu;
+  const agent = AGENTS[agentId];
   const status = overrideStatus || agent.status;
 
   // Icon symbol based on agent persona

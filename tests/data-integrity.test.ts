@@ -16,11 +16,11 @@
 
 import { describe, expect, it } from 'vitest';
 import { AGENTS, AGENT_LIST } from '../src/data/agents';
-import { KPI_METRICS, PIPELINE_STAGES, STORYBOARD_12_FIELDS } from '../src/data/pipeline';
-import { REACT_STEPS } from '../src/data/reactSteps';
 import { INITIAL_LOGS } from '../src/data/logs';
 import { OPS_NODES } from '../src/data/opsData';
+import { KPI_METRICS, PIPELINE_STAGES, STORYBOARD_12_FIELDS } from '../src/data/pipeline';
 import { AUDIT_STORYBOARDS, PII_AUDIT_LOGS } from '../src/data/qualityData';
+import { REACT_STEPS } from '../src/data/reactSteps';
 
 /** 数据层完整性门禁：单一事实源一致性校验（五标 · 规范化） */
 describe('data layer integrity', () => {
@@ -109,6 +109,20 @@ describe('data layer integrity', () => {
       expect(node.gpuUtil).toBeGreaterThanOrEqual(0);
       expect(node.gpuUtil).toBeLessThanOrEqual(100);
       expect(node.vramUsed).toBeLessThanOrEqual(node.vramTotal);
+    }
+  });
+
+  it('算力节点地址采用 RFC 5737 文档保留段，不泄露内网拓扑', () => {
+    for (const node of OPS_NODES) {
+      expect(node.ip).toMatch(/^192\.0\.2\.\d+$/);
+      expect(node.ip).not.toMatch(/^10\.|^172\.(1[6-9]|2\d|3[01])\.|^192\.168\./);
+    }
+  });
+
+  it('事件流初始日志均携带 traceId（全链路可关联）', () => {
+    expect(INITIAL_LOGS.length).toBeGreaterThan(0);
+    for (const log of INITIAL_LOGS) {
+      expect(log.traceId).toBeTruthy();
     }
   });
 

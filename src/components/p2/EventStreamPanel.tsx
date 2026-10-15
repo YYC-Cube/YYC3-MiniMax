@@ -98,6 +98,14 @@ export function EventStreamPanel({ logs, streamMode, onSelectAgent, onSendComman
                   >
                     {log.level}
                   </span>
+                  {log.traceId && (
+                    <span
+                      className="text-[#00F0FF]/45 select-text"
+                      title={`traceId: ${log.traceId}`}
+                    >
+                      #{log.traceId.slice(0, 8)}
+                    </span>
+                  )}
                 </div>
                 <span
                   className="text-[10px] font-bold cursor-pointer hover:underline"

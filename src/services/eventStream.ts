@@ -164,6 +164,7 @@ export function createEventStream(options: EventStreamOptions): EventStreamHandl
         else {
           telemetry.warn('event_stream.invalid_message', {
             message: '入站消息规范化失败，已丢弃',
+            traceId: createTraceId(),
             data: { rawType: typeof candidate },
           });
         }

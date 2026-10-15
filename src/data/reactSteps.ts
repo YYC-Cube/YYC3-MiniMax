@@ -13,6 +13,7 @@
  * exports: REACT_STEPS
  */
 
+import { GATES, formatGatePercent } from '../domain/constants';
 import { ReActStep } from '../types';
 
 export const REACT_STEPS: ReActStep[] = [
@@ -103,7 +104,7 @@ export const REACT_STEPS: ReActStep[] = [
   {
     step: 7,
     name: '质量校验复检',
-    enName: 'Quality Verification (≤2 R)',
+    enName: `Quality Verification (≤${GATES.MAX_REVIEW_ROUNDS} R)`,
     agentId: 'zongshi',
     agentName: '格物·宗师',
     color: '#C0C0C0',
@@ -111,7 +112,7 @@ export const REACT_STEPS: ReActStep[] = [
     tokensIn: 1650,
     tokensOut: 320,
     durationMs: 240,
-    description: '面部特征一致性 ≥80% 严格比对；若未达标则触发红色虚线回环至 Step 5。',
+    description: `面部特征一致性 ${formatGatePercent(GATES.CONSISTENCY)} 严格比对；若未达标则触发红色虚线回环至 Step 5。`,
     status: 'pending',
   },
   {

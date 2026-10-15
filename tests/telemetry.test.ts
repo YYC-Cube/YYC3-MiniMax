@@ -92,6 +92,16 @@ describe('telemetry 结构化输出', () => {
       reviewRound: 1,
     });
   });
+
+  it('audit 支持外部传入 traceId 以关联同链路业务事件', () => {
+    const captured: TelemetryEvent[] = [];
+    cleanupFns.push(addTelemetrySink((e) => captured.push(e)));
+
+    telemetry.audit('gate.simulate_failure', 'image', undefined, 'trace-shared-1');
+
+    expect(captured[0]!.event).toBe('audit.gate.simulate_failure');
+    expect(captured[0]!.traceId).toBe('trace-shared-1');
+  });
 });
 
 describe('installGlobalErrorHooks（happy-dom）', () => {
