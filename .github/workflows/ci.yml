@@ -103,15 +103,16 @@ jobs:
       - name: 产物检测（检测无误后方可部署）
         run: |
           set -e
-          for f in CNAME index.html manifest.webmanifest sw.js \
+          for f in CNAME index.html 404.html manifest.webmanifest sw.js \
+                   p2/index.html p3/index.html p4/index.html p5/index.html \
                    yyc3-icons/brand/favicon-32.png; do
-            test -s "dist/$f" || { echo "::error::dist/$f 缺失或为空"; exit 1; }
+            test -s "out/$f" || { echo "::error::out/$f 缺失或为空"; exit 1; }
           done
-          if grep -q 'noindex' dist/index.html; then
+          if grep -q 'noindex' out/index.html; then
             echo "::error::生产产物包含 noindex，阻止公开站点收录"
             exit 1
           fi
-          echo "产物检测通过：CNAME / index.html / manifest / sw.js / favicon 就绪，无 noindex"
+          echo "产物检测通过：CNAME / 五路由 / 404 / manifest / sw.js / favicon 就绪，无 noindex"
 
       - name: Configure Pages（自愈启用，幂等）
         uses: actions/configure-pages@v5
@@ -121,7 +122,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: out
 
       - name: Deploy to GitHub Pages
         id: deployment

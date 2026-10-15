@@ -71,7 +71,24 @@ $ npm view next@latest peerDependencies.engines --json
 | vite 依赖 | 移除 | vitest@5 与 @vitejs/plugin-react@6 的 peer 均要求显式 vite（`^6 | | ^7 | | ^8`） | **保留** vite devDep，仅服务 vitest 工具链 |
 | eslint-config-next 传递插件 | P5 再验证 | eslint-plugin-import/jsx-a11y/react peer 上限 eslint 9，ESLint 10 下为 unmet peer 警告 | P5 接线时实测 `pnpm lint`，失败则回退现有规则集或 override 插件版本 |
 
-## 六、下一步（P2 布局与元信息）
+## 六、P5/P6 执行勘误与最终决策
+
+| # | 清单/P0 假设 | 实测 | 最终决策 |
+| - | ------------ | ---- | -------- |
+| D4 | P0 备选：FlatCompat 转换 next/core-web-vitals | **eslint-config-next@16.4+ 原生导出扁平配置数组**；FlatCompat 转换路径触发 config-validator 循环引用崩溃（ESLint 10） | 弃用 FlatCompat，直接 import + 拍平展开；卸载 @eslint/eslintrc |
+| D5 | 评估清单 §7：compiler 系规则（set-state-in-effect/purity/refs/static-components）随 React Compiler 处理 | 接入后 9 处 error（W1 时钟渲染/StageCard 动态组件等，均属既有代码模式） | 迁移期降 warn（0 error 门禁保持），与 React Compiler 启用合并修复，不在行为等价迁移中重构 |
+| D6 | TS 语义 no-unused-vars 通配全仓 | typescript-eslint v8 对纯 JS 文件（eslint.config.js/postcss/sw.js）值位置误报 "only used as a type" | JS 文件块单独关闭该规则 |
+| D7 | Next 静态导出无 redirects() | `/?view=` 旧深链（PWA 快捷方式/外链）需兼容 | LegacyViewBridge 客户端 replace 桥接 + manifest 快捷方式升级真路由直达（少一跳） |
+| D8 | sw.js 单页缓存（v1） | 多路由下缓存键错配会"离线串页" | SW v2：五路由文档预缓存 + pathname 归一化导航缓存 + activate 清 v1 |
+| D9 | MPA 化后滚动行为待适配 | 无全局 scroll-behavior、局部容器滚动与路由无关、MPA 导航滚动浏览器原生接管 | 零改动通过 |
+
+## 七、P7 主线合并清单（待执行）
+
+1. `feat/nextjs16` → `main` 合并（--no-ff 保留迁移史）
+2. push github main → CI 全绿 → Pages 自动部署 `out/`
+3. 线上复检：五路由 200 / 404.html / sw v2 生效 / 无 noindex
+4. 内网 GitBucket 恢复后 `git push origin main` 镜像同步
 
 ---
 **P0 状态**: ✅ 完成
+**P1–P6 状态**: ✅ 全部完成（分支 feat/nextjs16，提交链 f62e535→P6）

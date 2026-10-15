@@ -6,8 +6,8 @@
   "packageManager": "pnpm@10.34.3",
   "description": "YYC³ AI FAMILY 漫剧工业化指挥中心 · 8 Agent 协同 / ReAct-C 九步闭环 / PWA",
   "keywords": [
+    "nextjs",
     "react",
-    "vite",
     "typescript",
     "tailwindcss",
     "vitest",
@@ -43,6 +43,7 @@
     "lint": "eslint .",
     "knip": "knip",
     "madge:circular": "madge --circular --extensions ts,tsx src",
+    "preview": "npx serve out",
     "format": "oxfmt"
   },
   "knip": {
