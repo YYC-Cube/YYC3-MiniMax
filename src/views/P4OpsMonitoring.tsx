@@ -10,7 +10,7 @@
  *
  * brief: 混合算力拓扑监控视图：DGX×2/Mac/NAS 节点遥测与告警
  *
- * dependencies: react, lucide-react, data/opsData, components/AgentAvatar
+ * dependencies: react, lucide-react, data/opsData, components/AgentAvatar, domain/opsView
  * exports: P4OpsMonitoring
  */
 
@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 import { OPS_NODES, SYSTEM_ALERTS, SystemAlert } from '../data/opsData';
+import { memUsagePct } from '../domain/opsView';
 
 interface P4OpsMonitoringProps {
   onNavigateToP5: () => void;
@@ -80,7 +81,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
           <div className="space-y-2.5">
             {OPS_NODES.map((node) => {
               const isWarning = node.status === 'warn';
-              const memPct = Math.round((node.memUsed / node.memTotal) * 100);
+              const memPct = memUsagePct(node.memUsed, node.memTotal);
 
               return (
                 <div

@@ -10,7 +10,7 @@
  *
  * brief: 家族/流水线/ReAct/算力/质安五卡精简视图，点击成员唤起 W1
  *
- * dependencies: react, lucide-react, data/*, components/AgentAvatar
+ * dependencies: react, lucide-react, data/*, components/AgentAvatar, components/StatusPill, domain/constants, domain/opsView
  * exports: MobileFallback
  */
 
@@ -19,12 +19,14 @@ import React, { useEffect, useState } from 'react';
 import { AgentAvatar } from '../components/AgentAvatar';
 import { BrandMark } from '../components/BrandMark';
 import { PwaInstallButton } from '../components/PwaInstallButton';
+import { StatusPill } from '../components/StatusPill';
 import { AGENT_LIST } from '../data/agents';
 import { OPS_NODES } from '../data/opsData';
 import { KPI_METRICS, PIPELINE_STAGES } from '../data/pipeline';
 import { AUDIT_STORYBOARDS, PII_AUDIT_LOGS } from '../data/qualityData';
 import { REACT_STEPS } from '../data/reactSteps';
-import { GATES, formatGateDecimal, formatGatePercent } from '../domain/constants';
+import { formatGateDecimal, formatGatePercent, GATES } from '../domain/constants';
+import { memUsagePct, OPS_STATUS_LABEL, OPS_STATUS_TONE, REACT_STEP_STATUS_LABEL, REACT_STEP_STATUS_TONE } from '../domain/opsView';
 import { AgentId } from '../types';
 
 interface MobileFallbackProps {
@@ -40,10 +42,6 @@ const TABS: Array<{ id: MobileTab; label: string; icon: React.FC<{ size?: number
   { id: 'ops', label: '算力', icon: Cpu },
   { id: 'security', label: '质安', icon: ShieldAlert },
 ];
-
-function pct(value: number, max: number): number {
-  return Math.min(100, Math.round((value / max) * 100));
-}
 
 /**
  * 移动端降级视图（< 768px 自动切换）
@@ -200,22 +198,7 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({ onSelectAgent })
                     {step.agentName} · {step.model}
                   </p>
                 </div>
-                <span
-                  className={`text-[9px] px-1.5 py-0.5 rounded border shrink-0 ${step.status === 'running'
-                    ? 'text-[#00F0FF] border-[#00F0FF]/40'
-                    : step.status === 'completed' || step.status === 'loopback'
-                      ? 'text-[#00FF88] border-[#00FF88]/40'
-                      : 'text-[#5A6478] border-white/10'
-                    }`}
-                >
-                  {step.status === 'running'
-                    ? '执行中'
-                    : step.status === 'completed'
-                      ? '已完成'
-                      : step.status === 'loopback'
-                        ? '回环'
-                        : '待命'}
-                </span>
+                <StatusPill label={REACT_STEP_STATUS_LABEL[step.status]} tone={REACT_STEP_STATUS_TONE[step.status]} />
               </div>
             ))}
           </div>
@@ -231,16 +214,7 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({ onSelectAgent })
                     <p className="text-xs font-bold text-white truncate">{node.name}</p>
                     <p className="text-[10px] text-[#5A6478] truncate">{node.hardware}</p>
                   </div>
-                  <span
-                    className={`text-[9px] px-1.5 py-0.5 rounded border shrink-0 ${node.status === 'online'
-                      ? 'text-[#00FF88] border-[#00FF88]/40'
-                      : node.status === 'warn'
-                        ? 'text-[#FFD700] border-[#FFD700]/40'
-                        : 'text-[#FF006E] border-[#FF006E]/40'
-                      }`}
-                  >
-                    {node.status === 'online' ? '在线' : node.status === 'warn' ? '高负载' : '告警'}
-                  </span>
+                  <StatusPill label={OPS_STATUS_LABEL[node.status]} tone={OPS_STATUS_TONE[node.status]} />
                 </div>
                 <div className="mt-2 space-y-1.5">
                   <div className="flex items-center space-x-2">
@@ -253,7 +227,7 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({ onSelectAgent })
                   <div className="flex items-center space-x-2">
                     <span className="text-[9px] text-[#5A6478] w-8">{node.memKind === 'storage' ? 'DISK' : 'VRAM'}</span>
                     <div className="flex-1 h-1 rounded-full bg-white/10 overflow-hidden">
-                      <div className="h-full bg-[#BF00FF]" style={{ width: `${pct(node.memUsed, node.memTotal)}%` }} />
+                      <div className="h-full bg-[#BF00FF]" style={{ width: `${memUsagePct(node.memUsed, node.memTotal)}%` }} />
                     </div>
                     <span className="text-[9px] font-mono-num text-[#9BA3B4] w-16 text-right">
                       {node.memUsed}/{node.memTotal}{node.memUnit}
