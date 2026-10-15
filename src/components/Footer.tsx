@@ -18,10 +18,10 @@
  * exports: Footer
  */
 
+import { useCommandCenter, type ViewId } from '@/context/CommandCenterContext';
 import { ArrowRight, HardDrive, Server, ShieldCheck, Zap } from 'lucide-react';
-import React from 'react';
 import { usePathname } from 'next/navigation';
-import { useCommandCenter, type ViewId } from '@/app/CommandCenterContext';
+import React from 'react';
 
 export const Footer: React.FC = () => {
   const pathname = usePathname();

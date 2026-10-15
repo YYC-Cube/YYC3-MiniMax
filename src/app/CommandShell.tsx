@@ -28,7 +28,7 @@ import { Header } from '@/components/Header'
 import { UniversalWidget } from '@/components/UniversalWidget'
 import { MobileFallback } from '@/views/MobileFallback'
 import { useEffect, useState, type ReactNode } from 'react'
-import { useCommandCenter } from './CommandCenterContext'
+import { useCommandCenter } from '../context/CommandCenterContext'
 import { useResponsiveGate } from './ResponsiveGate'
 
 export function CommandShell({ children }: { children: ReactNode }) {

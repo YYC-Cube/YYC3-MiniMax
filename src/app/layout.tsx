@@ -20,7 +20,7 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import { Bootstrap } from './Bootstrap'
-import { CommandCenterProvider } from './CommandCenterContext'
+import { CommandCenterProvider } from '../context/CommandCenterContext'
 import { CommandShell } from './CommandShell'
 import { LegacyViewBridge } from './LegacyViewBridge'
 import './globals.css'

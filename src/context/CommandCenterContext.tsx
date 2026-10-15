@@ -1,5 +1,5 @@
 /**
- * file: app/CommandCenterContext.tsx
+ * file: context/CommandCenterContext.tsx
  * description: 指挥舱全局上下文 · 跨路由共享状态与 W1 指令路由（迁移自 App.tsx 编排层）
  * author: YanYuCloudCube Team
  * version: v1.0.0

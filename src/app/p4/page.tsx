@@ -16,7 +16,7 @@
 'use client'
 
 import { P4OpsMonitoring } from '@/views/P4OpsMonitoring'
-import { useCommandCenter } from '../CommandCenterContext'
+import { useCommandCenter } from '../../context/CommandCenterContext'
 
 export default function Page() {
   const { navigate } = useCommandCenter()

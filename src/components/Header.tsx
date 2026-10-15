@@ -18,6 +18,7 @@
  * exports: Header
  */
 
+import { VIEW_PATHS, type ViewId } from '@/context/CommandCenterContext';
 import {
   Activity,
   Cpu,
@@ -30,7 +31,6 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { VIEW_PATHS, type ViewId } from '@/app/CommandCenterContext';
 import { BrandMark } from './BrandMark';
 import { PwaInstallButton } from './PwaInstallButton';
 

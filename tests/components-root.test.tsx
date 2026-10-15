@@ -14,7 +14,7 @@
 
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { CommandCenterProvider } from '../src/app/CommandCenterContext';
+import { CommandCenterProvider } from '../src/context/CommandCenterContext';
 import { ErrorBoundary } from '../src/components/ErrorBoundary';
 import { Footer } from '../src/components/Footer';
 import { Header } from '../src/components/Header';

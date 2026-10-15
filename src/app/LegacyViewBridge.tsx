@@ -18,7 +18,7 @@
 
 import { useEffect, Suspense } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { VIEW_IDS, VIEW_PATHS } from './CommandCenterContext'
+import { VIEW_IDS, VIEW_PATHS } from '../context/CommandCenterContext'
 
 function Bridge() {
   const router = useRouter()

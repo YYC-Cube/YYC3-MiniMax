@@ -60,6 +60,9 @@ jobs:
       - name: Circular dependencies (madge)
         run: pnpm madge:circular
 
+      - name: Dependency boundaries (dependency-cruiser)
+        run: pnpm depcruise
+
       - name: Unit tests with coverage gate (vitest)
         run: pnpm test:coverage
 

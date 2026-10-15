@@ -43,6 +43,7 @@
     "lint": "eslint .",
     "knip": "knip",
     "madge:circular": "madge --circular --extensions ts,tsx src",
+    "depcruise": "depcruise --config .dependency-cruiser.cjs src",
     "preview": "npx serve out",
     "format": "oxfmt"
   },
@@ -77,6 +78,7 @@
     "@vitejs/plugin-react": "^6.0.0",
     "@vitest/coverage-v8": "^5.0.3",
     "babel-plugin-react-compiler": "^1.0.0",
+    "dependency-cruiser": "^18.6.0",
     "eslint": "^10.12.0",
     "eslint-config-next": "^16.4.1",
     "eslint-plugin-react-hooks": "^7.1.1",

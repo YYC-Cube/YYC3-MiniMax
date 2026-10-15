@@ -1,7 +1,8 @@
 /**
  * YYC³ AI FAMILY — Service Worker（Next.js 16 静态导出多路由版）
  * 策略：
- *  - 安装：预缓存五路由文档（/ /p2/ /p3/ /p4/ /p5/）+ 404 兜底页 + manifest + 品牌图标
+ *  - 安装：逐项预缓存五路由文档（/ /p2/ /p3/ /p4/ /p5/）+ 404 兜底页 + manifest + 品牌图标
+ *          （逐项 add 容错：单资源失败不阻断安装）
  *  - 导航请求：network-first，按各自 pathname 落缓存（路由内容一一对应），
  *              离线回退先精确匹配本路由，再回退根外壳（离线可开屏不白屏）
  *  - 同源静态资源（含 /_next/static 分包）：stale-while-revalidate
@@ -37,10 +38,18 @@ function navCacheKey(url) {
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches
-      .open(SHELL_CACHE)
-      .then((cache) => cache.addAll(PRECACHE_URLS))
-      .then(() => self.skipWaiting()),
+    caches.open(SHELL_CACHE).then(async (cache) => {
+      // 逐项预缓存（容错）：任一资源 404/网络抖动仅记录并跳过，绝不阻断 SW 安装，
+      // 避免单个缺失资源导致离线首屏整体失效（降级为「缓存可得部分」）
+      await Promise.all(
+        PRECACHE_URLS.map((url) =>
+          cache.add(url).catch((err) => {
+            console.warn('[sw] precache 跳过不可达资源:', url, err);
+          }),
+        ),
+      );
+      await self.skipWaiting();
+    }),
   );
 });
 

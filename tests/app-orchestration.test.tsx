@@ -18,7 +18,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { CommandCenterProvider } from '../src/app/CommandCenterContext';
+import { CommandCenterProvider } from '../src/context/CommandCenterContext';
 import { CommandShell } from '../src/app/CommandShell';
 import P2Page from '../src/app/p2/page';
 import P3Page from '../src/app/p3/page';

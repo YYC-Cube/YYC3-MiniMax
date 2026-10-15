@@ -16,7 +16,7 @@
 'use client'
 
 import { P5QualitySecurity } from '@/views/P5QualitySecurity'
-import { useCommandCenter } from '../CommandCenterContext'
+import { useCommandCenter } from '../../context/CommandCenterContext'
 
 export default function Page() {
   const { navigate } = useCommandCenter()

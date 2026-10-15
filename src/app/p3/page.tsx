@@ -16,7 +16,7 @@
 'use client'
 
 import { P3ReActWorkflow } from '@/views/P3ReActWorkflow'
-import { useCommandCenter } from '../CommandCenterContext'
+import { useCommandCenter } from '../../context/CommandCenterContext'
 
 export default function Page() {
   const { setActiveAgentId, setIsWidgetOpen, navigate } = useCommandCenter()

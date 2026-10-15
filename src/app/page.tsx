@@ -16,7 +16,7 @@
 'use client'
 
 import { P1FamilyCenter } from '@/views/P1FamilyCenter'
-import { useCommandCenter } from './CommandCenterContext'
+import { useCommandCenter } from '../context/CommandCenterContext'
 
 export default function Page() {
   const { setActiveAgentId, setIsWidgetOpen, navigate } = useCommandCenter()
