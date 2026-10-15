@@ -15,8 +15,7 @@
  */
 
 import { ArrowRight, ShieldAlert } from 'lucide-react';
-import React from 'react';
-import { GATES } from '../../domain/constants';
+import { GATES, GATE_SIM_SAMPLE_SCORE } from '../../domain/constants';
 
 interface GateFailureModalProps {
   onClose: () => void;
@@ -36,14 +35,14 @@ export function GateFailureModal({ onClose, onNavigateToP5 }: GateFailureModalPr
               质检门禁拦截告警：一致性不达标！
             </h3>
             <span className="text-xs text-[#FF006E] font-mono-num font-bold">
-              GATE-FAIL: Consistency 74.8% &lt; {GATES.CONSISTENCY}.0%
+              GATE-FAIL: Consistency {GATE_SIM_SAMPLE_SCORE}% &lt; {GATES.CONSISTENCY}.0%
             </span>
           </div>
         </div>
 
         <p className="text-xs text-[#E0E4EC] leading-relaxed mb-4">
           分镜 <strong>#EP03-SC03-SH02 (密室阴影逆光)</strong> 经格物·宗师面部特征比对，得分为
-          <strong> 74.8%</strong>，未通过 {GATES.CONSISTENCY}% 工业化交付门禁。系统已自动启动 ReAct-C 第 7
+          <strong> {GATE_SIM_SAMPLE_SCORE}%</strong>，未通过 {GATES.CONSISTENCY}% 工业化交付门禁。系统已自动启动 ReAct-C 第 7
           步红色回环复检机制！
         </p>
 

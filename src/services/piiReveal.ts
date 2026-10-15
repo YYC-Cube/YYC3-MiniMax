@@ -26,18 +26,29 @@
  * SIM 模式（未配置 NEXT_PUBLIC_PII_REVEAL_API 时）：
  * 返回本地演示原文并显式标注。生产环境必须配置接口后删除 DEMO_RAW 映射。
  *
- * dependencies: telemetry
+ * 离线降级（诊断 #37：公网部署无网关时的可用性闭环）：
+ * - 网关不可达（fetch 抛错）时回退「掩码快照」——复用 qualityData 的 maskedSnippet；
+ * - 不在前端缓存原文，符合后端契约「响应不缓存（no-store）」；
+ * - 降级与成功路径均发射 metric 指标（available/latency_ms），可观测闭环。
+ *
+ * dependencies: telemetry, data/qualityData
  * exports: revealPiiRaw, PiiRawPayload
  */
 
-import { telemetry } from './telemetry';
+import { PII_AUDIT_LOGS } from '../data/qualityData';
+import { createTraceId, telemetry } from './telemetry';
 
 export interface PiiRawPayload {
   raw: string;
 }
 
-/** 受控接口地址（构建时注入；Next.js 约定 NEXT_PUBLIC_ 前缀变量内联到客户端） */
-const ENDPOINT = process.env.NEXT_PUBLIC_PII_REVEAL_API;
+/** 受控接口地址（构建时内联 NEXT_PUBLIC_ 前缀变量；按次读取便于测试注入） */
+const endpoint = (): string | undefined => process.env.NEXT_PUBLIC_PII_REVEAL_API;
+
+/** 离线降级快照：logId → 掩码文本（不含任何原文，可直接随包分发） */
+const MASKED_SNAPSHOTS = new Map<string, string>(
+  PII_AUDIT_LOGS.map((log) => [log.id, log.maskedSnippet]),
+);
 
 /**
  * SIM 演示原文映射（仅本地开发/演示用）。
@@ -55,21 +66,41 @@ const DEMO_RAW: Record<string, string> = {
 
 /**
  * 按审计记录 ID 受控调取 PII 原文（异步契约，与生产接口签名一致）
- * @throws 未知 logId 或接口拒绝（403/500）时抛错，由调用方提示
+ * - 单次调取生成共享 traceId：审计/告警/指标同链路可串联
+ * - 网关不可达时回退掩码快照（离线降级），不在前端缓存原文
+ * @throws 未知 logId、接口拒绝（403/500）或网关不可达且无降级快照时抛错，由调用方提示
  */
 export async function revealPiiRaw(logId: string): Promise<PiiRawPayload> {
   // 调取即审计：who/when 由遥测时间戳与用户态补全，target=logId
-  telemetry.audit('pii.reveal.request', logId);
+  const traceId = createTraceId();
+  telemetry.audit('pii.reveal.request', logId, undefined, traceId);
 
-  if (ENDPOINT) {
-    const res = await fetch(`${ENDPOINT}/${encodeURIComponent(logId)}`, {
-      credentials: 'include',
-      headers: { Accept: 'application/json' },
-    });
+  const api = endpoint();
+  if (api) {
+    const startedAt = Date.now();
+    let res: Response;
+    try {
+      res = await fetch(`${api}/${encodeURIComponent(logId)}`, {
+        credentials: 'include',
+        headers: { Accept: 'application/json' },
+      });
+    } catch {
+      // 网络级失败（离线/DNS/网关未启动）：结构化告警 + 掩码快照降级，不缓存原文
+      telemetry.warn('pii.reveal.gateway_unreachable', { traceId, data: { logId } });
+      telemetry.metric('pii.reveal.available', 0, { traceId, tags: { logId } });
+      const masked = MASKED_SNAPSHOTS.get(logId);
+      if (masked !== undefined) {
+        return { raw: `${masked}（离线降级快照 · 网关不可达，恢复后可调取原文）` };
+      }
+      throw new Error(`PII 网关不可达且无降级快照: ${logId}`);
+    }
     if (!res.ok) {
-      telemetry.warn('pii.reveal.denied', { data: { logId, status: res.status } });
+      telemetry.warn('pii.reveal.denied', { traceId, data: { logId, status: res.status } });
+      telemetry.metric('pii.reveal.available', 0, { traceId, tags: { logId, status: res.status } });
       throw new Error(`PII 原文调取被拒绝（HTTP ${res.status}）`);
     }
+    telemetry.metric('pii.reveal.latency_ms', Date.now() - startedAt, { traceId });
+    telemetry.metric('pii.reveal.available', 1, { traceId });
     return (await res.json()) as PiiRawPayload;
   }
 

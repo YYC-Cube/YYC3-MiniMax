@@ -29,7 +29,7 @@ import { StageCard } from '../components/p2/StageCard';
 import { StageDetailDrawer } from '../components/p2/StageDetailDrawer';
 import { StageTabs } from '../components/p2/StageTabs';
 import { KPI_METRICS, PIPELINE_STAGES } from '../data/pipeline';
-import { GATES, formatGatePercent } from '../domain/constants';
+import { GATES, GATE_SIM_SAMPLE_SCORE, formatGatePercent } from '../domain/constants';
 import { useAgentEventStream } from '../hooks/useAgentEventStream';
 import { createTraceId, telemetry } from '../services/telemetry';
 import type { AgentId, LogItem, PipelineStageId } from '../types';
@@ -86,7 +86,10 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
 
   // Trigger Gate Failure Test (flashes pink 3 times then pops modal)
   const triggerGateFailureTest = () => {
-    telemetry.audit('gate.simulate_failure', 'image');
+    // 同链路 traceId：审计与指标可串联（可观测闭环）
+    const traceId = createTraceId();
+    telemetry.audit('gate.simulate_failure', 'image', undefined, traceId);
+    telemetry.metric('gate.consistency_pct', GATE_SIM_SAMPLE_SCORE, { unit: '%', traceId });
     setIsAlertFlashing(true);
     try {
       const audioBeep = new AudioContext();

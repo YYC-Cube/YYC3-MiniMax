@@ -23,6 +23,9 @@ export const GATES = {
   MAX_REVIEW_ROUNDS: 2,
 } as const;
 
+/** 门禁模拟事故样本分（演示注入的事故值，非阈值；用于 GATE-FAIL 演示与 metric 上报） */
+export const GATE_SIM_SAMPLE_SCORE = 74.8;
+
 /** 百分比门禁展示文案：≥ 80% */
 export function formatGatePercent(value: number): string {
   return `≥ ${value}%`;

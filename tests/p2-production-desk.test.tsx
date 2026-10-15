@@ -14,6 +14,8 @@
 
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { GATE_SIM_SAMPLE_SCORE } from '../src/domain/constants';
+import { addTelemetrySink, type TelemetryEvent } from '../src/services/telemetry';
 import { P2ProductionDesk } from '../src/views/P2ProductionDesk';
 
 type DeskProps = Parameters<typeof P2ProductionDesk>[0];
@@ -84,11 +86,21 @@ describe('P2ProductionDesk（编排层）', () => {
     expect(screen.getByText(/接收控制台快捷指令: "@元启 启动 EP05 生产"/)).toBeTruthy();
   });
 
-  it('模拟门禁失败：延迟 1.5s 弹出告警弹窗，忽略后关闭', () => {
+  it('模拟门禁失败：延迟 1.5s 弹出告警弹窗，忽略后关闭，同链路上报 metric 指标', () => {
+    // 同链路可观测断言：audit 与 metric.gate.consistency_pct 共享 traceId
+    const captured: TelemetryEvent[] = [];
+    const off = addTelemetrySink((e) => captured.push(e));
     renderDesk({ onNavigateToP5: vi.fn() });
 
     fireEvent.click(screen.getByText('模拟门禁失败测试'));
     expect(screen.queryByText('质检门禁拦截告警：一致性不达标！')).toBeNull();
+
+    const auditEvt = captured.find((e) => e.event === 'audit.gate.simulate_failure');
+    const metricEvt = captured.find((e) => e.event === 'metric.gate.consistency_pct');
+    expect(metricEvt?.data?.value).toBe(GATE_SIM_SAMPLE_SCORE);
+    expect(metricEvt?.data?.unit).toBe('%');
+    expect(metricEvt?.traceId).toBe(auditEvt?.traceId);
+    off();
 
     act(() => {
       vi.advanceTimersByTime(1600);

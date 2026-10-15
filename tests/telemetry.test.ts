@@ -102,6 +102,28 @@ describe('telemetry 结构化输出', () => {
     expect(captured[0]!.event).toBe('audit.gate.simulate_failure');
     expect(captured[0]!.traceId).toBe('trace-shared-1');
   });
+
+  it('metric 事件：metric.{name} 规约，平铺 name/value/unit 且可携带外部 traceId', () => {
+    const captured: TelemetryEvent[] = [];
+    cleanupFns.push(addTelemetrySink((e) => captured.push(e)));
+
+    telemetry.metric('gate.consistency_pct', 74.8, { unit: '%', traceId: 'trace-metric-1' });
+
+    const evt = captured.find((e) => e.event === 'metric.gate.consistency_pct');
+    expect(evt?.level).toBe('info');
+    expect(evt?.traceId).toBe('trace-metric-1');
+    expect(evt?.data).toEqual({ name: 'gate.consistency_pct', value: 74.8, unit: '%' });
+  });
+
+  it('metric 缺省 traceId 时本地生成，保证指标事件永不缺链', () => {
+    const captured: TelemetryEvent[] = [];
+    cleanupFns.push(addTelemetrySink((e) => captured.push(e)));
+
+    telemetry.metric('pii.reveal.latency_ms', 12);
+
+    expect(captured[0]!.event).toBe('metric.pii.reveal.latency_ms');
+    expect(captured[0]!.traceId).toBeTruthy();
+  });
 });
 
 describe('installGlobalErrorHooks（happy-dom）', () => {

@@ -106,6 +106,19 @@ export const telemetry = {
       traceId: traceId ?? createTraceId(),
       data: { action, target, ...detail },
     }),
+  /**
+   * 指标事件：数值型业务指标（事件名规约 metric.{name}，与 audit 同级一等公民）
+   * data 平铺 name/value/unit 便于采集端直接聚合；traceId 可关联同链路业务事件
+   */
+  metric: (
+    name: string,
+    value: number,
+    detail?: { unit?: string; traceId?: string; tags?: Record<string, unknown> },
+  ) =>
+    emit('info', `metric.${name}`, {
+      traceId: detail?.traceId ?? createTraceId(),
+      data: { name, value, unit: detail?.unit, ...detail?.tags },
+    }),
 };
 
 /**
