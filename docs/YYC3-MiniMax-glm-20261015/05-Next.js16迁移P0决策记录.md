@@ -63,14 +63,15 @@ $ npm view next@latest peerDependencies.engines --json
 - [x] 本决策记录文档
 - [ ] （随本提交入库）迁移评估清单 04 文档
 
-## 五、下一步（P1 脚手架与配置）
+## 五、P1 执行勘误（相对评估清单 04）
 
-1. `pnpm add next@^16` + react/react-dom 钉 19.2.x；移除 vite/@tailwindcss/vite
-2. 新增 next.config.ts（output:'export'/trailingSlash/images.unoptimized）
-3. tsconfig.json 改写（jsx: preserve、next 插件、include 扩充）
-4. postcss.config.mjs（@tailwindcss/postcss）
-5. package.json scripts 切换（dev/build/test/typecheck 口径不变）
-6. 验收：`next build` 产出 out/
+| 清单项 | 清单假设 | P1 实测 | 处置 |
+| ------ | -------- | ------- | ---- |
+| tsconfig `jsx` | 改为 `preserve` | **Next 16 强制 `react-jsx`**（automatic runtime，build 时自动改写并标注 mandatory） | 采纳 react-jsx |
+| vite 依赖 | 移除 | vitest@5 与 @vitejs/plugin-react@6 的 peer 均要求显式 vite（`^6 | | ^7 | | ^8`） | **保留** vite devDep，仅服务 vitest 工具链 |
+| eslint-config-next 传递插件 | P5 再验证 | eslint-plugin-import/jsx-a11y/react peer 上限 eslint 9，ESLint 10 下为 unmet peer 警告 | P5 接线时实测 `pnpm lint`，失败则回退现有规则集或 override 插件版本 |
+
+## 六、下一步（P2 布局与元信息）
 
 ---
 **P0 状态**: ✅ 完成

@@ -18,6 +18,9 @@ export default tseslint.config(
   {
     ignores: [
       'dist/**',
+      'out/**',
+      '.next/**',
+      'next-env.d.ts',
       'node_modules/**',
       '.pnpm-store/**',
       '.figma/**',
