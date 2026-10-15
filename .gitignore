@@ -1,6 +1,8 @@
 node_modules/
 dist/
 build/
+.next/
+out/
 coverage/
 .pnpm-store/
 .cache/
@@ -11,6 +13,7 @@ vite.config.*.timestamp-*
 *-debug.log*
 logs/
 *.log
+.DS_Store
 .claude-replay.*
 .tmp-*
 /.figma/design-context/

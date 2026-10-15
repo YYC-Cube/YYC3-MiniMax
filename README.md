@@ -40,8 +40,8 @@ keywords:
 
 **8 拟人化 Agent 协同 · 六阶段流水线 · ReAct-C 九步闭环**
 
+![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs&logoColor=white)
 ![React 19](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
-![Vite 8](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![TypeScript 5.9](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
 ![Tailwind CSS v4](https://img.shields.io/badge/TailwindCSS-v4-06B6D4?logo=tailwindcss&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Vitest-5-6E9F18?logo=vitest&logoColor=white)
@@ -125,15 +125,16 @@ keywords:
 
 | 层级 | 技术 | 说明 |
 | ---- | ---- | ---- |
-| 框架 | React 19 + TypeScript 5.9（strict） | 函数组件 + Hooks，零运行时样式依赖 |
-| 构建 | Vite 8 + `@vitejs/plugin-react` | 246ms 冷启 / 300ms 生产构建 |
-| 样式 | Tailwind CSS v4（`@tailwindcss/vite`） | 原子类 + CSS 变量霓虹主题（无 tailwind.config） |
+| 框架 | **Next.js 16 App Router** + React 19 + TypeScript 5.9（strict） | 静态导出 SSG（`output: 'export'`），五路由目录形态 |
+| 构建 | next build（Turbopack）→ `out/` | 五路由 + 404.html 静态导出，构建约 1s |
+| 样式 | Tailwind CSS v4（`@tailwindcss/postcss`） | 原子类 + CSS 变量霓虹主题（无 tailwind.config） |
 | 图标 | lucide-react + yyc3-icons 全端图标集 | 品牌单一真源 `public/yyc3-icons/brand/`（favicon/apple-touch/maskable） |
 | 可视化 | 原生 SVG | 时钟环 / 九步环 / 遥测曲线 / 环形仪表，零图表库 |
-| PWA | Web App Manifest + Service Worker | 可安装/离线开屏/外壳预缓存/快捷方式深链，见 `public/sw.js` |
+| PWA | Web App Manifest + Service Worker v2 | 可安装/五路由预缓存/离线开屏/快捷方式直达路由，见 `public/sw.js` |
 | 实时流 | 原生 WebSocket + 指数退避重连 | `src/services/eventStream.ts`，无后端自动降级模拟 |
-| 测试 | Vitest 5 + happy-dom + Testing Library | 数据完整性 / 服务层 / 组件三类单测 |
-| 质量 | `tsc --noEmit` + vitest + oxfmt + GitHub Actions | 四重门禁 |
+| 元信息 | Metadata / Viewport API | layout.tsx 声明式 head（12 项），robots index 已启用 |
+| 测试 | Vitest 5 + happy-dom + Testing Library | 数据完整性 / 服务层 / 组件三类单测（131 例） |
+| 质量 | `tsc --noEmit` + eslint-config-next + knip + vitest + oxfmt + GitHub Actions | 五重门禁（0 error，覆盖率棘轮 ≥93%） |
 
 ### 工程原则（五高五标五化落地）
 
@@ -156,10 +157,10 @@ keywords:
 # 1. 安装依赖（.npmrc 已将 store 指向项目内，受限沙箱亦可运行）
 pnpm install
 
-# 2. 启动开发服务器（默认端口 8443，团队规范自 3030 起顺延）
+# 2. 启动开发服务器（next dev，默认端口 3000，团队规范自 3030 起顺延）
 PORT=3032 pnpm dev
 
-# 3. 生产构建 + 预览
+# 3. 生产构建（静态导出至 out/）+ 预览
 pnpm build
 pnpm preview
 
@@ -176,11 +177,13 @@ pnpm format      # oxfmt 格式化
 
 | 命令 | 说明 |
 | ---- | ---- |
-| `pnpm dev` | 启动 Vite 开发服务器（读取 `PORT` 环境变量，默认 8443） |
-| `pnpm build` | 生产构建（输出至 `dist/`） |
-| `pnpm preview` | 本地预览生产构建 |
+| `pnpm dev` | 启动 next dev 开发服务器（读取 `PORT` 环境变量，默认 3000） |
+| `pnpm build` | 生产构建 + 静态导出（输出至 `out/`，trailingSlash 目录形态） |
+| `pnpm preview` | 本地预览 `out/` 静态产物 |
 | `pnpm typecheck` | TypeScript 类型门禁（0 error 标准） |
 | `pnpm test` / `pnpm test:watch` | Vitest 单测（单次 / 监听） |
+| `pnpm lint` | ESLint 门禁（typescript-eslint + next/core-web-vitals，0 error 标准） |
+| `pnpm knip` | 依赖/导出死代码检测 |
 | `pnpm format` | oxfmt 格式化 |
 
 ### 实时事件流接驳（WebSocket）
@@ -189,7 +192,7 @@ P2 事件流内置高可用双模客户端 [src/services/eventStream.ts](./src/s
 
 ```bash
 # .env.local（可选）配置真实网关后自动切换 LIVE 模式
-VITE_EVENT_STREAM_URL=wss://gateway.yyc3.local/agent-events
+NEXT_PUBLIC_EVENT_STREAM_URL=wss://gateway.yyc3.local/agent-events
 ```
 
 - **LIVE 模式**：连接 WebSocket 实时流，断线指数退避重连（≤ 5 次，上限 30s）
@@ -212,13 +215,22 @@ YYC3-MiniMax/
 │       ├── brand/               # 品牌图标套件（favicon/192/512/maskable/apple-touch）
 │       └── Android/iOS/Web App/macOS/watchOS/  # 全员全端图标源
 ├── src/
+│   ├── app/                     # Next.js App Router（静态导出约定层）
+│   │   ├── layout.tsx           # 根布局：Metadata/Viewport API + 全局壳挂载
+│   │   ├── page.tsx             # 根路由 P1；p2/-p5/ 五路由同构薄壳
+│   │   ├── CommandCenterContext.tsx # 跨路由共享状态 + 编程式路由
+│   │   ├── CommandShell.tsx     # 全局壳（Header/Footer/W1/缩放/移动分支）
+│   │   ├── LegacyViewBridge.tsx # ?view= 旧深链 → 真路由桥接
+│   │   ├── Bootstrap.tsx        # 错误钩子 + SW 注册
+│   │   ├── error.tsx / global-error.tsx / not-found.tsx
+│   │   └── globals.css          # Tailwind v4 入口 + 霓虹主题 + keyframes
 │   ├── components/
-│   │   ├── Header.tsx           # 顶部导航 + 实时时钟 + 全局状态灯 + PWA 安装
-│   │   ├── Footer.tsx           # 底部状态栏（NAS/任务队列/在线率）
+│   │   ├── Header.tsx           # 顶部导航（Link 路由化）+ 实时时钟 + PWA 安装
+│   │   ├── Footer.tsx           # 底部状态栏（NAS/任务队列/在线率/路由 CTA）
 │   │   ├── AgentAvatar.tsx      # Agent 头像（光环/脉冲环/状态 LED）
 │   │   ├── BrandMark.tsx        # 品牌标识单一真源（全局 logo 统一引用）
 │   │   ├── PwaInstallButton.tsx # PWA 安装按钮（beforeinstallprompt）
-│   │   └── UniversalWidget.tsx  # W1 全局 AI 浮窗（响应式）
+│   │   └── UniversalWidget.tsx  # W1 全局 AI 浮窗（跨路由唯一实例）
 │   ├── views/
 │   │   ├── P1FamilyCenter.tsx   # P1 时钟环中心（真实走时三针）
 │   │   ├── P2ProductionDesk.tsx # P2 漫剧生产台
@@ -238,14 +250,13 @@ YYC3-MiniMax/
 │   │   ├── reactSteps.ts        # ReAct-C 九步定义
 │   │   └── logs.ts / opsData.ts / qualityData.ts
 │   ├── types/index.ts           # 全局类型定义
-│   ├── App.tsx                  # 视图路由 + 移动端分支 + PWA 深链
-│   ├── index.css                # Tailwind v4 入口 + 霓虹主题 + keyframes
-│   └── main.tsx                 # React 挂载入口 + SW 注册
-├── tests/                       # Vitest 单测（数据完整性/事件流/组件/PWA）
+│   └── env.d.ts                 # NEXT_PUBLIC_* 环境变量类型契约
+├── tests/                       # Vitest 单测（数据完整性/事件流/组件/编排/PWA）
+├── next.config.ts               # Next 16 配置（output:'export'/trailingSlash/images）
+├── postcss.config.mjs           # Tailwind v4 PostCSS 插件
+├── eslint.config.js             # typescript-eslint + next/core-web-vitals
 ├── .github/workflows/ci.yml     # CI 质量门禁 + GitHub Pages 自动部署
-├── docs/                        # 团队规范 + 会话工作文档
-├── .figma/make/site.json        # 站点元信息（标题/语言/SEO/图标）
-├── vite.config.ts               # Vite 8 配置（@ 别名 → src）
+├── docs/                        # 团队规范 + 会话工作文档 + 迁移评估清单
 └── package.json
 ```
 
@@ -270,7 +281,7 @@ GitHub Topics 命名规范：全小写、连字符分词、不超过 20 个标�
 
 | 分类 | 标签 |
 | ---- | ---- |
-| 技术栈 | `react` · `vite` · `typescript` · `tailwindcss` · `vitest` · `pnpm` |
+| 技术栈 | `nextjs` · `react` · `typescript` · `tailwindcss` · `vitest` · `pnpm` |
 | 形态 | `pwa` · `service-worker` · `spa` · `offline-first` |
 | 领域 | `ai-agent` · `multi-agent-orchestration` · `react-c` |
 | 场景 | `command-center` · `realtime-dashboard` · `data-visualization` · `svg-animation` |

@@ -14,12 +14,35 @@
 
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { CommandCenterProvider } from '../src/app/CommandCenterContext';
 import { ErrorBoundary } from '../src/components/ErrorBoundary';
 import { Footer } from '../src/components/Footer';
 import { Header } from '../src/components/Header';
 import { UniversalWidget } from '../src/components/UniversalWidget';
 import { addTelemetrySink, type TelemetryEvent } from '../src/services/telemetry';
 import type { AgentId } from '../src/types';
+
+/* ------------------------- next/navigation mock（Header/Footer 路由化） ------------------------- */
+
+const PUSH_CALLS: string[] = [];
+let currentPath = '/';
+
+vi.mock('next/navigation', () => ({
+  usePathname: () => currentPath,
+  useRouter: () => ({
+    push: vi.fn((path: string) => {
+      PUSH_CALLS.push(path);
+      currentPath = path;
+    }),
+    replace: vi.fn(),
+  }),
+  useSearchParams: () => new URLSearchParams(),
+}));
+
+beforeEach(() => {
+  PUSH_CALLS.length = 0;
+  currentPath = '/';
+});
 
 // jsdom 未实现 scrollIntoView（W1 新消息滚动依赖）
 beforeAll(() => {
@@ -89,36 +112,30 @@ describe('ErrorBoundary（错误边界）', () => {
 });
 
 describe('Header（顶部导航）', () => {
-  function renderHeader(currentView: 'P1' | 'P2' | 'P3' | 'P4' | 'P5' = 'P2') {
-    const onViewChange = vi.fn();
+  function renderHeader(pathname = '/') {
+    currentPath = pathname;
     const onToggleScaleMode = vi.fn();
-    render(
-      <Header
-        currentView={currentView}
-        onViewChange={onViewChange}
-        scaleMode="fit"
-        onToggleScaleMode={onToggleScaleMode}
-      />,
-    );
-    return { onViewChange, onToggleScaleMode };
+    render(<Header scaleMode="fit" onToggleScaleMode={onToggleScaleMode} />);
+    return { onToggleScaleMode };
   }
 
-  it('五个导航 Tab 点击回调对应视图', () => {
-    const { onViewChange } = renderHeader();
-    fireEvent.click(screen.getByRole('button', { name: 'P1 时钟环中心' }));
-    fireEvent.click(screen.getByRole('button', { name: 'P2 漫剧生产台' }));
-    fireEvent.click(screen.getByRole('button', { name: 'P3 ReAct-C 编排' }));
-    fireEvent.click(screen.getByRole('button', { name: 'P4 算力监控台' }));
-    fireEvent.click(screen.getByRole('button', { name: 'P5 质检与安全' }));
-    expect(onViewChange).toHaveBeenCalledTimes(5);
-    expect(onViewChange).toHaveBeenNthCalledWith(1, 'P1');
-    expect(onViewChange).toHaveBeenLastCalledWith('P5');
+  it('五个导航 Tab Link 化：href 指向五路由（Next Link 渲染规范化无尾斜杠）', () => {
+    renderHeader();
+    const expected: Array<[string, string]> = [
+      ['P1 时钟环中心', '/'],
+      ['P2 漫剧生产台', '/p2'],
+      ['P3 ReAct-C 编排', '/p3'],
+      ['P4 算力监控台', '/p4'],
+      ['P5 质检与安全', '/p5'],
+    ];
+    for (const [label, href] of expected) {
+      expect(screen.getByRole('link', { name: label }).getAttribute('href')).toBe(href);
+    }
   });
 
-  it('品牌点击回 P1；视图缩放开关回调', () => {
-    const { onViewChange, onToggleScaleMode } = renderHeader();
-    fireEvent.click(screen.getByText(/YYC³/));
-    expect(onViewChange).toHaveBeenCalledWith('P1');
+  it('品牌点击回 P1（Link → 根路由）；视图缩放开关回调', () => {
+    const { onToggleScaleMode } = renderHeader();
+    expect(screen.getByRole('link', { name: /YYC³/ }).getAttribute('href')).toBe('/');
     fireEvent.click(screen.getByTitle('切换至标准 1980×1020 视图'));
     expect(onToggleScaleMode).toHaveBeenCalledTimes(1);
   });
@@ -145,14 +162,17 @@ describe('Header（顶部导航）', () => {
 });
 
 describe('Footer（底部状态栏）', () => {
-  function renderFooter(currentView: 'P1' | 'P2' | 'P3' | 'P4' | 'P5') {
-    const onNavigate = vi.fn();
-    render(<Footer currentView={currentView} onNavigate={onNavigate} />);
-    return { onNavigate };
+  function renderFooter(pathname: string) {
+    currentPath = pathname;
+    render(
+      <CommandCenterProvider>
+        <Footer />
+      </CommandCenterProvider>,
+    );
   }
 
   it('渲染 NAS/任务队列/在线率遥测摘要', () => {
-    renderFooter('P3');
+    renderFooter('/p3/');
     expect(screen.getByText('/mnt/nas/yyc3_pipeline')).toBeTruthy();
     expect(screen.getByText('万兆 NFSv4.2 挂载')).toBeTruthy();
     expect(screen.getByText('42 Active')).toBeTruthy();
@@ -160,20 +180,20 @@ describe('Footer（底部状态栏）', () => {
     expect(screen.getByText('合规校验: PASS')).toBeTruthy();
   });
 
-  it('P1 视图：CTA 引导进入生产台 → P2', () => {
-    const { onNavigate } = renderFooter('P1');
+  it('P1 视图：CTA 引导进入生产台 → /p2/', () => {
+    renderFooter('/');
     fireEvent.click(screen.getByText('进入漫剧工业化生产台'));
-    expect(onNavigate).toHaveBeenCalledWith('P2');
+    expect(PUSH_CALLS).toContain('/p2/');
   });
 
-  it('P2 视图：CTA 引导查看 ReAct → P3', () => {
-    const { onNavigate } = renderFooter('P2');
+  it('P2 视图：CTA 引导查看 ReAct → /p3/', () => {
+    renderFooter('/p2/');
     fireEvent.click(screen.getByText('查看 ReAct-C 九步编排视图'));
-    expect(onNavigate).toHaveBeenCalledWith('P3');
+    expect(PUSH_CALLS).toContain('/p3/');
   });
 
   it('P3/P4/P5 视图：无快捷 CTA', () => {
-    renderFooter('P4');
+    renderFooter('/p4/');
     expect(screen.queryByText('进入漫剧工业化生产台')).toBeNull();
     expect(screen.queryByText('查看 ReAct-C 九步编排视图')).toBeNull();
   });

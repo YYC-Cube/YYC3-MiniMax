@@ -32,7 +32,7 @@ export const EVENT_STREAM_MAX_LOGS = 30;
 export const EVENT_STREAM_STORAGE_KEY = 'yyc3.p2.eventLogs';
 
 interface UseAgentEventStreamOptions {
-  /** WebSocket 网关地址（如 import.meta.env.VITE_EVENT_STREAM_URL），缺省走模拟流 */
+  /** WebSocket 网关地址（如 process.env.NEXT_PUBLIC_EVENT_STREAM_URL），缺省走模拟流 */
   url?: string;
   /** 模拟流节拍（ms） */
   intervalMs?: number;

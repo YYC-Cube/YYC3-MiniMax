@@ -6,8 +6,8 @@
   "packageManager": "pnpm@10.34.3",
   "description": "YYC³ AI FAMILY 漫剧工业化指挥中心 · 8 Agent 协同 / ReAct-C 九步闭环 / PWA",
   "keywords": [
+    "nextjs",
     "react",
-    "vite",
     "typescript",
     "tailwindcss",
     "vitest",
@@ -34,9 +34,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
+    "dev": "next dev",
+    "build": "next build",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -44,6 +43,7 @@
     "lint": "eslint .",
     "knip": "knip",
     "madge:circular": "madge --circular --extensions ts,tsx src",
+    "preview": "npx serve out",
     "format": "oxfmt"
   },
   "knip": {
@@ -58,8 +58,9 @@
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource-variable/noto-sans-sc": "^5.3.1",
     "lucide-react": "^1.55.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "next": "^16.4.1",
+    "react": "^19.2.9",
+    "react-dom": "^19.2.9"
   },
   "pnpm": {
     "overrides": {
@@ -67,7 +68,7 @@
     }
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.0.0",
+    "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^22.0.0",
@@ -76,6 +77,7 @@
     "@vitejs/plugin-react": "^6.0.0",
     "@vitest/coverage-v8": "^5.0.3",
     "eslint": "^10.12.0",
+    "eslint-config-next": "^16.4.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "happy-dom": "^20.14.6",
     "knip": "^6.41.0",

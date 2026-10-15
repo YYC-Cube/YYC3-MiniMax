@@ -94,7 +94,7 @@ describe('WebSocket × P2 生产台 集成链路', () => {
   });
 
   it('LIVE 全链路：onopen 徽章切换，服务端消息上屏', () => {
-    vi.stubEnv('VITE_EVENT_STREAM_URL', WS_URL);
+    vi.stubEnv('NEXT_PUBLIC_EVENT_STREAM_URL', WS_URL);
     renderP2();
 
     // 连接前仍为 SIM
@@ -127,7 +127,7 @@ describe('WebSocket × P2 生产台 集成链路', () => {
   });
 
   it('包装协议 {type:"log", data} 自动解包并上屏', () => {
-    vi.stubEnv('VITE_EVENT_STREAM_URL', WS_URL);
+    vi.stubEnv('NEXT_PUBLIC_EVENT_STREAM_URL', WS_URL);
     renderP2();
     const ws = MockWebSocket.instances[0];
     act(() => {
@@ -142,7 +142,7 @@ describe('WebSocket × P2 生产台 集成链路', () => {
   });
 
   it('非法消息不污染 UI：非法 agentId 与坏 JSON 均被隔离', () => {
-    vi.stubEnv('VITE_EVENT_STREAM_URL', WS_URL);
+    vi.stubEnv('NEXT_PUBLIC_EVENT_STREAM_URL', WS_URL);
     renderP2();
     const ws = MockWebSocket.instances[0];
     act(() => {
@@ -167,7 +167,7 @@ describe('WebSocket × P2 生产台 集成链路', () => {
   });
 
   it('服务端断开：徽章回退 SIM，模拟流恢复注入', () => {
-    vi.stubEnv('VITE_EVENT_STREAM_URL', WS_URL);
+    vi.stubEnv('NEXT_PUBLIC_EVENT_STREAM_URL', WS_URL);
     renderP2();
     const ws = MockWebSocket.instances[0];
     act(() => {
@@ -190,7 +190,7 @@ describe('WebSocket × P2 生产台 集成链路', () => {
   });
 
   it('卸载组件：客户端主动关闭连接，事件流完全停止', () => {
-    vi.stubEnv('VITE_EVENT_STREAM_URL', WS_URL);
+    vi.stubEnv('NEXT_PUBLIC_EVENT_STREAM_URL', WS_URL);
     const { unmount } = renderP2();
     const ws = MockWebSocket.instances[0];
     act(() => {
@@ -213,7 +213,7 @@ describe('WebSocket × P2 生产台 集成链路', () => {
   });
 
   it('选中成员回调贯通：点击日志行成员名触发 onSelectAgent', () => {
-    vi.stubEnv('VITE_EVENT_STREAM_URL', WS_URL);
+    vi.stubEnv('NEXT_PUBLIC_EVENT_STREAM_URL', WS_URL);
     const onSelectAgent = vi.fn();
     render(
       <P2ProductionDesk onSelectAgent={onSelectAgent} onSendToWidget={vi.fn()} />

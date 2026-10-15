@@ -11,7 +11,7 @@
  * brief: 高可用双模事件流：LIVE（WS 网关）+ SIM（降级模拟），链路永不中断
  *
  * details:
- * - 配置 VITE_EVENT_STREAM_URL 连接真实网关，指数退避重连 ≤5 次
+ * - 配置 NEXT_PUBLIC_EVENT_STREAM_URL 连接真实网关，指数退避重连 ≤5 次
  * - 未配置/失败自动降级内置模拟流；LIVE 后停用模拟定时器
  * - 消息规范化：非法 agentId/空消息静默丢弃，兼容 {type,data} 包装协议
  *

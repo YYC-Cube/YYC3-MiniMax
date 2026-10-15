@@ -14,10 +14,17 @@
  */
 
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    // 与 tsconfig paths / Next 默认对齐：src/app 等源码使用 @/ 别名导入（Next.js 16 迁移）
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
   test: {
     environment: 'happy-dom',
     include: ['tests/**/*.test.{ts,tsx}'],
@@ -28,8 +35,15 @@ export default defineConfig({
       provider: 'v8',
       include: ['src/**'],
       // 引导胶水排除出统计口径：main.tsx 为 DOM 挂载入口（createRoot + 全局钩子安装），
-      // services/pwa.ts 为仅生产环境的 SW 注册（navigator.serviceWorker 在 happy-dom 不可测）
-      exclude: ['src/vite-env.d.ts', 'src/index.css', 'src/main.tsx', 'src/services/pwa.ts'],
+      // services/pwa.ts 为仅生产环境的 SW 注册（navigator.serviceWorker 在 happy-dom 不可测）。
+      // src/app/** 整体为 Next 约定层（layout/page/error/not-found/Bootstrap 均为框架胶水，
+      // 且 coverage-v8 rolldown 对未导入 JSX 文件 remap 会 PARSE_ERROR，见 P2 验收），业务视图不受影响
+      exclude: [
+        'src/env.d.ts',
+        'src/services/pwa.ts',
+        'src/app/**',
+        'src/**/.DS_Store',
+      ],
       reporter: ['text', 'html'],
       // 覆盖率棘轮：App 编排层集成测试后基线上调（94.1/89.6/92.9/95.2），仅升不降
       thresholds: {
