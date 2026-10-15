@@ -63,12 +63,12 @@ keywords:
 
 ## 仓库信息
 
-| 项 | 值 |
-| -- | -- |
-| **GitHub 主仓** | <https://github.com/YYC-Cube/YYC3-MiniMax> |
-| **线上地址（Pages）** | <https://minimax.yyc3.top>（自定义域，HTTPS 强制） |
-| **内网镜像（GitBucket）** | <http://192.168.3.45:8080/git/root/YYC3-MiniMax> |
-| **远程名约定** | `github` = GitHub 主仓 · `origin` = 内网镜像 |
+| 项　　　　　　　　　　　　| 值　　　　　　　　　　　　　　　　　　　　　　　　 |
+| ---------------------------| ----------------------------------------------------|
+| **GitHub 主仓**　　　　　 | <https://github.com/YYC-Cube/YYC3-MiniMax>　　　　 |
+| **线上地址（Pages）**　　 | <https://minimax.yyc3.top>（自定义域，HTTPS 强制） |
+| **内网镜像（GitBucket）** | <http://192.168.3.45:8080/git/root/YYC3-MiniMax>　 |
+| **远程名约定**　　　　　　| `github` = GitHub 主仓 · `origin` = 内网镜像　　　 |
 
 ---
 
