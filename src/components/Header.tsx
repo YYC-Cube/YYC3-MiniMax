@@ -92,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="font-mono-num font-extrabold text-sm tracking-wider text-white">
                 YYC³ <span className="text-[#00F0FF]">AI FAMILY</span>
               </span>
-              <span className="text-[10px] px-1.5 py-0.2 bg-[#BF00FF]/20 border border-[#BF00FF]/40 text-[#BF00FF] rounded font-mono-num">
+              <span className="text-[10px] px-1.5 py-0.2 bg-[#BF00FF]/20 border border-[#BF00FF]/40 text-[#D26BFF] rounded font-mono-num">
                 v4.8-HYPER
               </span>
             </div>

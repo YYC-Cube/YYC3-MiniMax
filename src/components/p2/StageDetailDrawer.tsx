@@ -115,7 +115,7 @@ export function StageDetailDrawer({ stage, onClose }: StageDetailDrawerProps) {
                   <span className="text-[10px] text-[#9BA3B4] block">
                     主导执行 Agent
                   </span>
-                  <span className="text-xs font-bold text-[#BF00FF] mt-1 block">
+                  <span className="text-xs font-bold text-[#D26BFF] mt-1 block">
                     创想·灵韵 (Flux-Pro)
                   </span>
                 </div>

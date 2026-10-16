@@ -67,11 +67,13 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
 
   return (
     <div className="fixed bottom-6 right-6 z-50 select-none">
-      {/* Collapsed State: 56x56 Pulsing Sphere */}
+      {/* Collapsed State: 56x56 Pulsing Sphere（button：键盘可达，精修 F1——Tab 循环不再绕过 W1） */}
       {!isOpen && (
-        <div
+        <button
+          type="button"
           onClick={handleToggleOpen}
-          className="relative w-14 h-14 rounded-full cursor-pointer group flex items-center justify-center transition-transform hover:scale-105 active:scale-95 animate-bounce-subtle"
+          aria-haspopup="dialog"
+          className="relative w-14 h-14 rounded-full cursor-pointer group flex items-center justify-center transition-transform hover:scale-105 active:scale-95 animate-bounce-subtle focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]"
           title="展开 Universal Agent AI 浮窗"
         >
           {/* Pulsing ring */}
@@ -87,16 +89,18 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
 
           {/* Unread badge */}
           {unreadCount > 0 && (
-            <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#FF006E] border-2 border-[#0A1628] text-[10px] font-bold text-white flex items-center justify-center shadow-[0_0_8px_#FF006E]">
+            <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#C40055] border-2 border-[#0A1628] text-[10px] font-bold text-white flex items-center justify-center shadow-[0_0_8px_#FF006E]">
               {unreadCount}
             </div>
           )}
-        </div>
+        </button>
       )}
 
-      {/* Expanded State: 400x600 Glass Panel */}
+      {/* Expanded State: 400x600 Glass Panel（非模态 dialog：SR 可感知，无焦点陷阱——Tab 自然进出） */}
       {isOpen && (
         <div
+          role="dialog"
+          aria-label="Universal Agent AI 浮窗"
           className="w-[min(410px,calc(100vw-2rem))] h-[min(610px,calc(100dvh-8rem))] rounded-2xl glass-panel flex flex-col overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.8),0_0_24px_rgba(191,0,255,0.3)] border border-[#00F0FF]/40 transition-all duration-240"
           style={{
             animation: "float-widget 3s ease-in-out infinite alternate",
@@ -163,10 +167,12 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
               {AGENT_LIST.map((agent) => {
                 const isSelected = activeAgentId === agent.id
                 return (
-                  <div
+                  <button
                     key={agent.id}
+                    type="button"
                     onClick={() => onSelectAgent(agent.id)}
-                    className="flex flex-col items-center group cursor-pointer"
+                    aria-pressed={isSelected}
+                    className="flex flex-col items-center group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF] rounded-md"
                     title={`${agent.name} (${agent.title})`}
                   >
                     <div
@@ -190,7 +196,7 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
                     >
                       {agent.nick}
                     </span>
-                  </div>
+                  </button>
                 )
               })}
             </div>

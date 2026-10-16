@@ -33,7 +33,7 @@ export const LocaleToggle: React.FC<LocaleToggleProps> = ({
       onClick={() => setLocale(locale === "zh-CN" ? "en" : "zh-CN")}
       title={t("locale.switchTitle")}
       aria-label={t("locale.switchTitle")}
-      className={`flex items-center gap-1 rounded-md border border-[#BF00FF]/40 bg-[#BF00FF]/15 text-[#BF00FF] font-bold hover:bg-[#BF00FF]/25 transition-colors cursor-pointer ${
+      className={`flex items-center gap-1 rounded-md border border-[#BF00FF]/40 bg-[#BF00FF]/15 text-[#D26BFF] font-bold hover:bg-[#BF00FF]/25 transition-colors cursor-pointer ${
         isMobile ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]"
       }`}
     >

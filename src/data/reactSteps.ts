@@ -81,7 +81,7 @@ export const REACT_STEPS: ReActStep[] = [
     enName: "Script Refinement",
     agentId: "lingyun",
     agentName: "创想·灵韵",
-    color: "#BF00FF",
+    color: "#D26BFF",
     model: "flux-pro-cinema / gemini-1.5-pro",
     tokensIn: 1420,
     tokensOut: 810,

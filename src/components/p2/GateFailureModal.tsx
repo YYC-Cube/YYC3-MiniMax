@@ -19,11 +19,14 @@ import { GATES, GATE_SIM_SAMPLE_SCORE } from "../../domain/constants"
 
 interface GateFailureModalProps {
   onClose: () => void
+  /** 「忽略测试」：复位演示事故（不采纳），未传时退化为 onClose */
+  onIgnore?: () => void
   onNavigateToP5?: () => void
 }
 
 export function GateFailureModal({
   onClose,
+  onIgnore,
   onNavigateToP5,
 }: GateFailureModalProps) {
   return (
@@ -53,7 +56,7 @@ export function GateFailureModal({
 
         <div className="flex items-center justify-end space-x-3 pt-3 border-t border-white/10">
           <button
-            onClick={onClose}
+            onClick={onIgnore ?? onClose}
             className="px-3.5 py-1.5 rounded-lg text-xs text-[#9BA3B4] hover:text-white bg-white/5 transition-all cursor-pointer"
           >
             忽略测试

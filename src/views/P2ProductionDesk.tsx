@@ -28,6 +28,7 @@ import { KpiRibbon } from "../components/p2/KpiRibbon"
 import { StageCard } from "../components/p2/StageCard"
 import { StageDetailDrawer } from "../components/p2/StageDetailDrawer"
 import { StageTabs } from "../components/p2/StageTabs"
+import { useGate } from "../context/gate"
 import { KPI_METRICS, PIPELINE_STAGES } from "../data/pipeline"
 import {
   GATES,
@@ -62,6 +63,7 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
   const [isDetailDrawerOpen, setIsDetailDrawerOpen] = useState(false)
   const [isAlertFlashing, setIsAlertFlashing] = useState(false)
   const [gateFailureModal, setGateFailureModal] = useState(false)
+  const { simulateGateFail, clearGateFail } = useGate()
   const { logs, streamMode, prependLog } = useAgentEventStream({
     url: process.env.NEXT_PUBLIC_EVENT_STREAM_URL,
   })
@@ -103,6 +105,8 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
       unit: "%",
       traceId,
     })
+    // 激活跨视图演示事故：P5 门禁判定降级（总览 3/4 + 中卡告警），「忽略测试」复位
+    simulateGateFail()
     setIsAlertFlashing(true)
     try {
       const audioBeep = new AudioContext()
@@ -223,6 +227,10 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
       {gateFailureModal && (
         <GateFailureModal
           onClose={() => setGateFailureModal(false)}
+          onIgnore={() => {
+            clearGateFail()
+            setGateFailureModal(false)
+          }}
           onNavigateToP5={onNavigateToP5}
         />
       )}

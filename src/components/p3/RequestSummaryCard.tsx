@@ -65,7 +65,7 @@ export function RequestSummaryCard({
         </div>
         <div>
           <span className="text-[#9BA3B4] block">当前执行步骤</span>
-          <span className="text-[#BF00FF] font-mono-num font-bold text-xs">
+          <span className="text-[#D26BFF] font-mono-num font-bold text-xs">
             Step {activeStepIndex + 1}/9
           </span>
         </div>

@@ -111,7 +111,7 @@ export function ZongshiReportPanel({
         </button>
         <button
           onClick={onNavigateToP3}
-          className="text-[#BF00FF] hover:underline flex items-center space-x-1 cursor-pointer"
+          className="text-[#D26BFF] hover:underline flex items-center space-x-1 cursor-pointer"
         >
           <span>查看 ReAct-C 回环详情</span>
           <ArrowRight size={11} />

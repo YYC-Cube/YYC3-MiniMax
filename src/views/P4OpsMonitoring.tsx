@@ -85,7 +85,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
           {/* Network Interconnect Badge */}
           <div className="mb-3 p-2 rounded-lg bg-[#0A1628]/40 border border-white/10 flex items-center justify-between text-[10px] text-[#9BA3B4]">
             <span className="flex items-center space-x-1">
-              <Radio size={12} className="text-[#BF00FF]" />
+              <Radio size={12} className="text-[#D26BFF]" />
               <span>拓扑互联链路:</span>
             </span>
             <span className="font-mono-num text-white">
@@ -162,7 +162,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                             : "显存占用"}
                         </span>
                         <span
-                          className={`font-mono-num font-bold text-sm ${memPct > 90 ? "text-[#FF006E]" : "text-[#BF00FF]"
+                          className={`font-mono-num font-bold text-sm ${memPct > 90 ? "text-[#FF006E]" : "text-[#D26BFF]"
                             }`}
                         >
                           {node.memUsed} / {node.memTotal} {node.memUnit}
@@ -257,7 +257,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
 
             <div className="flex items-center justify-between text-[9px] pt-1 border-t border-white/5 font-mono-num">
               <span className="text-[#00F0FF]">● DGX-101: 84% (vLLM)</span>
-              <span className="text-[#BF00FF]">● DGX-102: 58% (Guard)</span>
+              <span className="text-[#D26BFF]">● DGX-102: 58% (Guard)</span>
             </div>
           </div>
 
@@ -265,7 +265,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
           <div className="rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between">
             <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-sm">
               <span className="font-bold text-white flex items-center space-x-1">
-                <Cpu size={13} className="text-[#BF00FF]" />
+                <Cpu size={13} className="text-[#D26BFF]" />
                 <span>显存驻留池分布 (GB)</span>
               </span>
               <span className="text-[10px] text-[#9BA3B4] font-mono-num">
@@ -295,7 +295,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                 <span className="text-[9px] text-[#9BA3B4] mt-1 font-mono-num">
                   DGX-2
                 </span>
-                <span className="text-[9px] text-[#BF00FF] font-bold font-mono-num">
+                <span className="text-[9px] text-[#D26BFF] font-bold font-mono-num">
                   49G
                 </span>
               </div>
@@ -496,7 +496,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                     <div className="flex items-center space-x-1.5">
                       <span
                         className={`font-mono-num text-[9px] font-bold px-1.5 py-0.2 rounded ${isCrit
-                          ? "bg-[#FF006E] text-white"
+                          ? "bg-[#C40055] text-white"
                           : isEvt
                             ? "bg-[#00F0FF]/30 text-[#00F0FF]"
                             : "bg-[#00FF88]/30 text-[#00FF88]"
@@ -521,7 +521,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                     <button
                       onClick={() => handleAlertAction(alt)}
                       className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1 cursor-pointer transition-all ${isCrit
-                        ? "bg-[#FF006E] hover:bg-[#FF006E]/80 text-white shadow-[0_0_8px_#FF006E]"
+                        ? "bg-[#C40055] hover:bg-[#C40055]/80 text-white shadow-[0_0_8px_#FF006E]"
                         : "bg-white/10 hover:bg-white/20 text-white border border-white/20"
                         }`}
                     >

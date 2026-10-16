@@ -38,7 +38,7 @@ export function StepDetailPanel({
         <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
           <div className="flex items-center space-x-2.5">
             <span
-              className="w-7 h-7 rounded-lg font-mono-num font-bold text-xs flex items-center justify-center text-white"
+              className="w-7 h-7 rounded-lg font-mono-num font-bold text-xs flex items-center justify-center text-[#0A1628]"
               style={{ backgroundColor: currentStep.color }}
             >
               {currentStep.step}
@@ -93,7 +93,7 @@ export function StepDetailPanel({
             <span className="text-[10px] text-[#9BA3B4] block">
               Output Tokens
             </span>
-            <span className="font-mono-num font-bold text-sm text-[#BF00FF] mt-0.5 block">
+            <span className="font-mono-num font-bold text-sm text-[#D26BFF] mt-0.5 block">
               {currentStep.tokensOut}
             </span>
           </div>

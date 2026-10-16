@@ -103,6 +103,14 @@ export function CommandShell({ children }: { children: ReactNode }) {
     <div className="w-screen h-screen overflow-hidden bg-[#0A1628] command-bg relative flex flex-col justify-between">
       <div className="noise-overlay" />
 
+      {/* Skip-link（WCAG 2.4.1）：首个可停靠点，键盘 Tab 一次直达主内容，聚焦前视觉隐藏 */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:px-3 focus:py-2 focus:text-xs focus:text-[#00F0FF] focus:bg-[#0A1628] focus:border focus:border-[#00F0FF] focus:rounded"
+      >
+        跳到主内容
+      </a>
+
       <div
         className={`w-full h-full flex flex-col justify-between relative z-10 ${scaleMode === "1080p" ? "origin-top-left" : ""
           }`}
@@ -115,7 +123,7 @@ export function CommandShell({ children }: { children: ReactNode }) {
         <Header scaleMode={scaleMode} onToggleScaleMode={toggleScaleMode} />
 
         { }
-        <main className="flex-1 w-full h-[calc(100%-92px)] relative overflow-hidden">
+        <main id="main-content" className="flex-1 w-full h-[calc(100%-92px)] relative overflow-hidden">
           <ErrorBoundary label="视图渲染异常">{children}</ErrorBoundary>
         </main>
 

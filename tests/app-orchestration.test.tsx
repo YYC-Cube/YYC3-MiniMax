@@ -204,6 +204,23 @@ describe("CommandShell 桌面编排（P1-P5 路由架构）", () => {
     expect(screen.getByTitle("展开 Universal Agent AI 浮窗")).toBeTruthy()
   })
 
+  it("W1 球体键盘可达（精修 F1）：button 语义 + Enter 激活展开 + 非模态 dialog", () => {
+    render(renderShell("P1"))
+    const sphere = screen.getByTitle("展开 Universal Agent AI 浮窗")
+    expect(sphere.tagName).toBe("BUTTON")
+    expect(sphere.getAttribute("aria-haspopup")).toBe("dialog")
+    expect(screen.queryByRole("dialog")).toBeNull()
+
+    fireEvent.click(sphere)
+    expect(screen.getByText("UNIVERSAL AGENT WIDGET (W1)")).toBeTruthy()
+    const dialog = screen.getByRole("dialog")
+    expect(dialog.getAttribute("aria-label")).toBe("Universal Agent AI 浮窗")
+    // 8 Agent 头像同样 button 化 + aria-pressed 选中态（元启为默认选中）
+    const avatar = screen.getByTitle(/元启/)
+    expect(avatar.tagName).toBe("BUTTON")
+    expect(avatar.getAttribute("aria-pressed")).toBe("true")
+  })
+
   it("P2 阶段卡头像唤起 W1（onSelectAgent 分支）", () => {
     render(renderShell("P2"))
     fireEvent.click(screen.getAllByTitle(/主导/)[0]!)

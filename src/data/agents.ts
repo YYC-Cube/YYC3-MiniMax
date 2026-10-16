@@ -76,7 +76,7 @@ export const AGENTS: Record<AgentId, AgentInfo> = {
     name: "创想·灵韵",
     nick: "灵韵",
     title: "视觉概念 / 艺术生成",
-    color: "#BF00FF",
+    color: "#D26BFF",
     clockPosition: "16:30",
     angleDeg: 135, // Bottom-right
     status: "speaking",

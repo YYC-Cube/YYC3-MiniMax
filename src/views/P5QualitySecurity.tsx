@@ -21,13 +21,14 @@ import { GateOverviewCard } from "../components/p5/GateOverviewCard"
 import { PiiAuditPanel } from "../components/p5/PiiAuditPanel"
 import { QualityQueuePanel } from "../components/p5/QualityQueuePanel"
 import { ZongshiReportPanel } from "../components/p5/ZongshiReportPanel"
+import { useGate } from "../context/gate"
 import { KPI_METRICS } from "../data/pipeline"
 import {
   AUDIT_STORYBOARDS,
   PII_AUDIT_LOGS,
   StoryboardAuditItem,
 } from "../data/qualityData"
-import { GATES } from "../domain/constants"
+import { GATES, GATE_SIM_SAMPLE_SCORE } from "../domain/constants"
 import { evaluateQualityGates, releaseRatePct } from "../domain/gateEvaluation"
 import { revealPiiRaw } from "../services/piiReveal"
 import { telemetry } from "../services/telemetry"
@@ -52,6 +53,8 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
   // 受控调取态：原文按次异步拉取（诊断 #21），缓存避免重复调取
   const [revealedRaw, setRevealedRaw] = useState<Record<string, string>>({})
   const [revealingPiiId, setRevealingPiiId] = useState<string | null>(null)
+  // GATE-FAIL 演示事故跨视图共享（P2 触发 / 模态「忽略测试」复位）
+  const { gateFailSimulated } = useGate()
 
   // 受控调取 PII 原文（异步契约与生产接口一致；审计由服务层自动留痕）
   const handleRevealPii = async (logId: string) => {
@@ -121,14 +124,17 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
     }, 500)
   }
 
-  // 四道门禁真实数据判定（domain 单一事实源）：1/2 源 KPI 实时值、3 源 PII 审计、4 为 gitleaks 上报位
+  // 四道门禁真实数据判定（domain 单一事实源）：1/2 源 KPI 实时值
+  //（GATE-FAIL 演示激活时门禁 1 注入事故样本 74.8）、3 源 PII 审计、4 为 gitleaks 上报位
   const kpiNum = (id: string) => {
     const kpi = KPI_METRICS.find((k) => k.id === id)
     const v = kpi?.value
     return typeof v === "number" ? v : parseFloat(v ?? "0")
   }
   const gateResults = evaluateQualityGates({
-    consistency: kpiNum("consistency_score"),
+    consistency: gateFailSimulated
+      ? GATE_SIM_SAMPLE_SCORE
+      : kpiNum("consistency_score"),
     syncnet: kpiNum("syncnet_score"),
     piiBypassCount: piiLogs.filter((l) => l.action === "放行").length,
     secretIncidents: 0, // gitleaks 周期门禁上报位：运行时无事故数据源，零事件即达标
@@ -156,6 +162,7 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
             title="门禁 1 · 角色面部一致性"
             value={gateResults[0].value}
             threshold={gateResults[0].threshold}
+            passed={gateResults[0].passed}
           />
 
           {/* Gate 2: SyncNet >= 0.75 */}
@@ -165,6 +172,7 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
             title="门禁 2 · SyncNet 唇形吻合"
             value={gateResults[1].value}
             threshold={gateResults[1].threshold}
+            passed={gateResults[1].passed}
           />
 
           {/* Gate 3: PII 0 泄漏 */}
@@ -174,6 +182,7 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
             title="门禁 3 · 敏感隐私实体"
             value={gateResults[2].value}
             threshold={gateResults[2].threshold}
+            passed={gateResults[2].passed}
           />
 
           {/* Gate 4: 密钥零入库 */}
@@ -183,6 +192,7 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
             title="门禁 4 · 密钥凭据防泄漏"
             value={gateResults[3].value}
             threshold={gateResults[3].threshold}
+            passed={gateResults[3].passed}
           />
         </div>
       </div>

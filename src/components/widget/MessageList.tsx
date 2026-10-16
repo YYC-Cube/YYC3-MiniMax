@@ -90,15 +90,16 @@ export function MessageList({
                 )}
               </div>
 
-              {/* Reference Card Jump Link */}
+              {/* Reference Card Jump Link（button：键盘可达，精修 F1） */}
               {msg.referenceCard && (
-                <div
+                <button
+                  type="button"
                   onClick={() => {
                     if (onNavigateToTask) {
                       onNavigateToTask(msg.referenceCard?.targetId || "image")
                     }
                   }}
-                  className="mt-2 p-2 rounded-lg bg-[#0A1628]/40 border border-[#00F0FF]/30 hover:border-[#00F0FF] transition-all cursor-pointer group flex items-center justify-between"
+                  className="w-full text-left mt-2 p-2 rounded-lg bg-[#0A1628]/40 border border-[#00F0FF]/30 hover:border-[#00F0FF] transition-all cursor-pointer group flex items-center justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]"
                 >
                   <div className="flex flex-col pr-2">
                     <div className="flex items-center space-x-1 text-[10px] text-[#00F0FF] font-bold">
@@ -113,7 +114,7 @@ export function MessageList({
                     size={13}
                     className="text-[#00F0FF] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
                   />
-                </div>
+                </button>
               )}
 
               {/* Human Takeover Decision Card（PR7） */}

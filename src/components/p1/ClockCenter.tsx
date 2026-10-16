@@ -68,6 +68,9 @@ export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
           title="点击快速进入漫剧生产指挥台"
         >
           <div className="w-full h-full bg-[#0A1628] rounded-[10px] flex flex-col items-center justify-center relative overflow-hidden border border-white/10">
+            {/* 人工复核记录（a11y-aa-scan.json 唯一残留 r=1）：bg-clip-text 渐变为对比度检测器盲区。
+                实测各渐变止点对内卡 #0A1628 底：#00F0FF 12.9:1 / #BF00FF 4.02:1 / #FFFFFF 18.1:1，
+                30px · font-black 构成 WCAG 大文本（阈值 3.0:1）→ 全部达标，误报放行 */}
             <span className="font-mono-num font-black text-3xl tracking-tighter bg-gradient-to-r from-[#00F0FF] via-[#BF00FF] to-white bg-clip-text text-transparent">
               YYC³
             </span>
@@ -103,7 +106,7 @@ export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
         <span
           style={{
             fontSize: Math.max(9, Math.round(12 * scale)),
-            color: "rgba(0,240,255,0.4)",
+            color: "rgba(0,240,255,0.72)",
             letterSpacing: "1px",
           }}
         >
@@ -112,7 +115,7 @@ export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
         <span
           style={{
             fontSize: Math.max(9, Math.round(12 * scale)),
-            color: isWeekend ? "#FF006E" : "rgba(0,240,255,0.4)",
+            color: isWeekend ? "#FF006E" : "rgba(0,240,255,0.72)",
             textShadow: isWeekend ? "0 0 6px rgba(255,0,110,0.4)" : "none",
             letterSpacing: "1px",
           }}

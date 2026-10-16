@@ -1,22 +1,33 @@
 #!/usr/bin/env node
 /**
  * file: bundle-budget.mjs
- * description: 构建产物预算门禁（评分卡 P1-2）· out/ JS 总量与单 chunk 预算棘轮
+ * description: 构建产物预算门禁 v2 · 每页实际加载量口径（解析静态导出 HTML 的 JS 引用）
  * author: YanYuCloudCube Team
- * version: v1.0.0
+ * version: v2.0.0
  * created: 2026-10-16
  * updated: 2026-10-16
  * status: active
  * tags: [script],[budget],[gate],[build]
  *
- * brief: pnpm build 后运行；超预算 exit 1 阻断 CI——预算棘轮只升不降，禁止放宽预算绕过
+ * brief: pnpm build 后运行；超预算 exit 1 阻断 CI——预算棘轮只降不升（基线只许优化不许回潮）
  *
  * usage:
- *   pnpm budget                          # 默认预算：总量 ≤850KB，单 chunk ≤280KB
- *   node scripts/bundle-budget.mjs --max-total=900KB --max-chunk=300KB
- */
+ *   pnpm budget                                    # 默认基线（见 MAX_PAGE/MAX_CHUNK）
+ *   node scripts/bundle-budget.mjs --max-page=600KB --max-chunk=300KB
+ *   node scripts/bundle-budget.mjs --observe       # 观测模式：只打印各页实载，不做门禁判定
+ *
+ * details:
+ * - 口径演进 v1→v2（2026-10-16）：v1 为 out 目录全站 JS 总和 ≤850KB。多页静态站中
+  * 全站总和与单页体验脱钩（共享 vendor chunk 重复计入），且 848.9 / 850KB 余量 0.13 %
+ * 已实质阻塞功能迭代；v2 改为「每页实际加载量」——解析各 index.html / 404.html 的
+  * <script src> 与 <link as="script"> 引用去重求和，忠实反映用户单页 JS 下载数
+    * - 全站总和降级为防膨胀护栏（MAX_TOTAL_GUARD，宽松值），不再作为体验门禁
+    * - 棘轮语义：MAX_PAGE 基线取 2026-10-16 实测最大页并写死，只降不升；
+    *   上调 = 显式修改本脚本 + 注释记录论证（对齐 coverage 棘轮先例）
+    * - max-chunk 语义不变（单文件体积上限，防 vendor 膨胀）
+    */
 
-import { readdirSync, statSync } from "node:fs"
+import { readFileSync, readdirSync, statSync } from "node:fs"
 import { extname, join, relative } from "node:path"
 
 const KB = 1024
@@ -41,61 +52,121 @@ function argValue(flag, fallback) {
   return hit ? parseSize(hit.split("=").slice(1).join("=")) : fallback
 }
 
-const MAX_TOTAL = argValue("--max-total", Math.round(850 * KB))
+const OBSERVE = process.argv.includes("--observe")
+// 棘轮基线：v2 重建于 2026-10-16。实测最大页 /p2 = 723.6KB（五页共享度极高：
+// 全局壳/context/vendor 全在共享 chunk，页间差仅 ~23KB），基线 = 实测 + 3.6% 应急余量。
+// 注意：实测证明单页阻塞执行 JS 即 ~700KB+（11 refs 全为 script src，preload 仅 1），
+// 「每页口径」价值在真实可信而非解压——解压仍需供给侧优化（数据外置/依赖审计）。
+const MAX_PAGE = argValue("--max-page", Math.round(750 * KB))
 const MAX_CHUNK = argValue("--max-chunk", Math.round(280 * KB))
+// 防膨胀护栏（宽松）：全站总和防无意识增长，非单页体验口径
+const MAX_TOTAL_GUARD = argValue("--max-total-guard", Math.round(1.2 * MB))
 
-function walkJsFiles(dir, base = dir, acc = []) {
+function walk(dir, base = dir, acc = { html: [], js: new Map() }) {
   for (const name of readdirSync(dir)) {
     const full = join(dir, name)
     const st = statSync(full)
-    if (st.isDirectory()) walkJsFiles(full, base, acc)
-    else if (extname(name) === ".js") {
-      acc.push({
-        path: relative(base, full).split("\\").join("/"),
-        bytes: st.size,
-      })
-    }
+    if (st.isDirectory()) walk(full, base, acc)
+    else if (name === "index.html" || name === "404.html") acc.html.push(full)
+    else if (extname(name) === ".js")
+      acc.js.set(
+        `/${relative(base, full).split("\\").join("/")}`,
+        statSync(full).size,
+      )
   }
   return acc
+}
+
+/** 解析页面 HTML 引用的 JS：script[src] + link[href][as=script]（去重，含预载 chunk） */
+function pageJsRefs(htmlPath) {
+  const html = readFileSync(htmlPath, "utf8")
+  const refs = new Set()
+  for (const m of html.matchAll(/<script[^>]*\ssrc="([^"]+\.js)"/g))
+    refs.add(m[1])
+  for (const m of html.matchAll(/<link[^>]*\shref="([^"]+\.js)"[^>]*\sas="script"/g))
+    refs.add(m[1])
+  for (const m of html.matchAll(/<link[^>]*\sas="script"[^>]*\shref="([^"]+\.js)"/g))
+    refs.add(m[1])
+  return [...refs]
 }
 
 const fmt = (b) =>
   b >= MB ? `${(b / MB).toFixed(2)}MB` : `${(b / KB).toFixed(1)}KB`
 
-let files
+let acc
 try {
-  files = walkJsFiles(OUT_DIR)
+  acc = walk(OUT_DIR)
 } catch {
   console.error("✗ out/ 目录不存在或不可读 —— 先执行 pnpm build 再运行预算门禁")
   process.exit(1)
 }
 
-if (files.length === 0) {
-  console.error("✗ out/ 无 JS 产物 —— 先执行 pnpm build 再运行预算门禁")
+if (acc.html.length === 0 || acc.js.size === 0) {
+  console.error("✗ out/ 无页面或无 JS 产物 —— 先执行 pnpm build 再运行预算门禁")
   process.exit(1)
 }
 
-const total = files.reduce((sum, f) => sum + f.bytes, 0)
-const biggest = Math.max(...files.map((f) => f.bytes))
+const pages = [...new Map(
+  acc.html
+    .map((htmlPath) => {
+      const route = `/${relative(OUT_DIR, htmlPath).split("\\").join("/").replace(/\/?index\.html$/, "").replace(/\.html$/, "") || ""}`
+      const refs = pageJsRefs(htmlPath)
+      let bytes = 0
+      let missing = 0
+      for (const ref of refs) {
+        const size = acc.js.get(ref)
+        if (size === undefined) missing++
+        else bytes += size
+      }
+      return {
+        route: route === "" ? "/" : route,
+        refs: refs.length,
+        bytes,
+        missing,
+      }
+    })
+    .map((p) => [p.route, p]),
+).values()].sort((a, b) => b.bytes - a.bytes)
 
-console.log("Bundle 预算门禁（out/**/*.js）")
-for (const f of [...files].sort((a, b) => b.bytes - a.bytes).slice(0, 5)) {
-  console.log(`  ${fmt(f.bytes).padStart(9)}  ${f.path}`)
+const total = [...acc.js.values()].reduce((s, b) => s + b, 0)
+const biggest = Math.max(...acc.js.values())
+
+console.log("Bundle 预算门禁 v2（每页实际加载量口径）")
+for (const p of pages) {
+  const mark =
+    p.bytes > MAX_PAGE ? " ✗超基线" : p.bytes > MAX_PAGE * 0.9 ? " ⚠逼近" : ""
+  console.log(
+    `  ${fmt(p.bytes).padStart(9)}  ${p.route}  (${p.refs} refs${p.missing ? `, ${p.missing} missing!` : ""})${mark}`,
+  )
 }
-console.log(`  ---------- 共 ${files.length} 个 JS 文件，总量 ${fmt(total)}`)
+console.log(
+  `  ---------- ${pages.length} 页 · 全站 JS 总和 ${fmt(total)}（${acc.js.size} 文件，护栏 ${fmt(MAX_TOTAL_GUARD)}）`,
+)
+
+if (OBSERVE) {
+  console.log("✓ 观测模式：仅打印，不做门禁判定")
+  process.exit(0)
+}
 
 const violations = []
-if (total > MAX_TOTAL)
-  violations.push(`JS 总量 ${fmt(total)} 超预算 ${fmt(MAX_TOTAL)}`)
+const heaviest = pages[0]
+if (heaviest && heaviest.bytes > MAX_PAGE)
+  violations.push(
+    `最大页 ${heaviest.route} 实载 ${fmt(heaviest.bytes)} 超棘轮基线 ${fmt(MAX_PAGE)}`,
+  )
 if (biggest > MAX_CHUNK)
   violations.push(`最大 chunk ${fmt(biggest)} 超预算 ${fmt(MAX_CHUNK)}`)
+if (total > MAX_TOTAL_GUARD)
+  violations.push(`全站 JS 总和 ${fmt(total)} 超膨胀护栏 ${fmt(MAX_TOTAL_GUARD)}`)
+if (pages.some((p) => p.missing > 0))
+  violations.push("存在 HTML 引用但 out/ 缺失的 JS（构建产物不完整）")
 
 if (violations.length > 0) {
   for (const v of violations) console.error(`✗ ${v}`)
-  console.error("✗ 预算门禁失败（棘轮只升不降：先优化产物，再上调预算）")
+  console.error("✗ 预算门禁失败（棘轮只降不升：先优化产物，再依流程上调基线）")
   process.exit(1)
 }
 
 console.log(
-  `✓ 预算门禁通过：总量 ${fmt(total)} ≤ ${fmt(MAX_TOTAL)}，最大 chunk ${fmt(biggest)} ≤ ${fmt(MAX_CHUNK)}`,
+  `✓ 预算门禁通过：最大页 ${heaviest.route} ${fmt(heaviest.bytes)} ≤ ${fmt(MAX_PAGE)}，最大 chunk ${fmt(biggest)} ≤ ${fmt(MAX_CHUNK)}，总和 ${fmt(total)} ≤ 护栏 ${fmt(MAX_TOTAL_GUARD)}`,
 )

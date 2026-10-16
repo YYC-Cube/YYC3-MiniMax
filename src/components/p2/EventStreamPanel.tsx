@@ -40,7 +40,7 @@ function getLogLevelStyle(level: LogItem["level"]) {
     case "ERROR":
       return { color: "#FF006E", bg: "rgba(255,0,110,0.18)" }
     case "THINK":
-      return { color: "#BF00FF", bg: "rgba(191,0,255,0.15)" }
+      return { color: "#D26BFF", bg: "rgba(191,0,255,0.15)" }
     case "ACT":
       return { color: "#00F0FF", bg: "rgba(0,240,255,0.15)" }
   }
@@ -72,8 +72,8 @@ export function EventStreamPanel({
         <div className="flex items-center space-x-1.5">
           <span
             className={`px-1.5 py-[1px] rounded text-[9px] font-bold border tracking-wide ${streamMode === "live"
-                ? "bg-[#00FF88]/20 text-[#00FF88] border-[#00FF88]/50"
-                : "bg-[#00F0FF]/15 text-[#00F0FF] border-[#00F0FF]/40"
+              ? "bg-[#00FF88]/20 text-[#00FF88] border-[#00FF88]/50"
+              : "bg-[#00F0FF]/15 text-[#00F0FF] border-[#00F0FF]/40"
               }`}
           >
             {streamMode === "live" ? "LIVE · WebSocket" : "SIM · 模拟流"}

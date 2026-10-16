@@ -143,7 +143,7 @@ export function AgentMember({
             </div>
             <div className="flex justify-between">
               <span>驱动模型:</span>
-              <span className="font-mono-num text-[#BF00FF]">
+              <span className="font-mono-num text-[#D26BFF]">
                 {agent.model.split("/")[0]}
               </span>
             </div>

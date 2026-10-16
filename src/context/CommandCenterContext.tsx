@@ -32,6 +32,7 @@
 import type { AgentId, PipelineStageId } from "@/types"
 import type { ReactNode } from "react"
 import { AgentProvider, useActiveAgent } from "./agent"
+import { GateProvider, useGate } from "./gate"
 import { NavigationProvider, useNavigation, type ViewId } from "./navigation"
 import {
   WidgetProvider,
@@ -52,12 +53,17 @@ interface CommandCenterValue {
   navigateToStage: (stageId: string) => void
   scaleMode: "fit" | "1080p"
   toggleScaleMode: () => void
+  gateFailSimulated: boolean
+  simulateGateFail: () => void
+  clearGateFail: () => void
 }
 export function CommandCenterProvider({ children }: { children: ReactNode }) {
   return (
     <NavigationProvider>
       <AgentProvider>
-        <WidgetProvider>{children}</WidgetProvider>
+        <WidgetProvider>
+          <GateProvider>{children}</GateProvider>
+        </WidgetProvider>
       </AgentProvider>
     </NavigationProvider>
   )
@@ -78,6 +84,7 @@ export function useCommandCenter(): CommandCenterValue {
     scaleMode,
     toggleScaleMode,
   } = useNavigation()
+  const { gateFailSimulated, simulateGateFail, clearGateFail } = useGate()
 
   return {
     activeAgentId,
@@ -92,5 +99,8 @@ export function useCommandCenter(): CommandCenterValue {
     navigateToStage,
     scaleMode,
     toggleScaleMode,
+    gateFailSimulated,
+    simulateGateFail,
+    clearGateFail,
   }
 }

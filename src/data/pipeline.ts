@@ -59,7 +59,7 @@ export const PIPELINE_STAGES: PipelineStage[] = [
     stepNum: 3,
     name: "图像生成",
     enName: "Image Synthesis",
-    color: "#BF00FF",
+    color: "#D26BFF",
     status: "running",
     activeTasks: 16,
     queueLength: 6,

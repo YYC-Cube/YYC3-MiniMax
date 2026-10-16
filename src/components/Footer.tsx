@@ -55,7 +55,7 @@ export const Footer: React.FC = () => {
       {/* Middle: Task Queue Count */}
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
-          <Server size={12} className="text-[#BF00FF]" />
+          <Server size={12} className="text-[#D26BFF]" />
           <span className="text-[#9BA3B4] text-[11px]">全流程活跃任务:</span>
           <span className="font-mono-num font-bold text-white bg-[#BF00FF]/20 px-2 py-0.5 rounded text-[11px] border border-[#BF00FF]/40 text-glow-purple">
             42 Active
@@ -78,7 +78,7 @@ export const Footer: React.FC = () => {
         {currentView === "P2" && (
           <button
             onClick={() => navigate("P3")}
-            className="flex items-center space-x-1 text-[11px] text-[#BF00FF] hover:text-white bg-[#BF00FF]/15 hover:bg-[#BF00FF]/30 px-2.5 py-0.5 rounded transition-all border border-[#BF00FF]/40 cursor-pointer"
+            className="flex items-center space-x-1 text-[11px] text-[#D26BFF] hover:text-white bg-[#BF00FF]/15 hover:bg-[#BF00FF]/30 px-2.5 py-0.5 rounded transition-all border border-[#BF00FF]/40 cursor-pointer"
           >
             <span>查看 ReAct-C 九步编排视图</span>
             <ArrowRight size={11} />

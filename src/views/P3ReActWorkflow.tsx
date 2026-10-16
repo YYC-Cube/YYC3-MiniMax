@@ -146,7 +146,7 @@ export const P3ReActWorkflow: React.FC<P3ReActWorkflowProps> = ({
         {/* Top Header of Diagram */}
         <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/10 z-20">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-lg bg-[#BF00FF]/20 border border-[#BF00FF]/50 flex items-center justify-center text-[#BF00FF]">
+            <div className="w-8 h-8 rounded-lg bg-[#BF00FF]/20 border border-[#BF00FF]/50 flex items-center justify-center text-[#D26BFF]">
               <Sparkles size={16} />
             </div>
             <div>

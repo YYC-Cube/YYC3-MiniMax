@@ -78,7 +78,7 @@ export function StageCard({
           <div className="relative w-full flex items-center justify-center">
             <ArrowRight
               size={16}
-              className="text-[#BF00FF] drop-shadow-[0_0_6px_#BF00FF]"
+              className="text-[#D26BFF] drop-shadow-[0_0_6px_#BF00FF]"
             />
             {/* Flowing particle animation */}
             <div
@@ -182,7 +182,7 @@ export function StageCard({
           </div>
           <div className="bg-[#0A1628]/30 p-1.5 rounded border border-white/5">
             <span className="text-[9px] text-[#9BA3B4] block">队列长度</span>
-            <span className="font-mono-num font-bold text-sm text-[#BF00FF]">
+            <span className="font-mono-num font-bold text-sm text-[#D26BFF]">
               {stage.queueLength}{" "}
               <span className="text-[9px] text-[#9BA3B4]">单</span>
             </span>
