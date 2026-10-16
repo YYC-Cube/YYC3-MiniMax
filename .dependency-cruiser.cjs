@@ -59,6 +59,14 @@ module.exports = {
       to: { path: "^src/(components|views|hooks|context|app)/" },
     },
     {
+      name: "ui-only-orchestrator-client",
+      comment:
+        "UI 只经唯一应用门面 orchestratorClient 发命令/收事件（目标架构 UI → application）；worker 桥/入口/可观测实现为 apps/worker 私有件，UI 物理不可达",
+      severity: "error",
+      from: { path: "^src/(components|views|hooks|context|app)/" },
+      to: { path: "^src/workers/", pathNot: "^src/workers/orchestratorClient\\.ts$" },
+    },
+    {
       name: "core-purity",
       comment: "domain / types 为纯核：不得依赖其它 src 层",
       severity: "error",

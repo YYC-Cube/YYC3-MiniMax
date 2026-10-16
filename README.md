@@ -4,7 +4,7 @@ description: "YYC³ AI FAMILY 漫剧工业化指挥中心 · 项目总览与快�
 author: "YanYuCloudCube Team <admin@0379.email>"
 version: v1.2.1
 created: 2026-10-11
-updated: 2026-10-15
+updated: 2026-10-16
 status: stable
 tags:
   - project
@@ -80,7 +80,8 @@ keywords:
 围绕 **8 位拟人化 AI Agent 家族**，以指挥舱（Command Center）形态完整呈现工业化漫剧生产全链路：
 
 - **六阶段流水线**：小说立项 → 剧本分镜 → 图像生成 → 视频合成 → 成片交付 → 运营反哺
-- **ReAct-C 九步闭环**：Reasoning + Acting + Calibration，Step 7 质量门禁不达标自动红色回环（≤2 轮）
+- **ReAct-C 九步闭环**：Reasoning + Acting + Calibration，Step 7 质量门禁不达标自动红色回环（≤2 轮）；已落地为纯函数状态机驱动的真实编排闭环（UI 只发命令、worker 执行、事件回流）
+- **六边形编排架构**：8 Agent 统一六元组端口（input/context/tools/output/trace/error），模型经 ModelPort 适配器可替换（local/vLLM/Registry/mock，env 驱动），全链 traceId 留痕，失败可重试/回滚/人工接管
 - **双硬门禁**：人物一致性 ≥ 80%、SyncNet 唇形吻合 ≥ 0.75
 - **三重安全防线**：PII 三级脱敏、密钥零入库（AST 静态阻断）、数字盲水印
 - **混合算力拓扑**：双 DGX（8×H100 ×2）+ Mac Studio M4 Max + TrueNAS 万兆单一事实源
@@ -132,9 +133,10 @@ keywords:
 | 可视化 | 原生 SVG | 时钟环 / 九步环 / 遥测曲线 / 环形仪表，零图表库 |
 | PWA | Web App Manifest + Service Worker v2 | 可安装/五路由预缓存/离线开屏/快捷方式直达路由，见 `public/sw.js` |
 | 实时流 | 原生 WebSocket + 指数退避重连 | `src/services/eventStream.ts`，无后端自动降级模拟 |
+| 编排 | 六边形架构（core 纯核 + workers 桥 + ports 契约 + adapters 适配器） | 8 Agent 六元组端口、ReAct-C 状态机、P0>P1>P2 队列、traceId 全链留痕、人工接管三键 |
 | 元信息 | Metadata / Viewport API | layout.tsx 声明式 head（12 项），robots index 已启用 |
-| 测试 | Vitest 5 + happy-dom + Testing Library | 数据完整性 / 服务层 / 组件三类单测（131 例） |
-| 质量 | `tsc --noEmit` + eslint-config-next + knip + vitest + oxfmt + GitHub Actions | 五重门禁（0 error，覆盖率棘轮 ≥93%） |
+| 测试 | Vitest 5 + happy-dom + Testing Library | 数据/服务/组件/契约/编排五类单测（416 例 / 30 文件） |
+| 质量 | tsc + eslint + knip + madge + dependency-cruiser + vitest 覆盖率 + bundle 预算 + gitleaks + Lighthouse | CI 全门禁（0 error；覆盖率棘轮 lines 96/branches 87/functions 93/statements 94，仅升不降） |
 
 ### 工程原则（五高五标五化落地）
 
@@ -164,11 +166,17 @@ PORT=3032 pnpm dev
 pnpm build
 pnpm preview
 
-# 4. 质量门禁
-pnpm typecheck   # tsc --noEmit
-pnpm test        # vitest run（单次）
-pnpm test:watch  # vitest watch 模式
-pnpm format      # oxfmt 格式化
+# 4. 质量门禁（本地全量）
+pnpm typecheck        # tsc --noEmit
+pnpm lint             # eslint .
+pnpm knip             # 死代码/未用导出
+pnpm madge:circular   # 循环依赖
+pnpm depcruise        # 分层边界（六边形契约）
+pnpm test:coverage    # vitest + 覆盖率棘轮
+pnpm build && pnpm budget   # 静态导出 + 包体积预算
+pnpm test             # vitest run（单次）
+pnpm test:watch       # vitest watch 模式
+pnpm format           # oxfmt 格式化
 ```
 
 > 预览地址：<http://localhost:3032/>（以终端实际输出为准）
@@ -182,8 +190,13 @@ pnpm format      # oxfmt 格式化
 | `pnpm preview` | 本地预览 `out/` 静态产物 |
 | `pnpm typecheck` | TypeScript 类型门禁（0 error 标准） |
 | `pnpm test` / `pnpm test:watch` | Vitest 单测（单次 / 监听） |
+| `pnpm test:coverage` | 单测 + v8 覆盖率（棘轮 lines 96 / branches 87 / functions 93 / statements 94） |
 | `pnpm lint` | ESLint 门禁（typescript-eslint + next/core-web-vitals，0 error 标准） |
 | `pnpm knip` | 依赖/导出死代码检测 |
+| `pnpm madge:circular` | 循环依赖检测（全 src，0 容忍） |
+| `pnpm depcruise` | dependency-cruiser 分层边界守卫（core 纯核/UI 门面唯一/workers 禁 UI） |
+| `pnpm budget` | 构建产物包体积预算门禁（总量 ≤850KB，单 chunk ≤280KB） |
+| `pnpm audit:lighthouse` | Lighthouse CI 运行时预算（LCP/CLS/TBT/性能分，需先 build） |
 | `pnpm format` | oxfmt 格式化 |
 
 ### 实时事件流接驳（WebSocket）
@@ -200,6 +213,25 @@ NEXT_PUBLIC_EVENT_STREAM_URL=wss://gateway.yyc3.local/agent-events
 - **消息协议**：`{ "agentId": "tianshu", "message": "...", "level": "INFO", "tag": "ROUTE" }`
   （兼容 `{ "type": "log", "data": {...} }` 包装；非法消息静默丢弃）
 - P2 事件流头部状态灯实时显示当前模式（`LIVE · WebSocket` / `SIM · 模拟流`）
+
+### 编排接驳（模型提供方切换）
+
+ReAct-C 编排已解耦为六边形架构：UI 经唯一门面 [src/workers/orchestratorClient.ts](./src/workers/orchestratorClient.ts)
+dispatch / onStep / onEffect / resume；模型推理经 ModelPort 适配器 env 驱动装配
+（[src/services/adapters/index.ts](./src/services/adapters/index.ts)，配置不全自动降级 mock 并结构化告警）：
+
+```bash
+# .env.local（可选）接驳真实推理后端（缺省 mock 演示态）
+NEXT_PUBLIC_MODEL_PROVIDER=local        # local | vllm | registry | mock
+NEXT_PUBLIC_MODEL_LOCAL_URL=http://127.0.0.1:11434    # provider=local 时
+NEXT_PUBLIC_MODEL_VLLM_URL=http://127.0.0.1:8000/v1   # provider=vllm 时
+NEXT_PUBLIC_MODEL_REGISTRY_URL=https://registry.yyc3.local  # provider=registry 时
+```
+
+- **worker 模式**：编排跑在真实 DedicatedWorker 线程（UI 主线程零阻塞）；不可用时自动降级进程内运行，事件语义完全一致
+- **全链留痕**：每步 traceId/耗时/Token/模型名/风险标签经 `workers/observability` 落 telemetry（`metric.agent.step.*` / `audit.react.*`）
+- **人工接管**：Step7 复检 ≤2 轮耗尽后挂起，W1 推送接管卡片（重跑 Step5 / 回滚检查点 / 终止任务）
+- 分层边界由 [.dependency-cruiser.cjs](./.dependency-cruiser.cjs) 物理固化（`pnpm depcruise`，13 条 error 级规则）
 
 ---
 
@@ -230,31 +262,52 @@ YYC3-MiniMax/
 │   │   ├── AgentAvatar.tsx      # Agent 头像（光环/脉冲环/状态 LED）
 │   │   ├── BrandMark.tsx        # 品牌标识单一真源（全局 logo 统一引用）
 │   │   ├── PwaInstallButton.tsx # PWA 安装按钮（beforeinstallprompt）
-│   │   └── UniversalWidget.tsx  # W1 全局 AI 浮窗（跨路由唯一实例）
+│   │   ├── UniversalWidget.tsx  # W1 全局 AI 浮窗（跨路由唯一实例）
+│   │   └── widget/TakeoverCard.tsx # 人工接管卡片（rerun/rollback/abort 三键）
+│   ├── core/                    # 编排纯核（零 UI/零框架，depcruise 守卫）
+│   │   ├── agents/index.ts      # 8 Agent 行为核（六元组端口统一装配）
+│   │   ├── machine/reactStateMachine.ts # ReAct-C 九步纯函数状态机（S7→S5 回环）
+│   │   ├── queue/taskQueue.ts   # P0>P1>P2 优先级任务队列
+│   │   └── runtime/orchestrator.ts # 编排运行时（串行泵/会话检查点/指数退避/resume）
+│   ├── workers/                 # 桥接层（core ↔ UI）
+│   │   ├── orchestratorClient.ts    # UI 唯一门面（worker/进程内双模式单例）
+│   │   ├── orchestratorWorker.ts    # 消息协议桥（入站守卫/出站回流）
+│   │   ├── orchestratorWorker.entry.ts # DedicatedWorker 线程入口
+│   │   └── observability.ts        # trace→遥测统一落点（metric/audit）
 │   ├── views/
 │   │   ├── P1FamilyCenter.tsx   # P1 时钟环中心（真实走时三针）
 │   │   ├── P2ProductionDesk.tsx # P2 漫剧生产台
-│   │   ├── P3ReActWorkflow.tsx  # P3 ReAct-C 九步编排（全视口自适应）
+│   │   ├── P3ReActWorkflow.tsx  # P3 ReAct-C 九步编排（live 快照订阅）
 │   │   ├── P4OpsMonitoring.tsx  # P4 算力监控台
 │   │   ├── P5QualitySecurity.tsx# P5 质检与安全
 │   │   └── MobileFallback.tsx   # PWA 移动版五视图（< 768px）
 │   ├── services/
 │   │   ├── eventStream.ts       # WebSocket 事件流客户端（降级模拟/重连/规范化）
+│   │   ├── adapters/            # ModelPort 适配器（http/mock/local/vllm/registry，env 装配）
+│   │   ├── telemetry.ts         # 遥测事件总线（sink/结构化事件）
 │   │   └── pwa.ts               # Service Worker 注册（仅生产环境）
 │   ├── hooks/
 │   │   ├── useMediaQuery.ts     # 响应式媒体查询 Hook
-│   │   └── usePwaInstall.ts     # PWA 安装能力 Hook
+│   │   ├── usePwaInstall.ts     # PWA 安装能力 Hook
+│   │   ├── useWidgetChat.ts     # W1 会话（dispatch + 事件回流）
+│   │   └── useReActSnapshot.ts  # ReAct 实时快照（P3 live 徽标/回环/接管态）
 │   ├── data/                    # 高保真模拟数据层（单一事实源）
 │   │   ├── agents.ts            # 8 Agent 档案
 │   │   ├── pipeline.ts          # 六阶段 + KPI + 12 字段 Schema
 │   │   ├── reactSteps.ts        # ReAct-C 九步定义
 │   │   └── logs.ts / opsData.ts / qualityData.ts
-│   ├── types/index.ts           # 全局类型定义
+│   ├── types/
+│   │   ├── index.ts             # 全局类型定义（Agent/流水线/日志/遥测）
+│   │   ├── agent.ts             # AgentPort 六元组契约 + 运行时守卫
+│   │   └── ports.ts             # ModelPort/OrchestratorPort/TaskQueuePort 端口契约
 │   └── env.d.ts                 # NEXT_PUBLIC_* 环境变量类型契约
-├── tests/                       # Vitest 单测（数据完整性/事件流/组件/编排/PWA）
+├── tests/                       # Vitest 单测（数据/服务/组件/契约/编排/PWA）
+├── scripts/bundle-budget.mjs    # 包体积预算门禁脚本
 ├── next.config.ts               # Next 16 配置（output:'export'/trailingSlash/images）
 ├── postcss.config.mjs           # Tailwind v4 PostCSS 插件
-├── eslint.config.js             # typescript-eslint + next/core-web-vitals
+├── eslint.config.js             # typescript-eslint + next/core-web-vitals + 纯核禁令
+├── .dependency-cruiser.cjs      # 分层边界守卫（8 条 error 级规则）
+├── lighthouserc.cjs             # Lighthouse 运行时预算断言
 ├── .github/workflows/ci.yml     # CI 质量门禁 + GitHub Pages 自动部署
 ├── docs/                        # 团队规范 + 会话工作文档 + 迁移评估清单
 └── package.json

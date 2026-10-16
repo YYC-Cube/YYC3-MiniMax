@@ -25,7 +25,10 @@ This is the canonical project structure. Start with task-relevant files below. O
 - `src/app/globals.css` - 全局样式与 Tailwind v4 入口（原 src/index.css）
 - `src/views/` - 五大业务视图（P1-P5），由各 page 挂载
 - `src/components/` - 业务组件（Header/Footer/UniversalWidget/p2 子件等）
-- `src/services/` - telemetry/pwa/eventStream/piiReveal 等无 UI 服务
+- `src/core/` - 编排纯核（六边形）：agents 8 Agent 行为核 / machine ReAct-C 九步状态机 / queue 优先级队列 / runtime 编排运行时——零 UI、零 react/next、零浏览器 API（depcruise+eslint 双守卫）
+- `src/workers/` - 桥接层：orchestratorClient（UI 唯一门面，worker/进程内双模式）/ orchestratorWorker（消息桥）/ orchestratorWorker.entry（线程入口）/ observability（trace→遥测）
+- `src/types/agent.ts` `src/types/ports.ts` - 契约层：AgentPort 六元组（input/context/tools/output/trace/error）与 ModelPort/OrchestratorPort/TaskQueuePort，纯核零运行时依赖
+- `src/services/` - telemetry/pwa/eventStream/piiReveal 等无 UI 服务；adapters/ ModelPort 适配器（http/mock/local/vllm/registry，`NEXT_PUBLIC_MODEL_PROVIDER` env 驱动装配，配置不全降级 mock 并告警）
 - `next.config.ts` - output:'export' 静态导出 + trailingSlash + images.unoptimized
 - `postcss.config.mjs` - Tailwind CSS v4 PostCSS 插件（@tailwindcss/postcss）
 - `package.json` - 依赖与 dev/build/lint/typecheck/test 脚本
@@ -54,5 +57,7 @@ Tailwind CSS v4 通过 **@tailwindcss/postcss**（postcss.config.mjs）接入。
 - Use double quotes for strings containing apostrophes (`"We're here to help"`), or escape them in single-quoted strings. An unescaped apostrophe in a single-quoted string breaks the build.
 - Ensure JSX tags are closed and braces are balanced.
 - 页面组件在 page.tsx 中默认导出；业务组件用具名导出。
-- 门禁：`pnpm typecheck && pnpm lint && pnpm knip && pnpm test:coverage && pnpm build`（0 error 0 warning，覆盖率棘轮 ≥93%）
+- 门禁：`pnpm typecheck && pnpm lint && pnpm knip && pnpm madge:circular && pnpm depcruise && pnpm test:coverage && pnpm build && pnpm budget`（0 error 0 warning；覆盖率棘轮 lines 96 / branches 87 / functions 93 / statements 94，仅升不降；CI 另有 gitleaks 全历史密钥扫描与 Lighthouse 运行时预算）
+- 分层契约（depcruise 固化）：core 只依赖 core/types/domain；UI 仅经 `workers/orchestratorClient.ts` 门面触达编排（其余 workers 文件对 UI 物理不可达）；workers/services 禁依赖 UI 层；domain/types 禁 react/next/浏览器 API
+- 编排接驳（UI 侧）：W1/P3 经 `getOrchestratorClient()` dispatch/onStep/onEffect/resume；模型提供方切换仅动 env（`NEXT_PUBLIC_MODEL_PROVIDER=local|vllm|registry|mock` + 对应 `*_URL`），UI 签名零改动
 - React Compiler 已启用（next.config `reactCompiler: true`），compiler 系规则（set-state-in-effect/purity/refs/static-components）为 error 门禁——新增代码必须符合 Rules of React，禁止 render 期写 ref / effect 内同步 setState / render 期创建组件。
