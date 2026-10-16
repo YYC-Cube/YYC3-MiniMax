@@ -73,7 +73,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             </div>
           </div>
 
-          <p className="text-xs text-[#E0E4EC] font-mono-num break-all select-text bg-black/40 p-2.5 rounded-lg border border-white/10">
+          <p className="text-xs text-[#E0E4EC] font-mono-num break-all select-text bg-[#0A1628]/40 p-2.5 rounded-lg border border-white/10">
             {error.message || String(error)}
           </p>
 

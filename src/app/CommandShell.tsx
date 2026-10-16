@@ -59,9 +59,9 @@ export function CommandShell({ children }: { children: ReactNode }) {
         setScaleFactor(
           Math.min(
             window.innerWidth /
-              1980,
+            1980,
             window.innerHeight /
-              1020,
+            1020,
           ),
         )
       } else {
@@ -74,7 +74,7 @@ export function CommandShell({ children }: { children: ReactNode }) {
   }, [scaleMode])
   if (mounted && isMobile) {
     return (
-      <div className="w-screen h-screen overflow-hidden bg-[#0A0A0A] relative">
+      <div className="w-screen h-screen overflow-hidden bg-[#0A1628] relative">
         <div className="noise-overlay" />
         <div className="relative z-10 w-full h-full">
           <ErrorBoundary key="mobile" label="移动视图">
@@ -100,13 +100,12 @@ export function CommandShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-[#0A0A0A] command-bg relative flex flex-col justify-between">
+    <div className="w-screen h-screen overflow-hidden bg-[#0A1628] command-bg relative flex flex-col justify-between">
       <div className="noise-overlay" />
 
       <div
-        className={`w-full h-full flex flex-col justify-between relative z-10 ${
-          scaleMode === "1080p" ? "origin-top-left" : ""
-        }`}
+        className={`w-full h-full flex flex-col justify-between relative z-10 ${scaleMode === "1080p" ? "origin-top-left" : ""
+          }`}
         style={
           scaleMode === "1080p"
             ? { width: 1980, height: 1020, transform: `scale(${scaleFactor})` }
@@ -115,7 +114,7 @@ export function CommandShell({ children }: { children: ReactNode }) {
       >
         <Header scaleMode={scaleMode} onToggleScaleMode={toggleScaleMode} />
 
-        {}
+        { }
         <main className="flex-1 w-full h-[calc(100%-92px)] relative overflow-hidden">
           <ErrorBoundary label="视图渲染异常">{children}</ErrorBoundary>
         </main>
@@ -123,7 +122,7 @@ export function CommandShell({ children }: { children: ReactNode }) {
         <Footer />
       </div>
 
-      {}
+      { }
       <UniversalWidget
         activeAgentId={activeAgentId}
         onSelectAgent={setActiveAgentId}

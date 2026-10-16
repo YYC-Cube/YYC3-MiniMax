@@ -65,7 +65,7 @@ export function KpiRibbon({ kpis, onKpiClick }: KpiRibbonProps) {
 
             <div className="flex items-baseline space-x-1.5 my-0.5">
               <span
-                className="font-mono-num font-extrabold text-2xl tracking-tight"
+                className="font-mono-num font-extrabold text-[32px] leading-9 tracking-tight"
                 style={{ color: kpi.color }}
               >
                 {kpi.value}

@@ -59,7 +59,7 @@ export function StepDetailPanel({
         </div>
 
         {/* Bound Agent & Model */}
-        <div className="p-3 rounded-xl bg-black/40 border border-white/10 mb-4">
+        <div className="p-3 rounded-xl bg-[#0A1628]/40 border border-white/10 mb-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[11px] text-[#9BA3B4]">执行责任实体:</span>
             <span
@@ -81,7 +81,7 @@ export function StepDetailPanel({
 
         {/* Metrics Grid: Tokens in/out, Duration */}
         <div className="grid grid-cols-3 gap-2 mb-4">
-          <div className="p-2.5 rounded-lg bg-black/30 border border-white/5">
+          <div className="p-2.5 rounded-lg bg-[#0A1628]/30 border border-white/5">
             <span className="text-[10px] text-[#9BA3B4] block">
               Input Tokens
             </span>
@@ -89,7 +89,7 @@ export function StepDetailPanel({
               {currentStep.tokensIn}
             </span>
           </div>
-          <div className="p-2.5 rounded-lg bg-black/30 border border-white/5">
+          <div className="p-2.5 rounded-lg bg-[#0A1628]/30 border border-white/5">
             <span className="text-[10px] text-[#9BA3B4] block">
               Output Tokens
             </span>
@@ -97,7 +97,7 @@ export function StepDetailPanel({
               {currentStep.tokensOut}
             </span>
           </div>
-          <div className="p-2.5 rounded-lg bg-black/30 border border-white/5">
+          <div className="p-2.5 rounded-lg bg-[#0A1628]/30 border border-white/5">
             <span className="text-[10px] text-[#9BA3B4] block">执行耗时</span>
             <span className="font-mono-num font-bold text-sm text-[#00FF88] mt-0.5 block">
               {currentStep.durationMs}ms
@@ -110,7 +110,7 @@ export function StepDetailPanel({
           <span className="text-[11px] text-[#9BA3B4] block mb-1">
             步骤动作规约:
           </span>
-          <p className="text-xs text-[#E0E4EC] leading-relaxed bg-[#0A0D17] p-3 rounded-lg border border-white/10">
+          <p className="text-xs text-[#E0E4EC] leading-relaxed bg-[#0D1B30] p-3 rounded-lg border border-white/10">
             {currentStep.description}
           </p>
         </div>

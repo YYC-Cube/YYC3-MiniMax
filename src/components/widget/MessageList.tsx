@@ -40,7 +40,7 @@ export function MessageList({
   onTakeoverDecision,
 }: MessageListProps) {
   return (
-    <div className="flex-1 p-3.5 overflow-y-auto space-y-3 bg-[#0A0A0A]/40">
+    <div className="flex-1 p-3.5 overflow-y-auto space-y-3 bg-[#0A1628]/40">
       {messages.map((msg) => {
         const isUser = msg.sender === "user"
         const senderAgent = msg.agentId ? AGENTS[msg.agentId] : selectedAgent
@@ -68,8 +68,8 @@ export function MessageList({
 
             <div
               className={`max-w-[90%] rounded-xl px-3 py-2 text-xs leading-relaxed select-text ${isUser
-                  ? "bg-gradient-to-r from-[#00F0FF]/25 to-[#BF00FF]/30 text-white border border-[#00F0FF]/40 rounded-br-sm"
-                  : "bg-[#101320] text-[#E0E4EC] border border-white/10 rounded-bl-sm shadow-md"
+                ? "bg-gradient-to-r from-[#00F0FF]/25 to-[#BF00FF]/30 text-white border border-[#00F0FF]/40 rounded-br-sm"
+                : "bg-[#101320] text-[#E0E4EC] border border-white/10 rounded-bl-sm shadow-md"
                 }`}
               style={{
                 borderLeft: !isUser
@@ -98,7 +98,7 @@ export function MessageList({
                       onNavigateToTask(msg.referenceCard?.targetId || "image")
                     }
                   }}
-                  className="mt-2 p-2 rounded-lg bg-black/40 border border-[#00F0FF]/30 hover:border-[#00F0FF] transition-all cursor-pointer group flex items-center justify-between"
+                  className="mt-2 p-2 rounded-lg bg-[#0A1628]/40 border border-[#00F0FF]/30 hover:border-[#00F0FF] transition-all cursor-pointer group flex items-center justify-between"
                 >
                   <div className="flex flex-col pr-2">
                     <div className="flex items-center space-x-1 text-[10px] text-[#00F0FF] font-bold">

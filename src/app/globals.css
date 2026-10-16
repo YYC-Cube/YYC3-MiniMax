@@ -37,7 +37,7 @@
   --neon-silver: #c0c0c0;
   --text-primary: #ffffff;
   --text-secondary: #9ba3b4;
-  --panel-bg: rgba(16, 18, 28, 0.76);
+  --panel-bg: rgba(14, 24, 44, 0.76);
   --panel-border: 1px solid rgba(0, 240, 255, 0.25);
   --font-inter: 'Inter Variable', 'Inter', 'Noto Sans SC Variable', 'Noto Sans SC', sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', monospace;
@@ -46,7 +46,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #0a0a0a;
+  background-color: #0a1628;
   color: #ffffff;
   font-family: var(--font-inter);
   overflow: hidden;
@@ -57,7 +57,7 @@ body {
 
 /* Background Noise and Radial Nebula Glow */
 .command-bg {
-  background-color: #0a0a0a;
+  background-color: #0a1628;
   background-image:
     radial-gradient(circle at 50% 45%, rgba(191, 0, 255, 0.08) 0%, transparent 60%),
     radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.05) 0%, transparent 50%),
@@ -100,7 +100,7 @@ body {
 }
 
 .glass-panel-subtle {
-  background: rgba(14, 16, 24, 0.65);
+  background: rgba(12, 22, 40, 0.65);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);

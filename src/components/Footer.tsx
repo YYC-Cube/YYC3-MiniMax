@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
     <footer className="h-9 px-6 border-t border-[#00F0FF]/20 bg-[#0E1018]/90 backdrop-blur-md flex items-center justify-between select-none relative z-30 text-xs">
       {/* Left: NAS path /mnt/nas */}
       <div className="flex items-center space-x-3 text-[#9BA3B4]">
-        <div className="flex items-center space-x-1.5 bg-[#0A0A0A]/60 px-2 py-0.5 rounded border border-white/10">
+        <div className="flex items-center space-x-1.5 bg-[#0A1628]/60 px-2 py-0.5 rounded border border-white/10">
           <HardDrive size={12} className="text-[#00F0FF]" />
           <span className="font-mono-num text-[11px] text-white">
             /mnt/nas/yyc3_pipeline

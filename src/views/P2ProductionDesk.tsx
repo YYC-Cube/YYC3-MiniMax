@@ -173,7 +173,7 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
           </div>
 
           {/* Interactive Simulation Trigger Bar */}
-          <div className="mt-2 flex items-center justify-between bg-[#0A0D17]/80 px-4 py-2 rounded-xl border border-white/10 text-xs">
+          <div className="mt-2 flex items-center justify-between bg-[#0D1B30]/80 px-4 py-2 rounded-xl border border-white/10 text-xs">
             <div className="flex items-center space-x-3 text-[#9BA3B4]">
               <span className="text-[#00F0FF] font-bold flex items-center space-x-1">
                 <PlayCircle size={14} />

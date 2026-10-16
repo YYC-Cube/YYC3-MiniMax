@@ -53,15 +53,15 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
   }
 
   return (
-    <div className="w-full h-full p-5 grid grid-cols-12 gap-4 overflow-hidden select-none">
-      {/* LEFT COLUMN (4 Cols): Node Topology (Dual DGX + Mac + NAS) */}
-      <div className="col-span-4 flex flex-col justify-between rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 overflow-hidden">
+    <div className="w-full h-full p-6 grid grid-cols-12 gap-6 overflow-hidden select-none">
+      {/* LEFT COLUMN (5 Cols · 主焦): Node Topology (Dual DGX + Mac + NAS) */}
+      <div className="col-span-5 flex flex-col justify-between rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 overflow-hidden">
         <div>
           {/* Header */}
           <div className="flex items-center justify-between pb-2.5 border-b border-white/10 mb-3">
             <div className="flex items-center space-x-2">
               <Server size={16} className="text-[#00F0FF]" />
-              <h2 className="text-xs font-bold text-white tracking-wider">
+              <h2 className="text-sm font-bold text-white tracking-wider">
                 集群节点拓扑 (Node Topology)
               </h2>
             </div>
@@ -71,8 +71,19 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
             </span>
           </div>
 
+          {/* Hero: 集群健康度 —— 页面唯一排版锚点（H1 32px + 金色副锚点） */}
+          <div className="flex items-baseline space-x-2 mb-3">
+            <span className="font-mono-num font-black text-[32px] leading-9 text-[#00FF88]">
+              98.6
+            </span>
+            <span className="text-xs text-[#9BA3B4]">集群健康度 / 100</span>
+            <span className="ml-auto font-mono-num font-bold text-lg text-[#FFD700]">
+              SLA 99.98%
+            </span>
+          </div>
+
           {/* Network Interconnect Badge */}
-          <div className="mb-3 p-2 rounded-lg bg-black/40 border border-white/10 flex items-center justify-between text-[10px] text-[#9BA3B4]">
+          <div className="mb-3 p-2 rounded-lg bg-[#0A1628]/40 border border-white/10 flex items-center justify-between text-[10px] text-[#9BA3B4]">
             <span className="flex items-center space-x-1">
               <Radio size={12} className="text-[#BF00FF]" />
               <span>拓扑互联链路:</span>
@@ -91,9 +102,9 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
               return (
                 <div
                   key={node.id}
-                  className={`p-3 rounded-xl bg-[#0A0D18]/90 border transition-all ${isWarning
-                      ? "border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]"
-                      : "border-white/10 hover:border-[#00F0FF]/40"
+                  className={`p-3 rounded-xl bg-[#0D1B30]/90 border transition-all ${isWarning
+                    ? "border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]"
+                    : "border-white/10 hover:border-[#00F0FF]/40"
                     }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
@@ -128,14 +139,14 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
 
                   {/* Dual Radial/Bar Gauges: GPU & VRAM */}
                   <div className="grid grid-cols-2 gap-2 text-[10px]">
-                    <div className="bg-black/40 p-2 rounded-lg border border-white/5">
+                    <div className="bg-[#0A1628]/40 p-2 rounded-lg border border-white/5">
                       <div className="flex justify-between text-[#9BA3B4] mb-1">
                         <span>GPU 算力利用率</span>
-                        <span className="font-mono-num font-bold text-[#00F0FF]">
+                        <span className="font-mono-num font-bold text-sm text-[#00F0FF]">
                           {node.gpuUtil}%
                         </span>
                       </div>
-                      <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
+                      <div className="w-full h-1.5 bg-[#0A1628]/60 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-[#00F0FF] to-[#BF00FF] rounded-full"
                           style={{ width: `${node.gpuUtil}%` }}
@@ -143,7 +154,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                       </div>
                     </div>
 
-                    <div className="bg-black/40 p-2 rounded-lg border border-white/5">
+                    <div className="bg-[#0A1628]/40 p-2 rounded-lg border border-white/5">
                       <div className="flex justify-between text-[#9BA3B4] mb-1">
                         <span>
                           {node.memKind === "storage"
@@ -151,13 +162,13 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                             : "显存占用"}
                         </span>
                         <span
-                          className={`font-mono-num font-bold ${memPct > 90 ? "text-[#FF006E]" : "text-[#BF00FF]"
+                          className={`font-mono-num font-bold text-sm ${memPct > 90 ? "text-[#FF006E]" : "text-[#BF00FF]"
                             }`}
                         >
                           {node.memUsed} / {node.memTotal} {node.memUnit}
                         </span>
                       </div>
-                      <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
+                      <div className="w-full h-1.5 bg-[#0A1628]/60 rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full ${memPct > 90 ? "bg-[#FF006E]" : "bg-[#BF00FF]"
                             }`}
@@ -175,17 +186,17 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
         {/* Bottom Node Meta */}
         <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-[#9BA3B4]">
           <span>总聚合算力: 16× H100 + M4 Max</span>
-          <span className="text-[#00FF88] font-mono-num">SLA: 99.98%</span>
+          <span className="text-[#FFD700] font-mono-num">RoCE 200G 互联</span>
         </div>
       </div>
 
-      {/* MIDDLE COLUMN (5 Cols): 2x2 Telemetry Charts */}
-      <div className="col-span-5 flex flex-col justify-between space-y-3">
+      {/* MIDDLE COLUMN (4 Cols): 2x2 Telemetry Charts */}
+      <div className="col-span-4 flex flex-col justify-between space-y-3">
         {/* Row 1: Chart 1 (GPU Utilization Timelines) + Chart 2 (VRAM Bar Allocation) */}
         <div className="flex-1 grid grid-cols-2 gap-3 min-h-[240px]">
           {/* Chart 1: Dual DGX GPU Util Timelines */}
           <div className="rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between">
-            <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-xs">
+            <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-sm">
               <span className="font-bold text-white flex items-center space-x-1">
                 <Activity size={13} className="text-[#00F0FF]" />
                 <span>双 DGX GPU 利用率曲线</span>
@@ -252,7 +263,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
 
           {/* Chart 2: VRAM Allocation Bar Chart */}
           <div className="rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between">
-            <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-xs">
+            <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-sm">
               <span className="font-bold text-white flex items-center space-x-1">
                 <Cpu size={13} className="text-[#BF00FF]" />
                 <span>显存驻留池分布 (GB)</span>
@@ -325,7 +336,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
         <div className="flex-1 grid grid-cols-2 gap-3 min-h-[240px]">
           {/* Chart 3: RoCE 200Gbps Network Throughput */}
           <div className="rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between">
-            <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-xs">
+            <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-sm">
               <span className="font-bold text-white flex items-center space-x-1">
                 <Zap size={13} className="text-[#00FF88]" />
                 <span>RoCE 200Gbps 网络吞吐</span>
@@ -385,7 +396,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
 
           {/* Chart 4: NAS IOPS + Capacity Ring */}
           <div className="rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between">
-            <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-xs">
+            <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-sm">
               <span className="font-bold text-white flex items-center space-x-1">
                 <HardDrive size={13} className="text-[#FFD700]" />
                 <span>NAS IOPS 与存储池 (RAID1/6)</span>
@@ -422,7 +433,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                   <span className="font-mono-num font-extrabold text-xs text-white">
                     78.4%
                   </span>
-                  <span className="text-[8px] text-[#9BA3B4]">已用</span>
+                  <span className="text-[9px] text-[#9BA3B4]">已用</span>
                 </div>
               </div>
 
@@ -456,7 +467,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
           <div className="flex items-center justify-between pb-2.5 border-b border-white/10 mb-3">
             <div className="flex items-center space-x-2">
               <ShieldAlert size={16} className="text-[#FF006E]" />
-              <h2 className="text-xs font-bold text-white tracking-wider">
+              <h2 className="text-sm font-bold text-white tracking-wider">
                 告警与事件队列
               </h2>
             </div>
@@ -475,20 +486,20 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                 <div
                   key={alt.id}
                   className={`p-3 rounded-xl border text-xs transition-all ${isCrit
-                      ? "bg-[#FF006E]/10 border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]"
-                      : isEvt
-                        ? "bg-[#00F0FF]/10 border-[#00F0FF]/30"
-                        : "bg-[#00FF88]/10 border-[#00FF88]/30"
+                    ? "bg-[#FF006E]/10 border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]"
+                    : isEvt
+                      ? "bg-[#00F0FF]/10 border-[#00F0FF]/30"
+                      : "bg-[#00FF88]/10 border-[#00FF88]/30"
                     }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center space-x-1.5">
                       <span
                         className={`font-mono-num text-[9px] font-bold px-1.5 py-0.2 rounded ${isCrit
-                            ? "bg-[#FF006E] text-white"
-                            : isEvt
-                              ? "bg-[#00F0FF]/30 text-[#00F0FF]"
-                              : "bg-[#00FF88]/30 text-[#00FF88]"
+                          ? "bg-[#FF006E] text-white"
+                          : isEvt
+                            ? "bg-[#00F0FF]/30 text-[#00F0FF]"
+                            : "bg-[#00FF88]/30 text-[#00FF88]"
                           }`}
                       >
                         {alt.level}
@@ -510,8 +521,8 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                     <button
                       onClick={() => handleAlertAction(alt)}
                       className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1 cursor-pointer transition-all ${isCrit
-                          ? "bg-[#FF006E] hover:bg-[#FF006E]/80 text-white shadow-[0_0_8px_#FF006E]"
-                          : "bg-white/10 hover:bg-white/20 text-white border border-white/20"
+                        ? "bg-[#FF006E] hover:bg-[#FF006E]/80 text-white shadow-[0_0_8px_#FF006E]"
+                        : "bg-white/10 hover:bg-white/20 text-white border border-white/20"
                         }`}
                     >
                       <span>{alt.actionText}</span>

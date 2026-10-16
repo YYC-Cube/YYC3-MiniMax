@@ -18,7 +18,7 @@ import Link from "next/link"
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-8 bg-[#0A0A0A]">
+    <div className="min-h-screen flex items-center justify-center p-8 bg-[#0A1628]">
       <div className="max-w-md w-full text-center space-y-4 rounded-2xl glass-panel border border-[#00F0FF]/40 p-8">
         <p className="text-5xl font-bold text-[#00F0FF] font-mono-num">404</p>
         <h2 className="text-base font-bold text-white">航线未收录</h2>

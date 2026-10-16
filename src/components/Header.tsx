@@ -75,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
   }, [])
 
   return (
-    <header className="h-14 px-6 border-b border-[#00F0FF]/25 bg-[#10121C]/85 backdrop-blur-md flex items-center justify-between select-none relative z-40">
+    <header className="h-14 px-6 border-b border-[#00F0FF]/25 bg-[#0E182C]/85 backdrop-blur-md flex items-center justify-between select-none relative z-40">
       {/* Left: YYC³ Branding（→ 根路由） */}
       <div className="flex items-center space-x-3.5">
         <Link
@@ -83,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({
           className="cursor-pointer group flex items-center space-x-2.5"
         >
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#FF006E] p-[1.5px] shadow-[0_0_12px_rgba(0,240,255,0.4)] group-hover:shadow-[0_0_16px_rgba(191,0,255,0.7)] transition-all">
-            <div className="w-full h-full bg-[#0A0A0A] rounded-[6.5px] flex items-center justify-center p-1">
+            <div className="w-full h-full bg-[#0A1628] rounded-[6.5px] flex items-center justify-center p-1">
               <BrandMark size={26} quiet />
             </div>
           </div>
@@ -137,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* PWA 安装入口（浏览器可安装时才出现） */}
         <PwaInstallButton />
         {/* Real-time Clock */}
-        <div className="flex items-center space-x-2 bg-[#0A0A0A]/80 px-3 py-1 rounded border border-[#00F0FF]/30 shadow-[0_0_8px_rgba(0,240,255,0.2)]">
+        <div className="flex items-center space-x-2 bg-[#0A1628]/80 px-3 py-1 rounded border border-[#00F0FF]/30 shadow-[0_0_8px_rgba(0,240,255,0.2)]">
           <Activity size={13} className="text-[#00F0FF] animate-pulse" />
           <span className="font-mono-num text-sm font-bold text-[#00F0FF] tracking-widest text-glow-cyan">
             {timeStr}

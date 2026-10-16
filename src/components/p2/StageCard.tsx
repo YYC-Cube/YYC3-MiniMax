@@ -100,13 +100,11 @@ export function StageCard({
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") onSelectStage(stage.id)
         }}
-        className={`w-full h-[370px] rounded-xl glass-panel p-3.5 flex flex-col justify-between transition-all duration-200 cursor-pointer relative overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF] ${
-          isSelected
-            ? "border-[#00F0FF] shadow-[0_0_20px_rgba(0,240,255,0.4),0_0_30px_rgba(191,0,255,0.25)]"
-            : "border-[#00F0FF]/25 hover:border-[#00F0FF]/50 shadow-[0_8px_24px_rgba(0,0,0,0.5),0_0_10px_rgba(191,0,255,0.15)]"
-        } ${isRunning ? "animate-pulse-breath" : ""} ${
-          isBlocked ? "animate-alert-flash" : ""
-        }`}
+        className={`w-full h-[370px] rounded-xl glass-panel p-3.5 flex flex-col justify-between transition-all duration-200 cursor-pointer relative overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF] ${isSelected
+          ? "border-[#00F0FF] shadow-[0_0_20px_rgba(0,240,255,0.4),0_0_30px_rgba(191,0,255,0.25)]"
+          : "border-[#00F0FF]/25 hover:border-[#00F0FF]/50 shadow-[0_8px_24px_rgba(0,0,0,0.5),0_0_10px_rgba(191,0,255,0.15)]"
+          } ${isRunning ? "animate-pulse-breath" : ""} ${isBlocked ? "animate-alert-flash" : ""
+          }`}
         style={{
           backgroundColor: "rgba(16, 18, 28, 0.78)",
         }}
@@ -125,7 +123,7 @@ export function StageCard({
               <Icon size={20} style={{ color: stage.color }} />
             </div>
 
-            <div className="flex items-center space-x-1.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10">
+            <div className="flex items-center space-x-1.5 bg-[#0A1628]/40 px-2 py-0.5 rounded-full border border-white/10">
               <StatusLight status={stage.status} />
               <span className="text-[10px] text-[#9BA3B4] font-medium">
                 {STATUS_LABEL[stage.status]}
@@ -144,7 +142,7 @@ export function StageCard({
           </div>
 
           {/* Bound Lead Agent Avatars (32px overlapped) */}
-          <div className="bg-[#0A0C14]/80 p-2 rounded-lg border border-white/10 mb-2.5">
+          <div className="bg-[#0D1B30]/80 p-2 rounded-lg border border-white/10 mb-2.5">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[9px] text-[#9BA3B4]">协同 Agent:</span>
               <span className="text-[9px] text-[#00F0FF] font-bold">
@@ -156,9 +154,8 @@ export function StageCard({
                 <div
                   key={agId}
                   className="relative"
-                  title={`${AGENTS[agId]?.name} (${
-                    aIdx === 0 ? "主导" : "协作者"
-                  })`}
+                  title={`${AGENTS[agId]?.name} (${aIdx === 0 ? "主导" : "协作者"
+                    })`}
                   onClick={(e) => {
                     e.stopPropagation()
                     onSelectAgent(agId)
@@ -176,27 +173,27 @@ export function StageCard({
 
         {/* Middle: Key Metric Numbers (Monospace, Neon Color) */}
         <div className="grid grid-cols-2 gap-1.5 my-1">
-          <div className="bg-black/30 p-1.5 rounded border border-white/5">
+          <div className="bg-[#0A1628]/30 p-1.5 rounded border border-white/5">
             <span className="text-[9px] text-[#9BA3B4] block">在跑任务</span>
             <span className="font-mono-num font-bold text-sm text-[#00F0FF]">
               {stage.activeTasks}{" "}
               <span className="text-[9px] text-[#9BA3B4]">单</span>
             </span>
           </div>
-          <div className="bg-black/30 p-1.5 rounded border border-white/5">
+          <div className="bg-[#0A1628]/30 p-1.5 rounded border border-white/5">
             <span className="text-[9px] text-[#9BA3B4] block">队列长度</span>
             <span className="font-mono-num font-bold text-sm text-[#BF00FF]">
               {stage.queueLength}{" "}
               <span className="text-[9px] text-[#9BA3B4]">单</span>
             </span>
           </div>
-          <div className="bg-black/30 p-1.5 rounded border border-white/5">
+          <div className="bg-[#0A1628]/30 p-1.5 rounded border border-white/5">
             <span className="text-[9px] text-[#9BA3B4] block">平均耗时</span>
             <span className="font-mono-num font-bold text-xs text-white">
               {stage.avgDuration}
             </span>
           </div>
-          <div className="bg-black/30 p-1.5 rounded border border-white/5">
+          <div className="bg-[#0A1628]/30 p-1.5 rounded border border-white/5">
             <span className="text-[9px] text-[#9BA3B4] block">合格率</span>
             <span className="font-mono-num font-bold text-xs text-[#00FF88]">
               {stage.passRate}
@@ -212,7 +209,7 @@ export function StageCard({
             </span>
             <span className="font-mono-num text-white">{stage.progress}%</span>
           </div>
-          <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/10">
+          <div className="w-full h-1.5 bg-[#0A1628]/60 rounded-full overflow-hidden border border-white/10">
             <div
               className="h-full bg-gradient-to-r from-[#00F0FF] via-[#BF00FF] to-[#FF006E] rounded-full transition-all duration-300"
               style={{ width: `${stage.progress}%` }}

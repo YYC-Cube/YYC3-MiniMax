@@ -63,7 +63,7 @@ export function AgentMember({
       }}
     >
       {/* Clock Position Label Badge */}
-      <div className="mb-1 text-[10px] font-mono-num text-[#9BA3B4] bg-[#0A0A0A]/80 px-1.5 py-0.2 rounded border border-white/10 group-hover:text-[#00F0FF] group-hover:border-[#00F0FF]/40 transition-colors">
+      <div className="mb-1 text-[10px] font-mono-num text-[#9BA3B4] bg-[#0A1628]/80 px-1.5 py-0.2 rounded border border-white/10 group-hover:text-[#00F0FF] group-hover:border-[#00F0FF]/40 transition-colors">
         {member.clockLabel}
       </div>
 

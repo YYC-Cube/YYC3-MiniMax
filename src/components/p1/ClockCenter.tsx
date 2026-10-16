@@ -67,14 +67,14 @@ export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[102px] h-[102px] rounded-xl p-[2px] bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#FF006E] shadow-[0_0_20px_rgba(0,240,255,0.5),0_0_32px_rgba(191,0,255,0.3)] animate-pulse-breath cursor-pointer pointer-events-auto group hover:scale-105 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]"
           title="点击快速进入漫剧生产指挥台"
         >
-          <div className="w-full h-full bg-[#0A0A0A] rounded-[10px] flex flex-col items-center justify-center relative overflow-hidden border border-white/10">
-            <span className="font-mono-num font-black text-xl tracking-tighter bg-gradient-to-r from-[#00F0FF] via-[#BF00FF] to-white bg-clip-text text-transparent">
+          <div className="w-full h-full bg-[#0A1628] rounded-[10px] flex flex-col items-center justify-center relative overflow-hidden border border-white/10">
+            <span className="font-mono-num font-black text-3xl tracking-tighter bg-gradient-to-r from-[#00F0FF] via-[#BF00FF] to-white bg-clip-text text-transparent">
               YYC³
             </span>
-            <span className="text-[8px] text-[#9BA3B4] font-medium tracking-widest mt-0.5">
+            <span className="text-[9px] text-[#9BA3B4] font-medium tracking-widest mt-0.5">
               AI FAMILY
             </span>
-            <div className="flex items-center space-x-1 mt-0.5 text-[7px] text-[#00FF88] font-mono-num">
+            <div className="flex items-center space-x-1 mt-0.5 text-[9px] text-[#00FF88] font-mono-num">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-ping" />
               <span>ACTIVE</span>
             </div>
@@ -86,7 +86,7 @@ export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
       <span
         className="font-mono-num font-bold text-center whitespace-nowrap"
         style={{
-          fontSize: Math.max(11, Math.round(18 * scale)),
+          fontSize: Math.max(14, Math.round(32 * scale)),
           color: "#00F0FF",
           textShadow: "0 0 10px rgba(0,240,255,0.4)",
           letterSpacing: "2px",

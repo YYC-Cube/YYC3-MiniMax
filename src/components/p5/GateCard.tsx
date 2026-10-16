@@ -67,18 +67,18 @@ export function GateCard({
 
   return (
     <div
-      className={`rounded-xl glass-panel p-3.5 flex items-center justify-between border ${styles.card}`}
+      className={`rounded-xl glass-panel p-4 flex items-center justify-between border ${styles.card}`}
     >
-      <div className="flex items-center space-x-3">
-        <div className={`w-10 h-10 rounded-xl ${styles.iconWrap}`}>
+      <div className="flex items-center space-x-3 min-w-0">
+        <div className={`w-10 h-10 rounded-xl shrink-0 ${styles.iconWrap}`}>
           <Icon size={22} />
         </div>
-        <div>
-          <span className="text-[10px] text-[#9BA3B4] font-medium block">
+        <div className="min-w-0">
+          <span className="text-xs text-[#9BA3B4] font-medium block truncate">
             {title}
           </span>
           <div className="flex items-baseline space-x-1.5">
-            <span className="font-mono-num font-extrabold text-xl text-white">
+            <span className="font-mono-num font-extrabold text-2xl text-white">
               {value}
             </span>
             <span className={`text-[10px] ${styles.threshold} font-bold`}>

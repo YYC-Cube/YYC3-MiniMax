@@ -15,7 +15,6 @@
  */
 
 import { CheckCircle2, Cpu, Layers, X } from "lucide-react"
-import React from "react"
 import { STORYBOARD_12_FIELDS } from "../../data/pipeline"
 import { GATES, formatGatePercent } from "../../domain/constants"
 import type { PipelineStage } from "../../types"
@@ -28,7 +27,7 @@ interface StageDetailDrawerProps {
 
 export function StageDetailDrawer({ stage, onClose }: StageDetailDrawerProps) {
   return (
-    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-6">
+    <div className="fixed inset-0 z-50 bg-[#0A1628]/75 backdrop-blur-sm flex items-center justify-center p-6">
       <div className="w-[820px] max-h-[85vh] rounded-2xl glass-panel border border-[#00F0FF]/60 p-6 flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(0,240,255,0.4)] animate-bounce-subtle">
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-3 border-b border-white/10">
@@ -74,7 +73,7 @@ export function StageDetailDrawer({ stage, onClose }: StageDetailDrawerProps) {
                 {STORYBOARD_12_FIELDS.map((f, i) => (
                   <div
                     key={f.field}
-                    className="p-2.5 rounded-lg bg-black/40 border border-white/10 flex flex-col justify-between"
+                    className="p-2.5 rounded-lg bg-[#0A1628]/40 border border-white/10 flex flex-col justify-between"
                   >
                     <div className="flex justify-between items-center mb-1">
                       <span className="font-mono-num text-[#00F0FF] font-bold">
@@ -112,7 +111,7 @@ export function StageDetailDrawer({ stage, onClose }: StageDetailDrawerProps) {
               </div>
 
               <div className="grid grid-cols-3 gap-3">
-                <div className="p-3 rounded-lg bg-black/40 border border-white/10 text-center">
+                <div className="p-3 rounded-lg bg-[#0A1628]/40 border border-white/10 text-center">
                   <span className="text-[10px] text-[#9BA3B4] block">
                     主导执行 Agent
                   </span>
@@ -120,7 +119,7 @@ export function StageDetailDrawer({ stage, onClose }: StageDetailDrawerProps) {
                     创想·灵韵 (Flux-Pro)
                   </span>
                 </div>
-                <div className="p-3 rounded-lg bg-black/40 border border-white/10 text-center">
+                <div className="p-3 rounded-lg bg-[#0A1628]/40 border border-white/10 text-center">
                   <span className="text-[10px] text-[#9BA3B4] block">
                     质量复检 Agent
                   </span>
@@ -128,7 +127,7 @@ export function StageDetailDrawer({ stage, onClose }: StageDetailDrawerProps) {
                     格物·宗师 (余弦比对)
                   </span>
                 </div>
-                <div className="p-3 rounded-lg bg-black/40 border border-white/10 text-center">
+                <div className="p-3 rounded-lg bg-[#0A1628]/40 border border-white/10 text-center">
                   <span className="text-[10px] text-[#9BA3B4] block">
                     LoRA 权重池
                   </span>
@@ -149,7 +148,7 @@ export function StageDetailDrawer({ stage, onClose }: StageDetailDrawerProps) {
 
           {/* Default other stages */}
           {stage.id !== "storyboard" && stage.id !== "image" && (
-            <div className="p-4 rounded-xl bg-black/40 border border-white/10 text-xs text-[#9BA3B4] space-y-2">
+            <div className="p-4 rounded-xl bg-[#0A1628]/40 border border-white/10 text-xs text-[#9BA3B4] space-y-2">
               <p className="text-white font-medium">
                 当前阶段生产配置与算力资源分配：
               </p>

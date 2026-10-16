@@ -15,7 +15,7 @@
  */
 
 import { Send } from "lucide-react"
-import React, { useState } from "react"
+import { useState } from "react"
 import { AGENTS } from "../../data/agents"
 import type { EventStreamMode } from "../../services/eventStream"
 import type { AgentId, LogItem } from "../../types"
@@ -71,11 +71,10 @@ export function EventStreamPanel({
         </div>
         <div className="flex items-center space-x-1.5">
           <span
-            className={`px-1.5 py-[1px] rounded text-[9px] font-bold border tracking-wide ${
-              streamMode === "live"
+            className={`px-1.5 py-[1px] rounded text-[9px] font-bold border tracking-wide ${streamMode === "live"
                 ? "bg-[#00FF88]/20 text-[#00FF88] border-[#00FF88]/50"
                 : "bg-[#00F0FF]/15 text-[#00F0FF] border-[#00F0FF]/40"
-            }`}
+              }`}
           >
             {streamMode === "live" ? "LIVE · WebSocket" : "SIM · 模拟流"}
           </span>
@@ -92,7 +91,7 @@ export function EventStreamPanel({
           return (
             <div
               key={log.id}
-              className="p-2 rounded bg-[#0A0C14]/90 border border-white/5 hover:border-[#00F0FF]/30 transition-all"
+              className="p-2 rounded bg-[#0D1B30]/90 border border-white/5 hover:border-[#00F0FF]/30 transition-all"
               style={{ animation: "fade-in-up 0.2s ease-out" }}
             >
               <div className="flex items-center justify-between mb-1">
@@ -131,7 +130,7 @@ export function EventStreamPanel({
 
       {/* Bottom Quick Command Input to W1 */}
       <div className="mt-2 pt-2 border-t border-white/10">
-        <div className="flex items-center space-x-1.5 bg-black/60 rounded-lg p-1.5 border border-white/10 focus-within:border-[#00F0FF]/60">
+        <div className="flex items-center space-x-1.5 bg-[#0A1628]/60 rounded-lg p-1.5 border border-white/10 focus-within:border-[#00F0FF]/60">
           <input
             type="text"
             value={logInput}

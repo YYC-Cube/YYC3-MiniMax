@@ -78,8 +78,8 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
           <div className="absolute inset-0 rounded-full bg-[#00F0FF]/30 animate-ping opacity-50" />
 
           {/* Main sphere body */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#0A0A0A] p-[2px] shadow-[0_0_20px_rgba(0,240,255,0.6)]">
-            <div className="w-full h-full rounded-full bg-[#0A0A0A] flex items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#0A1628] p-[2px] shadow-[0_0_20px_rgba(0,240,255,0.6)]">
+            <div className="w-full h-full rounded-full bg-[#0A1628] flex items-center justify-center relative overflow-hidden">
               <BrandMark size={34} quiet />
               <div className="absolute inset-0 bg-radial from-transparent via-[#00F0FF]/10 to-transparent" />
             </div>
@@ -87,7 +87,7 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
 
           {/* Unread badge */}
           {unreadCount > 0 && (
-            <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#FF006E] border-2 border-[#0A0A0A] text-[10px] font-bold text-white flex items-center justify-center shadow-[0_0_8px_#FF006E]">
+            <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#FF006E] border-2 border-[#0A1628] text-[10px] font-bold text-white flex items-center justify-center shadow-[0_0_8px_#FF006E]">
               {unreadCount}
             </div>
           )}
@@ -106,7 +106,7 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
           <div className="h-12 px-4 bg-[#0E1018]/95 border-b border-white/10 flex items-center justify-between cursor-move">
             <div className="flex items-center space-x-2">
               <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#00F0FF] to-[#BF00FF] p-[1px]">
-                <div className="w-full h-full bg-[#0A0A0A] rounded-[5px] flex items-center justify-center p-[1px]">
+                <div className="w-full h-full bg-[#0A1628] rounded-[5px] flex items-center justify-center p-[1px]">
                   <BrandMark size={20} quiet />
                 </div>
               </div>
@@ -120,8 +120,8 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
               <button
                 onClick={() => setIsMergedMode(!isMergedMode)}
                 className={`px-2 py-0.5 rounded text-[10px] font-medium transition-all ${isMergedMode
-                    ? "bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/50 shadow-[0_0_8px_rgba(0,240,255,0.3)]"
-                    : "text-[#9BA3B4] hover:text-white bg-white/5 border border-transparent"
+                  ? "bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/50 shadow-[0_0_8px_rgba(0,240,255,0.3)]"
+                  : "text-[#9BA3B4] hover:text-white bg-white/5 border border-transparent"
                   }`}
                 title="天枢总调度合并模式：汇总所有智能体意见"
               >
@@ -150,7 +150,7 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
           </div>
 
           {/* 2. Top Agent Switcher: 8 Members Circle Avatars (32px) */}
-          <div className="px-3 py-2 bg-[#0A0C14]/90 border-b border-white/10">
+          <div className="px-3 py-2 bg-[#0D1B30]/90 border-b border-white/10">
             <div className="flex items-center justify-between mb-1.5 px-1">
               <span className="text-[10px] text-[#9BA3B4] font-medium">
                 8 拟人化 Agent 切换:
@@ -171,8 +171,8 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
                   >
                     <div
                       className={`relative transition-all duration-200 ${isSelected
-                          ? "scale-110"
-                          : "opacity-70 hover:opacity-100"
+                        ? "scale-110"
+                        : "opacity-70 hover:opacity-100"
                         }`}
                     >
                       <AgentAvatar
@@ -184,8 +184,8 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
                     </div>
                     <span
                       className={`text-[9px] mt-1 transition-colors whitespace-nowrap ${isSelected
-                          ? "text-[#00F0FF] font-bold"
-                          : "text-[#9BA3B4]"
+                        ? "text-[#00F0FF] font-bold"
+                        : "text-[#9BA3B4]"
                         }`}
                     >
                       {agent.nick}
@@ -222,7 +222,7 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
           </div>
 
           {/* 5. Input Box & Action Buttons */}
-          <div className="p-3 bg-[#0A0C14] border-t border-white/10">
+          <div className="p-3 bg-[#0D1B30] border-t border-white/10">
             <div className="flex items-center space-x-2 bg-[#121524] rounded-xl px-3 py-2 border border-white/15 focus-within:border-[#00F0FF]/70 transition-colors">
               <button
                 className="text-[#9BA3B4] hover:text-[#00F0FF] transition-colors p-0.5"
@@ -249,8 +249,8 @@ export const UniversalWidget: React.FC<UniversalWidgetProps> = ({
                 onClick={() => handleSend()}
                 disabled={!inputText.trim()}
                 className={`p-1.5 rounded-lg transition-all ${inputText.trim()
-                    ? "bg-gradient-to-r from-[#00F0FF] to-[#BF00FF] text-white shadow-[0_0_10px_rgba(0,240,255,0.5)] cursor-pointer"
-                    : "text-[#9BA3B4]/40 cursor-not-allowed"
+                  ? "bg-gradient-to-r from-[#00F0FF] to-[#BF00FF] text-white shadow-[0_0_10px_rgba(0,240,255,0.5)] cursor-pointer"
+                  : "text-[#9BA3B4]/40 cursor-not-allowed"
                   }`}
               >
                 <Send size={13} />

@@ -90,7 +90,7 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({
 
   return (
     <div
-      className="w-full h-[100dvh] overflow-y-auto bg-[#0A0A0A] command-bg relative"
+      className="w-full h-[100dvh] overflow-y-auto bg-[#0A1628] command-bg relative"
       style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
       <div className="noise-overlay" />
@@ -100,7 +100,7 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center space-x-2 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#FF006E] p-[1.5px] shadow-[0_0_10px_rgba(0,240,255,0.4)] shrink-0">
-              <div className="w-full h-full bg-[#0A0A0A] rounded-[6.5px] flex items-center justify-center p-[3px]">
+              <div className="w-full h-full bg-[#0A1628] rounded-[6.5px] flex items-center justify-center p-[3px]">
                 <BrandMark size={26} quiet />
               </div>
             </div>
@@ -120,7 +120,7 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({
             <LocaleToggle variant="mobile" />
             <PwaInstallButton variant="mobile" />
             {timeStr && (
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono-num font-bold text-[#00F0FF] bg-[#0A0A0A]/80 border border-[#00F0FF]/30">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono-num font-bold text-[#00F0FF] bg-[#0A1628]/80 border border-[#00F0FF]/30">
                 {timeStr}
               </span>
             )}
@@ -138,8 +138,8 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({
               onClick={() => setTab(id)}
               aria-pressed={tab === id}
               className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-md text-[11px] font-medium whitespace-nowrap transition-colors ${tab === id
-                  ? "bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/40"
-                  : "text-[#9BA3B4] border border-transparent hover:text-white"
+                ? "bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/40"
+                : "text-[#9BA3B4] border border-transparent hover:text-white"
                 }`}
             >
               <Icon size={12} />
@@ -230,11 +230,11 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({
               >
                 <span
                   className={`w-8 h-8 shrink-0 rounded-md flex items-center justify-center text-[10px] font-black font-mono-num border ${step.status === "running"
-                      ? "bg-[#00F0FF]/20 text-[#00F0FF] border-[#00F0FF]/50"
-                      : step.status === "completed" ||
-                        step.status === "loopback"
-                        ? "bg-[#00FF88]/15 text-[#00FF88] border-[#00FF88]/40"
-                        : "bg-white/5 text-[#5A6478] border-white/10"
+                    ? "bg-[#00F0FF]/20 text-[#00F0FF] border-[#00F0FF]/50"
+                    : step.status === "completed" ||
+                      step.status === "loopback"
+                      ? "bg-[#00FF88]/15 text-[#00FF88] border-[#00FF88]/40"
+                      : "bg-white/5 text-[#5A6478] border-white/10"
                     }`}
                 >
                   {step.step}

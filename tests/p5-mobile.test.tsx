@@ -56,15 +56,20 @@ describe("P5QualitySecurity（质检与安全）", () => {
     expect(screen.getAllByRole("button", { name: "打回重跑" })).toHaveLength(4)
   })
 
+  // 队列头待定计数（视觉重构后拆分为「待定」标签 + 大数字两个节点）
+  function pendingCountText(): string {
+    return screen.getByText("待定").parentElement?.textContent ?? ""
+  }
+
   it("核验通过：pending 样本流转后待定数归零", () => {
     renderP5()
-    expect(screen.getByText(/待定: 1/)).toBeTruthy()
+    expect(pendingCountText()).toBe("待定1")
 
     // sb-103 是唯一 pending（EP03-SC03-SH02，低于门禁），位于列表第 3 位
     const passBtns = screen.getAllByRole("button", { name: "核验通过" })
     fireEvent.click(passBtns[2]!)
 
-    expect(screen.getByText(/待定: 0/)).toBeTruthy()
+    expect(pendingCountText()).toBe("待定0")
   })
 
   it("打回重跑：500ms 延迟流转为 rejected 且复检轮次升至 2/2", () => {
@@ -85,7 +90,7 @@ describe("P5QualitySecurity（质检与安全）", () => {
 
     // sb-103（第 3 位）为唯一 pending：核验通过进入 passed 终态
     fireEvent.click(passBtns[2]!)
-    expect(screen.getByText(/待定: 0/)).toBeTruthy()
+    expect(pendingCountText()).toBe("待定0")
     expect((passBtns[2] as HTMLButtonElement).disabled).toBe(true)
     expect((rejectBtns[2] as HTMLButtonElement).disabled).toBe(true)
 

@@ -32,7 +32,7 @@ export function ZongshiReportPanel({
         <div className="flex items-center justify-between pb-2.5 border-b border-white/10 mb-3">
           <div className="flex items-center space-x-2">
             <FileCheck size={16} className="text-[#C0C0C0]" />
-            <h3 className="font-bold text-xs text-white tracking-wider">
+            <h3 className="font-bold text-sm text-white tracking-wider">
               格物·宗师 质量终审报告
             </h3>
           </div>
@@ -43,7 +43,7 @@ export function ZongshiReportPanel({
 
         {/* Report Highlights */}
         <div className="space-y-3 text-xs overflow-y-auto max-h-[60vh] pr-1">
-          <div className="p-3 rounded-xl bg-[#0A0D18] border border-white/10 space-y-2">
+          <div className="p-3 rounded-xl bg-[#0D1B30] border border-white/10 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-white font-bold">
                 事实溯源与剧情一致性核查
@@ -63,7 +63,7 @@ export function ZongshiReportPanel({
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-[#0A0D18] border border-white/10 space-y-2">
+          <div className="p-3 rounded-xl bg-[#0D1B30] border border-white/10 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-white font-bold">
                 复检轮次统计与容错控制
@@ -77,22 +77,22 @@ export function ZongshiReportPanel({
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-[#0A0D18] border border-white/10 space-y-2">
+          <div className="p-3 rounded-xl bg-[#0D1B30] border border-white/10 space-y-2">
             <span className="text-white font-bold block">母带交付质量总评</span>
             <div className="grid grid-cols-2 gap-2 text-[10px] font-mono-num">
-              <div className="p-1.5 bg-black/40 rounded">
+              <div className="p-1.5 bg-[#0A1628]/40 rounded">
                 <span className="text-[#9BA3B4]">画质规范:</span>
                 <span className="text-white pl-1">4K UHD @ 24fps</span>
               </div>
-              <div className="p-1.5 bg-black/40 rounded">
+              <div className="p-1.5 bg-[#0A1628]/40 rounded">
                 <span className="text-[#9BA3B4]">色彩空间:</span>
                 <span className="text-[#00F0FF] pl-1">DCI-P3 Cinema</span>
               </div>
-              <div className="p-1.5 bg-black/40 rounded">
+              <div className="p-1.5 bg-[#0A1628]/40 rounded">
                 <span className="text-[#9BA3B4]">唇形评分:</span>
                 <span className="text-[#00FF88] pl-1">SyncNet 0.84</span>
               </div>
-              <div className="p-1.5 bg-black/40 rounded">
+              <div className="p-1.5 bg-[#0A1628]/40 rounded">
                 <span className="text-[#9BA3B4]">脱敏完整度:</span>
                 <span className="text-[#00FF88] pl-1">100% PASS</span>
               </div>

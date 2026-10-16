@@ -41,7 +41,7 @@ export function StageTabs({
             className={`relative py-2.5 px-3 rounded-lg flex items-center justify-between transition-all duration-200 cursor-pointer ${
               isActive
                 ? "bg-gradient-to-r from-[#00F0FF]/15 to-[#BF00FF]/15 border border-[#00F0FF]/50 shadow-[0_0_12px_rgba(0,240,255,0.2)]"
-                : "bg-black/20 hover:bg-white/5 border border-transparent"
+                : "bg-[#0A1628]/20 hover:bg-white/5 border border-transparent"
             } ${stage.status === "blocked" ? "animate-alert-flash" : ""}`}
           >
             <div className="flex items-center space-x-2 truncate">

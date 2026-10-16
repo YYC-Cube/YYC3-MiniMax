@@ -36,7 +36,7 @@ export default function GlobalError({
 
   return (
     <html lang="zh-CN">
-      <body className="bg-[#0A0A0A] text-white antialiased">
+      <body className="bg-[#0A1628] text-white antialiased">
         <div className="min-h-screen flex items-center justify-center p-8">
           <div className="max-w-md w-full space-y-4 text-center">
             <h2 className="text-lg font-bold">应用崩溃保护</h2>

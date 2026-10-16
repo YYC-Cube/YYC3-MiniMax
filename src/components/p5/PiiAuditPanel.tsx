@@ -39,7 +39,7 @@ export function PiiAuditPanel({
         <div className="flex items-center justify-between pb-2.5 border-b border-white/10 mb-3">
           <div className="flex items-center space-x-2">
             <ShieldCheck size={16} className="text-[#00FF88]" />
-            <h3 className="font-bold text-xs text-white tracking-wider">
+            <h3 className="font-bold text-sm text-white tracking-wider">
               安全审计与 PII 脱敏 (智云·守护)
             </h3>
           </div>
@@ -56,7 +56,7 @@ export function PiiAuditPanel({
             return (
               <div
                 key={log.id}
-                className="p-3 rounded-xl bg-[#0A0D18] border border-white/10 hover:border-[#00F0FF]/40 transition-all text-xs"
+                className="p-3 rounded-xl bg-[#0D1B30] border border-white/10 hover:border-[#00F0FF]/40 transition-all text-xs"
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center space-x-2">
@@ -77,7 +77,7 @@ export function PiiAuditPanel({
                 </span>
 
                 {/* Masked vs Raw Snippet Comparison */}
-                <div className="space-y-1.5 bg-black/50 p-2.5 rounded-lg border border-white/5 my-2">
+                <div className="space-y-1.5 bg-[#0A1628]/50 p-2.5 rounded-lg border border-white/5 my-2">
                   <div>
                     <span className="text-[9px] text-[#9BA3B4] block mb-0.5">
                       脱敏放行文本 (Cleaned):

@@ -45,12 +45,15 @@ export function QualityQueuePanel({
         <div className="flex items-center justify-between pb-2.5 border-b border-white/10 mb-3">
           <div className="flex items-center space-x-2">
             <FileCheck size={16} className="text-[#00F0FF]" />
-            <h3 className="font-bold text-xs text-white tracking-wider">
+            <h3 className="font-bold text-sm text-white tracking-wider">
               分镜质检队列 (格物·宗师门禁)
             </h3>
           </div>
-          <span className="text-[10px] font-mono-num text-[#9BA3B4]">
-            待定: {storyboards.filter((s) => s.status === "pending").length}
+          <span className="flex items-baseline space-x-1">
+            <span className="text-[10px] font-mono-num text-[#9BA3B4]">待定</span>
+            <span className="font-mono-num font-bold text-lg text-[#FFD700]">
+              {storyboards.filter((s) => s.status === "pending").length}
+            </span>
           </span>
         </div>
 
@@ -71,7 +74,7 @@ export function QualityQueuePanel({
             return (
               <div
                 key={sb.id}
-                className={`p-3 rounded-xl bg-[#0A0D18] border transition-all ${isShaking ? "animate-alert-flash" : ""
+                className={`p-3 rounded-xl bg-[#0D1B30] border transition-all ${isShaking ? "animate-alert-flash" : ""
                   } ${isPassed
                     ? "border-[#00FF88]/40 bg-[#00FF88]/5"
                     : isRejected
@@ -108,7 +111,7 @@ export function QualityQueuePanel({
                 </div>
 
                 {/* Miniature Radar Attribute Breakdown */}
-                <div className="grid grid-cols-3 gap-1 bg-black/40 p-2 rounded-lg border border-white/5 text-[9px] mb-2 font-mono-num">
+                <div className="grid grid-cols-3 gap-1 bg-[#0A1628]/40 p-2 rounded-lg border border-white/5 text-[9px] mb-2 font-mono-num">
                   <div className="flex justify-between">
                     <span className="text-[#9BA3B4]">五官:</span>
                     <span className="text-white">

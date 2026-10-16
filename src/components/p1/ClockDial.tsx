@@ -206,7 +206,7 @@ export function ClockDial({ time, cx, cy, radius, members }: ClockDialProps) {
           cx={cx}
           cy={cy}
           r={4.2}
-          fill="#0A0A0A"
+          fill="#0A1628"
           stroke="#00F0FF"
           strokeWidth={1.4}
         />
