@@ -18,8 +18,8 @@
 // traceId 经微任务派发：telemetry 同步上报不变，UI 更新错开同步 setState
 // （React Compiler 规则：effect 内禁同步 setState 级联；错误边界为冷路径，延迟不可感知）
 
-import { useEffect, useState } from "react"
 import { createTraceId, telemetry } from "@/services/telemetry"
+import { useEffect, useState } from "react"
 
 export default function Error({
   error,
@@ -48,7 +48,7 @@ export default function Error({
 
   return (
     <div className="w-full h-full min-h-screen flex items-center justify-center p-8">
-      <div className="max-w-md w-full rounded-2xl glass-panel border border-[#FF006E]/60 p-6 space-y-4 shadow-[0_0_30px_rgba(255,0,110,0.3)]">
+      <div className="max-w-md w-full rounded-2xl glass-panel border border-[#FF006E]/60 p-6 space-y-4 shadow-[0_0_16px_rgba(255,0,110,0.25)]">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-xl bg-[#FF006E]/20 border border-[#FF006E] flex items-center justify-center text-[#FF006E] font-bold">
             !

@@ -152,7 +152,7 @@ export const KPI_METRICS: KPIMetric[] = [
     value: "91.4",
     unit: "%",
     target: "门禁 ≥ 80.0%",
-    color: "#BF00FF",
+    color: "#FFD700",
     trend: [82.5, 84.1, 86.8, 88.2, 89.5, 90.8, 91.4],
     changePct: "+4.2%",
     isPositive: true,

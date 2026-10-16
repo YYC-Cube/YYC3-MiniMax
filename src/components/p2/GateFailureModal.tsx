@@ -28,7 +28,7 @@ export function GateFailureModal({
 }: GateFailureModalProps) {
   return (
     <div className="fixed inset-0 z-50 bg-[#0A1628]/80 backdrop-blur-md flex items-center justify-center p-6">
-      <div className="w-[520px] rounded-2xl glass-panel border-2 border-[#FF006E] p-6 flex flex-col shadow-[0_0_40px_rgba(255,0,110,0.7)] animate-alert-flash">
+      <div className="w-[520px] rounded-2xl glass-panel border-2 border-[#FF006E] p-6 flex flex-col shadow-[0_0_16px_rgba(255,0,110,0.3)] animate-alert-flash">
         <div className="flex items-center space-x-3 mb-3">
           <div className="w-10 h-10 rounded-xl bg-[#FF006E]/20 border border-[#FF006E] flex items-center justify-center text-[#FF006E]">
             <ShieldAlert size={22} />

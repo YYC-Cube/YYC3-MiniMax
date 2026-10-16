@@ -65,7 +65,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                 集群节点拓扑 (Node Topology)
               </h2>
             </div>
-            <span className="text-[10px] text-[#00FF88] font-mono-num flex items-center space-x-1">
+            <span className="text-[10px] text-[#FFD700] font-mono-num flex items-center space-x-1">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-ping" />
               <span>4/4 在线</span>
             </span>

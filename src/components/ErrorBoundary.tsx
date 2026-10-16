@@ -58,7 +58,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
     return (
       <div className="w-full h-full flex items-center justify-center p-8">
-        <div className="max-w-md w-full rounded-2xl glass-panel border border-[#FF006E]/60 p-6 space-y-4 shadow-[0_0_30px_rgba(255,0,110,0.3)]">
+        <div className="max-w-md w-full rounded-2xl glass-panel border border-[#FF006E]/60 p-6 space-y-4 shadow-[0_0_16px_rgba(255,0,110,0.25)]">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-xl bg-[#FF006E]/20 border border-[#FF006E] flex items-center justify-center text-[#FF006E] font-bold">
               !

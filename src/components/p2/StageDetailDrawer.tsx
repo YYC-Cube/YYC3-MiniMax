@@ -28,7 +28,7 @@ interface StageDetailDrawerProps {
 export function StageDetailDrawer({ stage, onClose }: StageDetailDrawerProps) {
   return (
     <div className="fixed inset-0 z-50 bg-[#0A1628]/75 backdrop-blur-sm flex items-center justify-center p-6">
-      <div className="w-[820px] max-h-[85vh] rounded-2xl glass-panel border border-[#00F0FF]/60 p-6 flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(0,240,255,0.4)] animate-bounce-subtle">
+      <div className="w-[820px] max-h-[85vh] rounded-2xl glass-panel border border-[#00F0FF]/60 p-6 flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.9),0_0_16px_rgba(0,240,255,0.3)] animate-bounce-subtle">
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-3 border-b border-white/10">
           <div className="flex items-center space-x-3">

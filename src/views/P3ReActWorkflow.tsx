@@ -140,7 +140,7 @@ export const P3ReActWorkflow: React.FC<P3ReActWorkflowProps> = ({
   }
 
   return (
-    <div className="w-full h-full flex flex-col lg:flex-row p-3 lg:p-5 gap-3 lg:gap-5 overflow-y-auto lg:overflow-hidden select-none">
+    <div className="w-full h-full flex flex-col lg:flex-row p-3 lg:p-6 gap-3 lg:gap-6 overflow-y-auto lg:overflow-hidden select-none">
       {/* Left 8.5 Cols: 9-Step Circular Workflow Diagram + Controls */}
       <div className="flex-1 min-h-0 flex flex-col justify-between rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 lg:p-5 relative overflow-hidden">
         {/* Top Header of Diagram */}
@@ -171,6 +171,14 @@ export const P3ReActWorkflow: React.FC<P3ReActWorkflowProps> = ({
                 {`顺时针九步闭环执行 · Step 7 质量校验不达标则触发红色回环（≤${GATES.MAX_REVIEW_ROUNDS}轮）`}
               </span>
             </div>
+          </div>
+
+          {/* 数值锚点：当前活跃步 / 9（live 快照优先，本地演示回退轮转态）—— H2 18px */}
+          <div className="flex items-baseline space-x-1.5">
+            <span className="font-mono-num font-black text-lg leading-none text-[#00F0FF]">
+              {snapshot.hasLiveTask ? (snapshot.activeStep ?? 1) : activeStepIndex + 1}
+            </span>
+            <span className="text-[11px] text-[#9BA3B4] font-mono-num">/ 9 步</span>
           </div>
 
           {/* Player controls */}
