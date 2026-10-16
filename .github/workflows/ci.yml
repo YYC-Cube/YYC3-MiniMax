@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+# 最小权限基线（job 级按需覆盖：deploy-pages 提权 pages:write / id-token:write）
+permissions:
+  contents: read
 
 # 部署互斥：同分支新推送自动取消在途流水线，避免 Pages 竞态覆盖
 concurrency:
@@ -17,12 +22,15 @@ jobs:
     permissions:
       contents: read
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           # gitleaks 全历史扫描需要完整提交图
           fetch-depth: 0
+          # 只读门禁作业：不保留 GITHUB_TOKEN git 凭据
+          persist-credentials: false
 
       - name: Secret scan (gitleaks · 全量历史)
         # 直装 gitleaks 全量扫描：不依赖增量缓存基线（缓存指向的旧提交
@@ -84,10 +92,15 @@ jobs:
   lighthouse:
     name: Lighthouse 体检（评分卡 P0-1 运行时预算）
     needs: quality-gates
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -127,12 +140,15 @@ jobs:
       pages: write
       id-token: write
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6

@@ -2,7 +2,7 @@
 file: README.md
 description: "YYC³ AI FAMILY 漫剧工业化指挥中心 · 项目总览与快速开始"
 author: "YanYuCloudCube Team <admin@0379.email>"
-version: v1.2.1
+version: v1.2.2
 created: 2026-10-11
 updated: 2026-10-16
 status: stable
@@ -42,14 +42,21 @@ keywords:
 
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs&logoColor=white)
 ![React 19](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
-![TypeScript 5.9](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
+![TypeScript 5.7](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)
 ![Tailwind CSS v4](https://img.shields.io/badge/TailwindCSS-v4-06B6D4?logo=tailwindcss&logoColor=white)
-![Vitest](https://img.shields.io/badge/Vitest-5-6E9F18?logo=vitest&logoColor=white)
-![pnpm](https://img.shields.io/badge/pnpm-10.34-F69220?logo=pnpm&logoColor=white)
+![Vitest 5](https://img.shields.io/badge/Vitest-5-6E9F18?logo=vitest&logoColor=white)
+![pnpm 10.34](https://img.shields.io/badge/pnpm-10.34-F69220?logo=pnpm&logoColor=white)
 ![Node 22+](https://img.shields.io/badge/Node-22%2B-339933?logo=nodedotjs&logoColor=white)
-![License MIT](https://img.shields.io/badge/License-MIT-00F0FF.svg)
+![Static Export](https://img.shields.io/badge/Static%20Export-SSG-black?logo=nextdotjs&logoColor=white)
+
 [![YYC³ Quality Gates & Pages Deploy](https://github.com/YYC-Cube/YYC3-MiniMax/actions/workflows/ci.yml/badge.svg)](https://github.com/YYC-Cube/YYC3-MiniMax/actions/workflows/ci.yml)
-![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-自动部署-2088FF?logo=github&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-416%20passing-6E9F18?logo=vitest&logoColor=white)
+![Coverage](https://img.shields.io/badge/coverage-lines%2096%25-00C853?logo=vitest&logoColor=white)
+![Bundle](https://img.shields.io/badge/bundle-%E2%89%A4850KB-2088FF)
+![Code Style](https://img.shields.io/badge/code_style-oxfmt-4B5563)
+![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8?logo=pwa&logoColor=white)
+![License MIT](https://img.shields.io/badge/License-MIT-00F0FF.svg)
+![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2-2088FF?logo=github&logoColor=white)
 
 </div>
 
@@ -61,7 +68,7 @@ keywords:
 
 ---
 
-## 仓库信息
+## 📡 仓库信息
 
 | 项　　　　　　　　　　　　| 值　　　　　　　　　　　　　　　　　　　　　　　　 |
 | ---------------------------| ----------------------------------------------------|
@@ -70,7 +77,7 @@ keywords:
 
 ---
 
-## 项目概述
+## 🧭 项目概述
 
 「**_YanYuCloudCube_**」言启象限 | 语枢未来
 
@@ -93,7 +100,7 @@ keywords:
 
 ---
 
-## 功能矩阵
+## 🗺️ 功能矩阵
 
 | 视图　　　 | 名称　　　　　　 | 核心能力　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
 | ------------| ------------------| --------------------------------------------------------------------------------------------------|
@@ -120,11 +127,11 @@ keywords:
 
 ---
 
-## 技术架构
+## 🏗️ 技术架构
 
 | 层级 | 技术 | 说明 |
 | ---- | ---- | ---- |
-| 框架 | **Next.js 16 App Router** + React 19 + TypeScript 5.9（strict） | 静态导出 SSG（`output: 'export'`），五路由目录形态 |
+| 框架 | **Next.js 16 App Router** + React 19 + TypeScript 5.7（strict） | 静态导出 SSG（`output: 'export'`），五路由目录形态 |
 | 构建 | next build（Turbopack）→ `out/` | 五路由 + 404.html 静态导出，构建约 1s |
 | 样式 | Tailwind CSS v4（`@tailwindcss/postcss`） | 原子类 + CSS 变量霓虹主题（无 tailwind.config） |
 | 图标 | lucide-react + yyc3-icons 全端图标集 | 品牌单一真源 `public/yyc3-icons/brand/`（favicon/apple-touch/maskable） |
@@ -144,7 +151,7 @@ keywords:
 
 ---
 
-## 快速开始
+## 🚀 快速开始
 
 ### 环境要求
 
@@ -231,9 +238,21 @@ NEXT_PUBLIC_MODEL_REGISTRY_URL=https://registry.yyc3.local  # provider=registry 
 - **人工接管**：Step7 复检 ≤2 轮耗尽后挂起，W1 推送接管卡片（重跑 Step5 / 回滚检查点 / 终止任务）
 - 分层边界由 [.dependency-cruiser.cjs](./.dependency-cruiser.cjs) 物理固化（`pnpm depcruise`，13 条 error 级规则）
 
+编排链路依赖方向（物理 import，depcruise 守卫）：
+
+```mermaid
+graph LR
+  UI["UI 层<br/>views · components · hooks"] -->|"唯一门面<br/>dispatch · onStep · onEffect · resume"| CLI["workers/orchestratorClient<br/>worker / 进程内双模式"]
+  CLI --> RUN["core 纯核<br/>agents · machine · queue · runtime"]
+  CLI --> ADP["services/adapters<br/>local · vllm · registry · mock"]
+  RUN -.->|"AgentPort 六元组"| T["types 契约<br/>agent.ts · ports.ts"]
+  ADP -.->|"ModelPort"| T
+  OBS["workers/observability<br/>trace → telemetry"] -.->|"横切注入"| RUN
+```
+
 ---
 
-## 目录结构
+## 📂 目录结构
 
 ```
 YYC3-MiniMax/
@@ -304,7 +323,7 @@ YYC3-MiniMax/
 ├── next.config.ts               # Next 16 配置（output:'export'/trailingSlash/images）
 ├── postcss.config.mjs           # Tailwind v4 PostCSS 插件
 ├── eslint.config.js             # typescript-eslint + next/core-web-vitals + 纯核禁令
-├── .dependency-cruiser.cjs      # 分层边界守卫（8 条 error 级规则）
+├── .dependency-cruiser.cjs      # 分层边界守卫（13 条 error 级规则）
 ├── lighthouserc.cjs             # Lighthouse 运行时预算断言
 ├── .github/workflows/ci.yml     # CI 质量门禁 + GitHub Pages 自动部署
 ├── docs/                        # 团队规范 + 会话工作文档 + 迁移评估清单
@@ -313,19 +332,19 @@ YYC3-MiniMax/
 
 ---
 
-## 开发者文档导航
+## 📚 开发者文档导航
 
 | 文档 | 说明 |
 | ---- | ---- |
-| [LICENSE](./LICENSE) | MIT 开源许可证 |
-| [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) | 行为准则（贡献者公约） |
-| [CONTRIBUTING.md](./CONTRIBUTING.md) | 贡献指南与工作流 |
-| [SECURITY.md](./SECURITY.md) | 安全政策与漏洞上报 |
-| [docs/YYC3-团队通用-标准规范/](./docs/YYC3-团队通用-标准规范/) | 团队五维驱动 / 开发标准 / 文档闭环 |
+| 📄 [LICENSE](./LICENSE) | MIT 开源许可证 |
+| 🤝 [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) | 行为准则（贡献者公约） |
+| 🛠️ [CONTRIBUTING.md](./CONTRIBUTING.md) | 贡献指南与工作流 |
+| 🔐 [SECURITY.md](./SECURITY.md) | 安全政策与漏洞上报 |
+| 📐 [docs/YYC3-团队通用-标准规范/](./docs/YYC3-团队通用-标准规范/) | 团队五维驱动 / 开发标准 / 文档闭环 |
 
 ---
 
-## 仓库标签 / 关键词（Topics）
+## 🏷️ 仓库标签 / 关键词（Topics）
 
 仓库标签三处同一真源：本文档 YAML 标头 / `package.json` `keywords` / GitHub Topics（已通过 API 写入）。
 GitHub Topics 命名规范：全小写、连字符分词、不超过 20 个标签、单个标签 ≤ 50 字符。
@@ -342,10 +361,10 @@ GitHub Topics 命名规范：全小写、连字符分词、不超过 20 个标�
 
 ---
 
-## 部署设计（GitHub Pages 全链路闭环）
+## 🌐 部署设计（GitHub Pages 全链路闭环）
 
 ```
-push main ──► 质量门禁（gitleaks/lint/tsc/knip/madge/vitest+coverage/build）
+push main / workflow_dispatch ──► 质量门禁（gitleaks/lint/tsc/knip/madge/depcruise/vitest+coverage/build）
               │ 全绿后
               ▼
          deploy-pages 作业
@@ -364,7 +383,7 @@ push main ──► 质量门禁（gitleaks/lint/tsc/knip/madge/vitest+coverage/
 | DNS | `CNAME minimax.yyc3.top → YYC-Cube.github.io` | 已在云 DNS 生效（Pages 已识别自定义域） |
 | HTTPS | Enforce HTTPS 已开启 | 证书由 GitHub 自动签发续期 |
 | 构建模式 | `build_type: workflow` | Pages 数据源为 Actions 工作流，非分支推送 |
-| 触发条件 | `push main` 且质量门禁全绿 | PR 只跑门禁不部署，防未审产物上线 |
+| 触发条件 | `push main` / 手动 `workflow_dispatch`，且质量门禁全绿 | PR 只跑门禁不部署；手动触发仅验证门禁，防未审产物上线 |
 | 部署互斥 | `concurrency: ci-{ref}` | 新推送自动取消在途部署，避免竞态覆盖 |
 | 鉴权 | OIDC + `pages:write` / `id-token:write` | 零长期密钥，token 权限最小化 |
 
@@ -372,7 +391,7 @@ push main ──► 质量门禁（gitleaks/lint/tsc/knip/madge/vitest+coverage/
 
 ---
 
-## 路线图 Roadmap
+## 🗓️ 路线图 Roadmap
 
 - [x] P1-P5 五大视图 + W1 全局浮窗原型闭环
 - [x] ReAct-C 九步闭环可视化（含 Step7 回环模拟）
@@ -384,11 +403,11 @@ push main ──► 质量门禁（gitleaks/lint/tsc/knip/madge/vitest+coverage/
 - [x] GitHub 仓库化 + Pages 自动部署闭环（质量门禁 → 产物检测 → minimax.yyc3.top）
 - [ ] W1 接入真实 LLM 网关（多模型路由）
 - [ ] P4 接入 Prometheus / node_exporter 真实遥测
-- [ ] Agent 编排内核落地（core/ 端口适配器 + 九步状态机，替换模拟数据层）
+- [x] Agent 编排内核落地（core 纯核端口适配器 + 九步状态机 + worker 双模式，PR1-PR7 已交付）
 
 ---
 
-## 项目概述（英文摘要）
+## 🌍 项目概述（英文摘要）
 
 > An immersive command center that streamlines the industrial production of
 > comics and short films, enabling real-time collaboration among eight
@@ -400,10 +419,11 @@ push main ──► 质量门禁（gitleaks/lint/tsc/knip/madge/vitest+coverage/
 
 ---
 
-## 变更历史
+## 📜 变更历史
 
 | 版本 | 日期 | 变更内容 | 作者 |
 | ------ | ---------- | ---------------------------------------------------------------- | ------------------- |
+| v1.2.2 | 2026-10-16 | 文档可视化体系升级：徽章两行分组重构与版本对齐（TS 5.7）、12 章节图标体系、开发者文档导航图标、编排 mermaid 依赖图；CI 加固（最小权限基线/timeout 预算/workflow_dispatch）；事实修正（13 条 depcruise 规则/路线图编排内核勾选） | YanYuCloudCube Team |
 | v1.2.1 | 2026-10-15 | GitHub 仓库化：主仓地址/Topics 标签体系（20 项）/Pages 自动部署 CI（产物检测+OIDC+CNAME）/robots 收录修正 | YanYuCloudCube Team |
 | v1.2.0 | 2026-10-12 | P1 真实三针时钟；P3 全视口自适应；PWA（manifest/SW/安装）落地；品牌图标单一真源；README YAML 标头修复与标签体系 | YanYuCloudCube Team |
 | v1.1.0 | 2026-10-11 | 新增 WS 事件流/vitest+CI/移动端降级/全端图标；合规标头标尾 | YanYuCloudCube Team |
