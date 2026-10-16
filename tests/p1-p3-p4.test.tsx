@@ -69,10 +69,31 @@ describe("P1FamilyCenter（家族中枢）", () => {
   it("中心 Logo 与底部快速入口均导航 P2", () => {
     const { onNavigate } = renderP1()
     fireEvent.click(screen.getByText("AI FAMILY"))
-    fireEvent.click(screen.getByText("进入漫剧工业化生产台"))
+    fireEvent.click(screen.getByText("进入 P2 漫剧生产台"))
     expect(onNavigate).toHaveBeenCalledTimes(2)
     expect(onNavigate).toHaveBeenNthCalledWith(1, "P2")
     expect(onNavigate).toHaveBeenNthCalledWith(2, "P2")
+  })
+
+  it("键盘可达（审计 P1-#4）：Enter/Space 触发成员选择/中心导航/快捷入口", () => {
+    const { onSelectAgent, onNavigate } = renderP1()
+    // 成员头像：Enter 唤起 W1
+    fireEvent.keyDown(
+      screen.getByText("12:00").closest('[role="button"]')!,
+      { key: "Enter" },
+    )
+    expect(onSelectAgent).toHaveBeenCalledWith("tianshu")
+    // 中心品牌核：Enter 导航 P2
+    fireEvent.keyDown(
+      screen.getByRole("button", { name: /YYC³ 品牌核心/ }),
+      { key: "Enter" },
+    )
+    // 底部快捷入口：Space 导航 P2
+    fireEvent.keyDown(
+      screen.getByRole("button", { name: "进入 P2 漫剧生产台" }),
+      { key: " " },
+    )
+    expect(onNavigate).toHaveBeenCalledTimes(2)
   })
 })
 
@@ -169,6 +190,13 @@ describe("P4OpsMonitoring（算力监控台）", () => {
     expect(screen.getByText("NAS IOPS 与存储池 (RAID1/6)")).toBeTruthy()
     expect(screen.getByText("告警与事件队列")).toBeTruthy()
     expect(screen.getByText("4/4 在线")).toBeTruthy()
+  })
+
+  it("节点状态三重提示（审计 P1-#3）：StatusPill 文字胶囊非仅色点", () => {
+    renderP4()
+    // 3 节点 online + 1 节点 warn，均以文字胶囊呈现状态
+    expect(screen.getAllByText("在线").length).toBeGreaterThanOrEqual(3)
+    expect(screen.getByText("高负载")).toBeTruthy()
   })
 
   it("告警按钮按 targetPage 正确路由 P5/P2/P3", () => {

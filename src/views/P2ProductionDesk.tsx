@@ -42,6 +42,8 @@ interface P2ProductionDeskProps {
   onSelectAgent: (id: AgentId) => void
   onSendToWidget: (cmd: string) => void
   onNavigateToP5?: () => void
+  /** KPI 产能卡点击 → P4 算力监控台（IA 补链，NN/g 审计 #2） */
+  onNavigateToP4?: () => void
   highlightedStageId?: PipelineStageId | null
 }
 
@@ -49,6 +51,7 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
   onSelectAgent,
   onSendToWidget,
   onNavigateToP5,
+  onNavigateToP4,
   highlightedStageId,
 }) => {
   const stages = PIPELINE_STAGES
@@ -205,8 +208,8 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
         />
       </div>
 
-      {/* 3. BOTTOM CAPACITY & EFFICIENCY KPI RIBBON */}
-      <KpiRibbon kpis={KPI_METRICS} />
+      {/* 3. BOTTOM CAPACITY & EFFICIENCY KPI RIBBON（点击卡片 → P4 算力监控台） */}
+      <KpiRibbon kpis={KPI_METRICS} onKpiClick={onNavigateToP4} />
 
       {/* 4. STAGE DETAIL DRAWER MODAL (When clicking "进入阶段") */}
       {isDetailDrawerOpen && selectedStage && (

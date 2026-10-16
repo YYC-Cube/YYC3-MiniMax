@@ -25,8 +25,13 @@ import {
   Zap,
 } from "lucide-react"
 import React, { useState } from "react"
+import { StatusPill } from "../components/StatusPill"
 import { OPS_NODES, SYSTEM_ALERTS, SystemAlert } from "../data/opsData"
-import { memUsagePct } from "../domain/opsView"
+import {
+  memUsagePct,
+  OPS_STATUS_LABEL,
+  OPS_STATUS_TONE,
+} from "../domain/opsView"
 
 interface P4OpsMonitoringProps {
   onNavigateToP5: () => void
@@ -86,26 +91,30 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
               return (
                 <div
                   key={node.id}
-                  className={`p-3 rounded-xl bg-[#0A0D18]/90 border transition-all ${
-                    isWarning
+                  className={`p-3 rounded-xl bg-[#0A0D18]/90 border transition-all ${isWarning
                       ? "border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]"
                       : "border-white/10 hover:border-[#00F0FF]/40"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 min-w-0">
                       <span
-                        className="w-2 h-2 rounded-full"
+                        className="w-2 h-2 rounded-full shrink-0"
                         style={{
                           backgroundColor: isWarning ? "#FF006E" : "#00FF88",
-                          boxShadow: `0 0 6px ${
-                            isWarning ? "#FF006E" : "#00FF88"
-                          }`,
+                          boxShadow: `0 0 6px ${isWarning ? "#FF006E" : "#00FF88"
+                            }`,
                         }}
+                        aria-hidden="true"
                       />
-                      <span className="font-bold text-xs text-white">
+                      <span className="font-bold text-xs text-white truncate">
                         {node.name}
                       </span>
+                      {/* 状态三重提示（审计 P1-#3）：颜色+文字胶囊，非仅色点 */}
+                      <StatusPill
+                        label={OPS_STATUS_LABEL[node.status]}
+                        tone={OPS_STATUS_TONE[node.status]}
+                      />
                     </div>
                     <span className="text-[9px] font-mono-num text-[#9BA3B4] bg-white/5 px-1.5 py-0.2 rounded">
                       {node.ip}
@@ -142,18 +151,16 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                             : "显存占用"}
                         </span>
                         <span
-                          className={`font-mono-num font-bold ${
-                            memPct > 90 ? "text-[#FF006E]" : "text-[#BF00FF]"
-                          }`}
+                          className={`font-mono-num font-bold ${memPct > 90 ? "text-[#FF006E]" : "text-[#BF00FF]"
+                            }`}
                         >
                           {node.memUsed} / {node.memTotal} {node.memUnit}
                         </span>
                       </div>
                       <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
                         <div
-                          className={`h-full rounded-full ${
-                            memPct > 90 ? "bg-[#FF006E]" : "bg-[#BF00FF]"
-                          }`}
+                          className={`h-full rounded-full ${memPct > 90 ? "bg-[#FF006E]" : "bg-[#BF00FF]"
+                            }`}
                           style={{ width: `${memPct}%` }}
                         />
                       </div>
@@ -467,24 +474,22 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
               return (
                 <div
                   key={alt.id}
-                  className={`p-3 rounded-xl border text-xs transition-all ${
-                    isCrit
+                  className={`p-3 rounded-xl border text-xs transition-all ${isCrit
                       ? "bg-[#FF006E]/10 border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]"
                       : isEvt
                         ? "bg-[#00F0FF]/10 border-[#00F0FF]/30"
                         : "bg-[#00FF88]/10 border-[#00FF88]/30"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center space-x-1.5">
                       <span
-                        className={`font-mono-num text-[9px] font-bold px-1.5 py-0.2 rounded ${
-                          isCrit
+                        className={`font-mono-num text-[9px] font-bold px-1.5 py-0.2 rounded ${isCrit
                             ? "bg-[#FF006E] text-white"
                             : isEvt
                               ? "bg-[#00F0FF]/30 text-[#00F0FF]"
                               : "bg-[#00FF88]/30 text-[#00FF88]"
-                        }`}
+                          }`}
                       >
                         {alt.level}
                       </span>
@@ -504,11 +509,10 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                   <div className="flex items-center justify-end">
                     <button
                       onClick={() => handleAlertAction(alt)}
-                      className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1 cursor-pointer transition-all ${
-                        isCrit
+                      className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1 cursor-pointer transition-all ${isCrit
                           ? "bg-[#FF006E] hover:bg-[#FF006E]/80 text-white shadow-[0_0_8px_#FF006E]"
                           : "bg-white/10 hover:bg-white/20 text-white border border-white/20"
-                      }`}
+                        }`}
                     >
                       <span>{alt.actionText}</span>
                       <ArrowUpRight size={11} />

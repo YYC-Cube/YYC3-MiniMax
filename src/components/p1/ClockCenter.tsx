@@ -10,15 +10,16 @@
  *
  * brief: 中心 150px 慢旋环 + 102px 品牌核心（点击进 P2），下方 HH:MM:SS + yy/mm/dd 星期
  *
- * dependencies: react
+ * dependencies: react, services/i18n
  * exports: ClockCenter
  */
 
-const DAY_LABELS = ["日", "一", "二", "三", "四", "五", "六"] as const
+import { formatWeekdayLabel, getI18n } from "../../services/i18n";
 
-/** yy/mm/dd + 星期（周末粉色） */
+/** yy/mm/dd + 星期（周末粉色）；星期标签经 i18n 服务本地化（zh narrow 单字与历史版式一致） */
 function formatDateInfo(
   date: Date,
+  locale: string,
 ): { dateStr: string; dayLabel: string; isWeekend: boolean } {
   const yy = String(date.getFullYear()).slice(2)
   const mm = String(date.getMonth() + 1).padStart(2, "0")
@@ -26,7 +27,7 @@ function formatDateInfo(
   const dayIdx = date.getDay() // 0=日, 6=六
   return {
     dateStr: `${yy}/${mm}/${dd}`,
-    dayLabel: DAY_LABELS[dayIdx],
+    dayLabel: formatWeekdayLabel(date, locale),
     isWeekend: dayIdx === 0 || dayIdx === 6,
   }
 }
@@ -41,7 +42,8 @@ interface ClockCenterProps {
 
 export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
   const timeStr = time.toLocaleTimeString("zh-CN", { hour12: false })
-  const { dateStr, dayLabel, isWeekend } = formatDateInfo(time)
+  const { locale } = getI18n()
+  const { dateStr, dayLabel, isWeekend } = formatDateInfo(time, locale)
 
   return (
     <div className="absolute z-20 flex flex-col items-center pointer-events-none">
@@ -52,10 +54,16 @@ export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
           <div className="w-2 h-2 rounded-full bg-[#BF00FF] absolute -bottom-1 shadow-[0_0_10px_#BF00FF]" />
         </div>
 
-        {/* 124x124 Core Logo */}
+        {/* 124x124 Core Logo（键盘可达，审计 P1-#4） */}
         <div
           onClick={onNavigateToP2}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[102px] h-[102px] rounded-xl p-[2px] bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#FF006E] shadow-[0_0_20px_rgba(0,240,255,0.5),0_0_32px_rgba(191,0,255,0.3)] animate-pulse-breath cursor-pointer pointer-events-auto group hover:scale-105 transition-all"
+          role="button"
+          tabIndex={0}
+          aria-label="YYC³ 品牌核心：进入漫剧生产指挥台"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") onNavigateToP2()
+          }}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[102px] h-[102px] rounded-xl p-[2px] bg-gradient-to-br from-[#00F0FF] via-[#BF00FF] to-[#FF006E] shadow-[0_0_20px_rgba(0,240,255,0.5),0_0_32px_rgba(191,0,255,0.3)] animate-pulse-breath cursor-pointer pointer-events-auto group hover:scale-105 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]"
           title="点击快速进入漫剧生产指挥台"
         >
           <div className="w-full h-full bg-[#0A0A0A] rounded-[10px] flex flex-col items-center justify-center relative overflow-hidden border border-white/10">

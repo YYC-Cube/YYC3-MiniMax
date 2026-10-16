@@ -14,6 +14,11 @@
 
 import { act, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { QualityQueuePanel } from "../src/components/p5/QualityQueuePanel"
+import {
+  AUDIT_STORYBOARDS,
+  type StoryboardAuditItem,
+} from "../src/data/qualityData"
 import { MobileFallback } from "../src/views/MobileFallback"
 import { P5QualitySecurity } from "../src/views/P5QualitySecurity"
 
@@ -64,12 +69,60 @@ describe("P5QualitySecurity（质检与安全）", () => {
 
   it("打回重跑：500ms 延迟流转为 rejected 且复检轮次升至 2/2", () => {
     renderP5()
-    fireEvent.click(screen.getAllByRole("button", { name: "打回重跑" })[0]!)
+    // sb-103（第 3 位）为唯一 pending；终态卡按钮已禁用（审计 P1-#1）
+    fireEvent.click(screen.getAllByRole("button", { name: "打回重跑" })[2]!)
 
     act(() => {
       vi.advanceTimersByTime(600)
     })
     expect(screen.getByText("复检轮次: 2/2")).toBeTruthy()
+  })
+
+  it("终态锁（审计 P1-#1）：核验通过后该卡双按钮禁用不可翻转", () => {
+    renderP5()
+    const passBtns = screen.getAllByRole("button", { name: "核验通过" })
+    const rejectBtns = screen.getAllByRole("button", { name: "打回重跑" })
+
+    // sb-103（第 3 位）为唯一 pending：核验通过进入 passed 终态
+    fireEvent.click(passBtns[2]!)
+    expect(screen.getByText(/待定: 0/)).toBeTruthy()
+    expect((passBtns[2] as HTMLButtonElement).disabled).toBe(true)
+    expect((rejectBtns[2] as HTMLButtonElement).disabled).toBe(true)
+
+    // 终态卡点击无效：不翻转为 rejected（无 2/2 出现，轮次保持 1/2）
+    fireEvent.click(rejectBtns[2]!)
+    expect(screen.queryByText("复检轮次: 2/2")).toBeNull()
+    expect(screen.getAllByText("复检轮次: 1/2").length).toBe(4)
+  })
+
+  it("复检熔断（审计 P1-#2）：待检达 2/2 轮禁用打回并提示人工终审", () => {
+    // 直接渲染队列面板：构造"pending 且已达最大复检轮次"的熔断态
+    const storyboards: StoryboardAuditItem[] = [
+      { ...AUDIT_STORYBOARDS[2]!, reviewRound: 2 },
+    ]
+    const onReject = vi.fn()
+    render(
+      <QualityQueuePanel
+        storyboards={storyboards}
+        shakingCardId={null}
+        onPass={vi.fn()}
+        onReject={onReject}
+      />,
+    )
+    expect(screen.getByText(/已达复检上限/)).toBeTruthy()
+
+    const rejectBtn = screen.getByRole("button", {
+      name: "打回重跑",
+    }) as HTMLButtonElement
+    expect(rejectBtn.disabled).toBe(true)
+    fireEvent.click(rejectBtn)
+    expect(onReject).not.toHaveBeenCalled()
+
+    // 人工终审出口保留：核验通过仍可用
+    const passBtn = screen.getByRole("button", {
+      name: "核验通过",
+    }) as HTMLButtonElement
+    expect(passBtn.disabled).toBe(false)
   })
 
   it("PII 受控调取：异步拉取原文后可收起（原文不在数据包内）", async () => {
@@ -95,6 +148,28 @@ describe("P5QualitySecurity（质检与安全）", () => {
     fireEvent.click(screen.getByText("查看 ReAct-C 回环详情"))
     expect(onNavigateToP2).toHaveBeenCalledTimes(1)
     expect(onNavigateToP3).toHaveBeenCalledTimes(1)
+  })
+
+  it("质检队列「定位生产台」→ P2 image 阶段高亮补链（IA 审计 #3）", () => {
+    const onLocateProductionStage = vi.fn()
+    const { unmount } = render(
+      <P5QualitySecurity
+        onNavigateToP2={vi.fn()}
+        onNavigateToP3={vi.fn()}
+        onLocateProductionStage={onLocateProductionStage}
+      />,
+    )
+    fireEvent.click(
+      screen.getByRole("button", { name: "前往生产台镜头阶段" }),
+    )
+    expect(onLocateProductionStage).toHaveBeenCalledTimes(1)
+
+    // 未传回调时不渲染入口（与纯展示态兼容）
+    unmount()
+    renderP5()
+    expect(
+      screen.queryByRole("button", { name: "前往生产台镜头阶段" }),
+    ).toBeNull()
   })
 })
 

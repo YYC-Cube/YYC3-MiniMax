@@ -26,13 +26,13 @@ import {
   it,
   vi,
 } from "vitest"
-import { CommandCenterProvider } from "../src/context/CommandCenterContext"
 import { CommandShell } from "../src/app/CommandShell"
 import P2Page from "../src/app/p2/page"
 import P3Page from "../src/app/p3/page"
 import P4Page from "../src/app/p4/page"
 import P5Page from "../src/app/p5/page"
 import P1Page from "../src/app/page"
+import { CommandCenterProvider } from "../src/context/CommandCenterContext"
 
 /* ---------------------------------- 路由 mock ---------------------------------- */
 
@@ -147,7 +147,7 @@ describe("CommandShell 桌面编排（P1-P5 路由架构）", () => {
   it("默认渲染 P1：Header/Footer/P1 时钟环/W1 收起球体", () => {
     render(renderShell("P1"))
     expect(
-      screen.getByText("8 拟人化 Agent 协同 · 工业化漫剧指挥中心"),
+      screen.getByText("8 拟人化 Agent 协同 · 漫剧工业化指挥舱"),
     ).toBeTruthy()
     expect(screen.getByText("/mnt/nas/yyc3_pipeline")).toBeTruthy()
     expect(screen.getAllByText("12:00").length).toBeGreaterThan(0)
@@ -186,7 +186,7 @@ describe("CommandShell 桌面编排（P1-P5 路由架构）", () => {
   it("Footer CTA 链：P1 → /p2/，P2 → /p3/（router.push 路径断言）", () => {
     const { rerender } = render(renderShell("P1"))
     // P1 视图与 Footer 均有同名 CTA（原 App 测试即取 [0]）
-    fireEvent.click(screen.getAllByText("进入漫剧工业化生产台")[0]!)
+    fireEvent.click(screen.getAllByText("进入 P2 漫剧生产台")[0]!)
     expect(PUSH_CALLS).toContain("/p2/")
 
     rerenderAt("P2", rerender)
@@ -250,13 +250,13 @@ describe("CommandShell 桌面编排（P1-P5 路由架构）", () => {
     expect(screen.getAllByTitle(/主导/).length).toBeGreaterThan(0)
   })
 
-  it("scaleMode 切换：fit ↔ 1080p（标题翻转 + 缩放分支）", () => {
+  it("scaleMode 切换：fit ↔ 1080p（显示模式标题翻转 + 缩放分支）", () => {
     render(renderShell("P1"))
-    fireEvent.click(screen.getByTitle("切换至标准 1980×1020 视图"))
-    expect(screen.getByTitle("切换至自适应高度视图")).toBeTruthy()
+    fireEvent.click(screen.getByTitle("显示模式：切换至标准 1980×1020 视图"))
+    expect(screen.getByTitle("显示模式：切换至自适应高度视图")).toBeTruthy()
 
-    fireEvent.click(screen.getByTitle("切换至自适应高度视图"))
-    expect(screen.getByTitle("切换至标准 1980×1020 视图")).toBeTruthy()
+    fireEvent.click(screen.getByTitle("显示模式：切换至自适应高度视图"))
+    expect(screen.getByTitle("显示模式：切换至标准 1980×1020 视图")).toBeTruthy()
   })
 
   it("P4 告警路由：→P5 / →P2 / →P3 三向贯通", () => {

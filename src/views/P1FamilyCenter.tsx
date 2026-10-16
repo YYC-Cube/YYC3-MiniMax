@@ -19,7 +19,9 @@ import React, { useEffect, useRef, useState } from "react"
 import { AgentMember } from "../components/p1/AgentMember"
 import { ClockCenter } from "../components/p1/ClockCenter"
 import { ClockDial } from "../components/p1/ClockDial"
+import { OnboardingCoach } from "../components/p1/OnboardingCoach"
 import { AGENTS } from "../data/agents"
+import { useLocalStorage } from "../hooks/useLocalStorage"
 import { AgentId } from "../types"
 
 // ======== 真实时钟逻辑（复用自 docs/AIFamilyPage.tsx 设计基准） ========
@@ -81,6 +83,17 @@ export const P1FamilyCenter: React.FC<P1FamilyCenterProps> = ({
   onNavigate,
 }) => {
   const [hoveredAgentId, setHoveredAgentId] = useState<AgentId | null>(null)
+  // 首访三步引导（IA 审计 #4）：关闭/完成任一步骤后本机持久不再显示
+  const [onboardingDone, setOnboardingDone] = useLocalStorage(
+    "yyc3-onboarding-v1",
+    false,
+  )
+
+  /** 成员选择即视为完成第一步引导（learn-by-doing 自动收起） */
+  const handleMemberSelect = (id: AgentId) => {
+    setOnboardingDone(true)
+    onSelectAgent(id)
+  }
 
   const stageRef = useRef<HTMLDivElement>(null)
   const scale = useStageScale(stageRef)
@@ -137,23 +150,34 @@ export const P1FamilyCenter: React.FC<P1FamilyCenterProps> = ({
             isHovered={hoveredAgentId === member.id}
             onMouseEnter={() => setHoveredAgentId(member.id)}
             onMouseLeave={() => setHoveredAgentId(null)}
-            onSelect={() => onSelectAgent(member.id)}
+            onSelect={() => handleMemberSelect(member.id)}
           />
         ))}
       </div>
 
-      {/* Floating Bottom Quick Link to P2 */}
+      {/* 首访三步引导卡（关闭/完成步骤后本机持久隐藏） */}
+      {!onboardingDone && (
+        <OnboardingCoach onDismiss={() => setOnboardingDone(true)} />
+      )}
+
+      {/* Floating Bottom Quick Link to P2（键盘可达，审计 P1-#4） */}
       <div className="absolute bottom-4 left-6 z-30">
         <div
           onClick={() => onNavigate("P2")}
-          className="flex items-center space-x-3 px-4 py-2.5 rounded-xl glass-panel-hover glass-panel cursor-pointer group border border-[#00F0FF]/30"
+          role="button"
+          tabIndex={0}
+          aria-label="进入 P2 漫剧生产台"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") onNavigate("P2")
+          }}
+          className="flex items-center space-x-3 px-4 py-2.5 rounded-xl glass-panel-hover glass-panel cursor-pointer group border border-[#00F0FF]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]"
         >
           <div className="w-8 h-8 rounded-lg bg-[#00F0FF]/20 flex items-center justify-center text-[#00F0FF] group-hover:scale-110 transition-transform">
             <Cpu size={16} />
           </div>
           <div className="flex flex-col">
             <span className="text-xs font-bold text-white group-hover:text-[#00F0FF] transition-colors flex items-center space-x-1">
-              <span>进入漫剧工业化生产台</span>
+              <span>进入 P2 漫剧生产台</span>
               <ArrowRight
                 size={13}
                 className="group-hover:translate-x-1 transition-transform"

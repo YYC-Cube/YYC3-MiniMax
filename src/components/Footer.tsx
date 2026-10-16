@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
             onClick={() => navigate("P2")}
             className="flex items-center space-x-1 text-[11px] text-[#00F0FF] hover:text-white bg-[#00F0FF]/15 hover:bg-[#00F0FF]/30 px-2.5 py-0.5 rounded transition-all border border-[#00F0FF]/40 cursor-pointer"
           >
-            <span>进入漫剧工业化生产台</span>
+            <span>进入 P2 漫剧生产台</span>
             <ArrowRight size={11} />
           </button>
         )}

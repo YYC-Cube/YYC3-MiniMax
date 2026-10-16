@@ -37,11 +37,14 @@ import { telemetry } from "../services/telemetry"
 interface P5QualitySecurityProps {
   onNavigateToP2: () => void
   onNavigateToP3: () => void
+  /** 质检队列「定位生产台」→ P2 image 阶段高亮（navigateToStage，IA 补链） */
+  onLocateProductionStage?: () => void
 }
 
 export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
   onNavigateToP2,
   onNavigateToP3,
+  onLocateProductionStage,
 }) => {
   const [storyboards, setStoryboards] =
     useState<StoryboardAuditItem[]>(AUDIT_STORYBOARDS)
@@ -104,7 +107,15 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
       setStoryboards((prev) =>
         prev.map((item) =>
           item.id === id
-            ? { ...item, status: "rejected" as const, reviewRound: 2 }
+            ? {
+              ...item,
+              status: "rejected" as const,
+              // 复检轮次递增并以门禁上限封顶（审计 P1-#2：禁止硬编码 2）
+              reviewRound: Math.min(
+                item.reviewRound + 1,
+                GATES.MAX_REVIEW_ROUNDS,
+              ),
+            }
             : item,
         ),
       )
@@ -161,6 +172,7 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
           shakingCardId={shakingCardId}
           onPass={handlePass}
           onReject={handleReject}
+          onLocateStage={onLocateProductionStage}
         />
 
         {/* Middle Col (4 Cols): Security Audit Logs (智云·守护三级脱敏前后对比) */}

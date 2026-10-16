@@ -2,22 +2,28 @@
  * file: KpiRibbon.tsx
  * description: 底部 KPI 带 · 6 指标卡 + SVG 迷你趋势线
  * author: YanYuCloudCube Team
- * version: v1.0.0
+ * version: v1.1.0
  * created: 2026-10-11
- * updated: 2026-10-11
+ * updated: 2026-10-16
  * status: active
  * tags: [component],[p2],[kpi]
  *
  * brief: 产能与效率指标带（高 96px），趋势线在组件内计算
  *
+ * details:
+ * - v1.1 IA 补链（NN/g 审计 #2）：传入 onKpiClick 时卡片升级为 button，
+ *   点击直达 P4 算力监控台；未传时保持纯展示 div（分支双覆盖）
+ *
  * dependencies: react, types
  * exports: KpiRibbon
  */
 
-import type { KPIMetric } from "../../types"
+import type { KPIMetric } from "../../types";
 
 interface KpiRibbonProps {
   kpis: KPIMetric[]
+  /** 点击 KPI 卡回调（P2 → P4 算力监控台补链）；未提供时卡片为纯展示 */
+  onKpiClick?: (id: string) => void
 }
 
 /** 计算 SVG 折线点集（viewBox 0 0 100 32） */
@@ -36,17 +42,15 @@ function sparklinePoints(trend: number[]): { points: string; lastY: number } {
   return { points, lastY }
 }
 
-export function KpiRibbon({ kpis }: KpiRibbonProps) {
+export function KpiRibbon({ kpis, onKpiClick }: KpiRibbonProps) {
   return (
     <div className="h-24 grid grid-cols-6 gap-3.5">
       {kpis.map((kpi) => {
         const { points, lastY } = sparklinePoints(kpi.trend)
-
-        return (
-          <div
-            key={kpi.id}
-            className="h-full rounded-xl glass-panel p-2.5 flex flex-col justify-between border border-[#00F0FF]/25 hover:border-[#00F0FF]/50 transition-all"
-          >
+        const cardCls =
+          "h-full rounded-xl glass-panel p-2.5 flex flex-col justify-between border border-[#00F0FF]/25 hover:border-[#00F0FF]/50 transition-all text-left select-none"
+        const cardBody = (
+          <>
             <div className="flex items-center justify-between">
               <span className="text-[11px] text-[#9BA3B4] truncate">
                 {kpi.label}
@@ -96,6 +100,24 @@ export function KpiRibbon({ kpis }: KpiRibbonProps) {
                 </svg>
               </div>
             </div>
+          </>
+        )
+
+        // IA 补链：可点击时渲染 button（键盘可达 + 语义化），直达 P4 算力监控台
+        return onKpiClick ? (
+          <button
+            key={kpi.id}
+            type="button"
+            onClick={() => onKpiClick(kpi.id)}
+            aria-label={`${kpi.label}：前往算力监控台查看详情`}
+            title={`${kpi.label}：前往算力监控台查看详情`}
+            className={`${cardCls} cursor-pointer`}
+          >
+            {cardBody}
+          </button>
+        ) : (
+          <div key={kpi.id} className={cardCls}>
+            {cardBody}
           </div>
         )
       })}

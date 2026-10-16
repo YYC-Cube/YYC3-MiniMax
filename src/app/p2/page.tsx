@@ -34,6 +34,7 @@ export default function Page() {
       }}
       onSendToWidget={sendCommandToWidget}
       onNavigateToP5={() => navigate("P5")}
+      onNavigateToP4={() => navigate("P4")}
       highlightedStageId={highlightedStageId}
     />
   )

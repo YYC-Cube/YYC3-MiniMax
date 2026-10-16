@@ -105,7 +105,7 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({
             </div>
             <div className="min-w-0">
               <h1 className="text-sm font-bold text-white leading-none truncate">
-                AI FAMILY 指挥中心
+                AI FAMILY 指挥舱
               </h1>
               <p className="text-[10px] text-[#9BA3B4] mt-0.5">
                 YanYuCloudCube · 言启象限

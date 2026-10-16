@@ -21,6 +21,7 @@
 import { VIEW_PATHS, type ViewId } from "@/context/navigation"
 import {
   Activity,
+  CheckCircle2,
   Cpu,
   Maximize2,
   Radio,
@@ -45,12 +46,12 @@ const NAV_ITEMS: Array<{
   sub: string
   icon: typeof Sparkles
 }> = [
-  { id: "P1", label: "P1 时钟环中心", sub: "AI Family", icon: Sparkles },
-  { id: "P2", label: "P2 漫剧生产台", sub: "六阶段流水线", icon: Workflow },
-  { id: "P3", label: "P3 ReAct-C 编排", sub: "九步闭环", icon: Radio },
-  { id: "P4", label: "P4 算力监控台", sub: "双DGX+Mac+NAS", icon: Cpu },
-  { id: "P5", label: "P5 质检与安全", sub: "门禁与脱敏", icon: ShieldAlert },
-]
+    { id: "P1", label: "P1 时钟环中心", sub: "AI Family", icon: Sparkles },
+    { id: "P2", label: "P2 漫剧生产台", sub: "六阶段流水线", icon: Workflow },
+    { id: "P3", label: "P3 ReAct-C 编排", sub: "九步闭环", icon: Radio },
+    { id: "P4", label: "P4 算力监控台", sub: "双DGX+Mac+NAS", icon: Cpu },
+    { id: "P5", label: "P5 质检与安全", sub: "门禁与脱敏", icon: ShieldAlert },
+  ]
 
 export const Header: React.FC<HeaderProps> = ({
   scaleMode,
@@ -95,7 +96,7 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
             <span className="text-[10px] text-[#9BA3B4] font-medium tracking-tight">
-              8 拟人化 Agent 协同 · 工业化漫剧指挥中心
+              8 拟人化 Agent 协同 · 漫剧工业化指挥舱
             </span>
           </div>
         </Link>
@@ -110,11 +111,10 @@ export const Header: React.FC<HeaderProps> = ({
             <Link
               key={item.id}
               href={VIEW_PATHS[item.id]}
-              className={`relative px-3.5 py-1.5 rounded-lg flex items-center space-x-2 text-xs font-medium transition-all duration-200 cursor-pointer ${
-                isActive
-                  ? "bg-gradient-to-r from-[#00F0FF]/20 to-[#BF00FF]/20 text-white border border-[#00F0FF]/50 shadow-[0_0_12px_rgba(0,240,255,0.25)]"
-                  : "text-[#9BA3B4] hover:text-white hover:bg-white/5 border border-transparent"
-              }`}
+              className={`relative px-3.5 py-1.5 rounded-lg flex items-center space-x-2 text-xs font-medium transition-all duration-200 cursor-pointer ${isActive
+                ? "bg-gradient-to-r from-[#00F0FF]/20 to-[#BF00FF]/20 text-white border border-[#00F0FF]/50 shadow-[0_0_12px_rgba(0,240,255,0.25)]"
+                : "text-[#9BA3B4] hover:text-white hover:bg-white/5 border border-transparent"
+                }`}
             >
               <Icon
                 size={14}
@@ -144,39 +144,62 @@ export const Header: React.FC<HeaderProps> = ({
           </span>
         </div>
 
-        {/* Global Status Lights: 产能 / 质检 / 安全 */}
+        {/* Global Status Lights: 产能 / 质检 / 安全（颜色+图标+文字三重提示，审计 P1-#3） */}
         <div className="flex items-center space-x-3.5 pl-2 border-l border-white/15">
           <div
             className="flex items-center space-x-1.5"
+            role="status"
+            aria-label="产能系统：运行正常"
             title="产能系统: 运行正常"
           >
-            <span className="w-2 h-2 rounded-full bg-[#00FF88] shadow-[0_0_8px_#00FF88] animate-pulse" />
+            <CheckCircle2
+              size={12}
+              className="text-[#00FF88] drop-shadow-[0_0_6px_#00FF88] animate-pulse"
+              aria-hidden="true"
+            />
             <span className="text-[11px] text-[#9BA3B4]">产能</span>
           </div>
           <div
             className="flex items-center space-x-1.5"
+            role="status"
+            aria-label="质量门禁：严格在线"
             title="质量门禁: 严格在线"
           >
-            <span className="w-2 h-2 rounded-full bg-[#00FF88] shadow-[0_0_8px_#00FF88]" />
+            <CheckCircle2
+              size={12}
+              className="text-[#00FF88] drop-shadow-[0_0_6px_#00FF88]"
+              aria-hidden="true"
+            />
             <span className="text-[11px] text-[#9BA3B4]">质检</span>
           </div>
           <div
             className="flex items-center space-x-1.5"
+            role="status"
+            aria-label="安全审计：零泄漏防护"
             title="安全审计: 零泄漏防护"
           >
-            <span className="w-2 h-2 rounded-full bg-[#00FF88] shadow-[0_0_8px_#00FF88]" />
+            <CheckCircle2
+              size={12}
+              className="text-[#00FF88] drop-shadow-[0_0_6px_#00FF88]"
+              aria-hidden="true"
+            />
             <span className="text-[11px] text-[#9BA3B4]">安全</span>
           </div>
         </div>
 
-        {/* View mode toggle */}
+        {/* View mode toggle（显示模式：与快捷键层「驾驶模式」概念解耦） */}
         <button
           onClick={onToggleScaleMode}
-          className="p-1.5 rounded text-[#9BA3B4] hover:text-white hover:bg-white/10 transition-colors border border-white/10"
+          className="p-1.5 rounded text-[#9BA3B4] hover:text-white hover:bg-white/10 transition-colors border border-white/10 cursor-pointer"
+          aria-label={
+            scaleMode === "fit"
+              ? "显示模式：切换至标准 1980×1020 视图"
+              : "显示模式：切换至自适应高度视图"
+          }
           title={
             scaleMode === "fit"
-              ? "切换至标准 1980×1020 视图"
-              : "切换至自适应高度视图"
+              ? "显示模式：切换至标准 1980×1020 视图"
+              : "显示模式：切换至自适应高度视图"
           }
         >
           <Maximize2 size={13} />

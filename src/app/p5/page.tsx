@@ -19,11 +19,12 @@ import { P5QualitySecurity } from "@/views/P5QualitySecurity"
 import { useNavigation } from "../../context/navigation"
 
 export default function Page() {
-  const { navigate } = useNavigation()
+  const { navigate, navigateToStage } = useNavigation()
   return (
     <P5QualitySecurity
       onNavigateToP2={() => navigate("P2")}
       onNavigateToP3={() => navigate("P3")}
+      onLocateProductionStage={() => navigateToStage("image")}
     />
   )
 }

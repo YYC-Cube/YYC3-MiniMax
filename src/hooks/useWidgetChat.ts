@@ -40,7 +40,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
     sender: "agent",
     agentId: "tianshu",
     timestamp: "14:20:00",
-    text: "指挥官您好，我是 **元启·天枢**。当前 YYC³ 漫剧工业化生产台各系统运行平稳，今日已完成 28 集成片交付。ReAct-C 九步流水线当前正执行第 3 集镜头扩散与音视频合成，请下达生产决策。",
+    text: "指挥官您好，我是 **元启·天枢**。当前 P2 漫剧生产台各系统运行平稳，今日已完成 28 集成片交付。ReAct-C 九步流水线当前正执行第 3 集镜头扩散与音视频合成，请下达生产决策。",
     referenceCard: {
       type: "task",
       targetId: "image",

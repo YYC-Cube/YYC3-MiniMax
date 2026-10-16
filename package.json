@@ -39,6 +39,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:icons": "vitest run tests/icons.test.ts",
+    "test:i18n": "vitest run tests/i18n.test.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "knip": "knip",

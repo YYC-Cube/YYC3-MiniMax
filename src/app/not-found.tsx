@@ -23,13 +23,13 @@ export default function NotFound() {
         <p className="text-5xl font-bold text-[#00F0FF] font-mono-num">404</p>
         <h2 className="text-base font-bold text-white">航线未收录</h2>
         <p className="text-xs text-[#9BA3B4]">
-          该视图不在指挥舱航图内，请返回中枢
+          该视图不在指挥舱航图内，请返回指挥舱
         </p>
         <Link
           href="/"
           className="inline-block px-4 py-1.5 rounded-lg bg-[#00F0FF]/20 hover:bg-[#00F0FF]/30 text-[#00F0FF] font-bold text-xs border border-[#00F0FF]/50 transition-all"
         >
-          返回指挥中枢
+          返回指挥舱
         </Link>
       </div>
     </div>

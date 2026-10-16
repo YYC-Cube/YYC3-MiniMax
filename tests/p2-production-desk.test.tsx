@@ -134,4 +134,25 @@ describe("P2ProductionDesk（编排层）", () => {
     })
     expect(readEventCount()).toBe(before + 1)
   })
+
+  it("KPI 产能卡点击 → 导航 P4 算力监控台（IA 补链）", () => {
+    const onNavigateToP4 = vi.fn()
+    const { unmount } = renderDesk({ onNavigateToP4 })
+
+    const kpiCard = screen.getByRole("button", {
+      name: "系统整体可用率：前往算力监控台查看详情",
+    })
+    fireEvent.click(kpiCard)
+    expect(onNavigateToP4).toHaveBeenCalledTimes(1)
+    expect(onNavigateToP4).toHaveBeenCalledWith("system_availability")
+
+    // 未传回调时保持纯展示（无 button 语义，不误触）
+    unmount()
+    renderDesk()
+    expect(
+      screen.queryByRole("button", {
+        name: "系统整体可用率：前往算力监控台查看详情",
+      }),
+    ).toBeNull()
+  })
 })

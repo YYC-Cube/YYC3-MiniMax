@@ -151,7 +151,9 @@ describe("Header（顶部导航）", () => {
     expect(
       screen.getByRole("link", { name: /YYC³/ }).getAttribute("href"),
     ).toBe("/")
-    fireEvent.click(screen.getByTitle("切换至标准 1980×1020 视图"))
+    fireEvent.click(
+      screen.getByTitle("显示模式：切换至标准 1980×1020 视图"),
+    )
     expect(onToggleScaleMode).toHaveBeenCalledTimes(1)
   })
 
@@ -173,7 +175,7 @@ describe("Header（顶部导航）", () => {
     expect(screen.getByText("质检")).toBeTruthy()
     expect(screen.getByText("安全")).toBeTruthy()
     expect(
-      screen.getByText("8 拟人化 Agent 协同 · 工业化漫剧指挥中心"),
+      screen.getByText("8 拟人化 Agent 协同 · 漫剧工业化指挥舱"),
     ).toBeTruthy()
   })
 })
@@ -199,7 +201,7 @@ describe("Footer（底部状态栏）", () => {
 
   it("P1 视图：CTA 引导进入生产台 → /p2/", () => {
     renderFooter("/")
-    fireEvent.click(screen.getByText("进入漫剧工业化生产台"))
+    fireEvent.click(screen.getByText("进入 P2 漫剧生产台"))
     expect(PUSH_CALLS).toContain("/p2/")
   })
 
@@ -211,7 +213,7 @@ describe("Footer（底部状态栏）", () => {
 
   it("P3/P4/P5 视图：无快捷 CTA", () => {
     renderFooter("/p4/")
-    expect(screen.queryByText("进入漫剧工业化生产台")).toBeNull()
+    expect(screen.queryByText("进入 P2 漫剧生产台")).toBeNull()
     expect(screen.queryByText("查看 ReAct-C 九步编排视图")).toBeNull()
   })
 })

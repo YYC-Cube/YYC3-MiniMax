@@ -2,7 +2,7 @@
  * file: QualityQueuePanel.tsx
  * description: P5 分镜质检队列 · 格物·宗师门禁卡列表 + 核验通过/打回重跑操作
  * author: YanYuCloudCube Team
- * version: v1.0.0
+ * version: v1.1.0
  * created: 2026-10-16
  * updated: 2026-10-16
  * status: active
@@ -10,11 +10,15 @@
  *
  * brief: 左侧质检队列：分镜卡（一致性评分/雷达属性/提示词/拒绝原因）+ 双操作按钮
  *
+ * details:
+ * - v1.1 IA 补链（NN/g 审计 #3）：底部新增「定位生产台 · 镜头阶段」入口，
+ *   复用 navigateToStage 直达 P2 image 阶段卡并高亮（一致性门禁所在）
+ *
  * dependencies: react, lucide-react, data/qualityData, domain/constants
  * exports: QualityQueuePanel
  */
 
-import { CheckCircle2, FileCheck, XCircle } from "lucide-react"
+import { ArrowRight, CheckCircle2, FileCheck, XCircle } from "lucide-react"
 import type { StoryboardAuditItem } from "../../data/qualityData"
 import { GATES } from "../../domain/constants"
 
@@ -24,6 +28,8 @@ interface QualityQueuePanelProps {
   shakingCardId: string | null
   onPass: (id: string) => void
   onReject: (id: string) => void
+  /** 定位生产台镜头阶段（P5 → P2 image 阶段高亮补链）；未提供时不渲染入口 */
+  onLocateStage?: () => void
 }
 
 export function QualityQueuePanel({
@@ -31,6 +37,7 @@ export function QualityQueuePanel({
   shakingCardId,
   onPass,
   onReject,
+  onLocateStage,
 }: QualityQueuePanelProps) {
   return (
     <div className="col-span-4 rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 flex flex-col justify-between overflow-hidden">
@@ -54,21 +61,25 @@ export function QualityQueuePanel({
             const isRejected = sb.status === "rejected"
             const isShaking = shakingCardId === sb.id
             const isBelowGate = sb.consistencyScore < GATES.CONSISTENCY
+            // 终态锁（审计 P1-#1）：已通过/已打回的分镜禁止二次翻转
+            const isTerminal = isPassed || isRejected
+            // 复检熔断（审计 P1-#2）：待检且已达最大复检轮次，禁止再打回
+            const isMaxRounds =
+              sb.status === "pending" &&
+              sb.reviewRound >= GATES.MAX_REVIEW_ROUNDS
 
             return (
               <div
                 key={sb.id}
-                className={`p-3 rounded-xl bg-[#0A0D18] border transition-all ${
-                  isShaking ? "animate-alert-flash" : ""
-                } ${
-                  isPassed
+                className={`p-3 rounded-xl bg-[#0A0D18] border transition-all ${isShaking ? "animate-alert-flash" : ""
+                  } ${isPassed
                     ? "border-[#00FF88]/40 bg-[#00FF88]/5"
                     : isRejected
                       ? "border-[#FF006E]/60 bg-[#FF006E]/10"
                       : isBelowGate
                         ? "border-[#FF006E]/50"
                         : "border-white/10"
-                }`}
+                  }`}
               >
                 {/* Header: Shot Code + Score */}
                 <div className="flex items-center justify-between mb-2">
@@ -83,9 +94,8 @@ export function QualityQueuePanel({
 
                   <div className="flex flex-col items-end">
                     <span
-                      className={`font-mono-num font-extrabold text-sm ${
-                        isBelowGate ? "text-[#FF006E]" : "text-[#00FF88]"
-                      }`}
+                      className={`font-mono-num font-extrabold text-sm ${isBelowGate ? "text-[#FF006E]" : "text-[#00FF88]"
+                        }`}
                     >
                       {sb.consistencyScore}%
                     </span>
@@ -131,23 +141,42 @@ export function QualityQueuePanel({
                   </p>
                 )}
 
+                {/* 复检熔断提示（审计 P1-#2）：达上限的待检分镜禁止再打回 */}
+                {isMaxRounds && (
+                  <p className="text-[10px] text-[#FFD700] bg-[#FFD700]/10 border border-[#FFD700]/30 p-1.5 rounded mb-2 flex items-center space-x-1">
+                    <span aria-hidden="true">⚠</span>
+                    <span>
+                      已达复检上限（≤{GATES.MAX_REVIEW_ROUNDS}{" "}
+                      轮熔断），请人工终审
+                    </span>
+                  </p>
+                )}
+
                 {/* Action buttons (Pass / Reject) */}
                 <div className="flex items-center justify-between pt-2 border-t border-white/10">
                   <span className="text-[10px] text-[#9BA3B4] font-mono-num">
-                    复检轮次: {sb.reviewRound}/2
+                    复检轮次: {sb.reviewRound}/{GATES.MAX_REVIEW_ROUNDS}
                   </span>
 
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => onReject(sb.id)}
-                      className="px-2.5 py-1 rounded bg-[#FF006E]/20 hover:bg-[#FF006E]/30 text-[#FF006E] border border-[#FF006E]/40 font-bold text-[10px] transition-all flex items-center space-x-1 cursor-pointer"
+                      disabled={isTerminal || isMaxRounds}
+                      className={`px-2.5 py-1 rounded bg-[#FF006E]/20 text-[#FF006E] border border-[#FF006E]/40 font-bold text-[10px] transition-all flex items-center space-x-1 ${isTerminal || isMaxRounds
+                        ? "opacity-40 cursor-not-allowed"
+                        : "hover:bg-[#FF006E]/30 cursor-pointer"
+                        }`}
                     >
                       <XCircle size={11} />
                       <span>打回重跑</span>
                     </button>
                     <button
                       onClick={() => onPass(sb.id)}
-                      className="px-2.5 py-1 rounded bg-[#00FF88]/20 hover:bg-[#00FF88]/30 text-[#00FF88] border border-[#00FF88]/40 font-bold text-[10px] transition-all flex items-center space-x-1 cursor-pointer"
+                      disabled={isTerminal}
+                      className={`px-2.5 py-1 rounded bg-[#00FF88]/20 text-[#00FF88] border border-[#00FF88]/40 font-bold text-[10px] transition-all flex items-center space-x-1 ${isTerminal
+                        ? "opacity-40 cursor-not-allowed"
+                        : "hover:bg-[#00FF88]/30 cursor-pointer"
+                        }`}
                     >
                       <CheckCircle2 size={11} />
                       <span>核验通过</span>
@@ -162,7 +191,21 @@ export function QualityQueuePanel({
 
       <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-[#9BA3B4]">
         <span>门禁策略: 严格阻断模式</span>
-        <span className="text-[#00F0FF]">人物 LoRA 锚点已锁定</span>
+        <div className="flex items-center gap-2.5">
+          <span className="text-[#00F0FF]">人物 LoRA 锚点已锁定</span>
+          {onLocateStage && (
+            <button
+              type="button"
+              onClick={onLocateStage}
+              aria-label="前往生产台镜头阶段"
+              title="跳转 P2 漫剧生产台并高亮镜头扩散阶段（一致性门禁所在）"
+              className="flex items-center space-x-1 text-[#00F0FF] hover:text-white hover:underline cursor-pointer transition-colors"
+            >
+              <span>定位生产台 · 镜头阶段</span>
+              <ArrowRight size={11} />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

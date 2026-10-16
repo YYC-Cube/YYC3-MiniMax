@@ -91,10 +91,16 @@ export function StageCard({
         </div>
       )}
 
-      {/* 260x360 Baseline Card: rounded-12, panel-bg + blue border + 10px purple shadow */}
+      {/* 260x360 Baseline Card: rounded-12, panel-bg + blue border + 10px purple shadow（键盘可达，审计 P1-#4） */}
       <div
         onClick={() => onSelectStage(stage.id)}
-        className={`w-full h-[370px] rounded-xl glass-panel p-3.5 flex flex-col justify-between transition-all duration-200 cursor-pointer relative overflow-hidden group ${
+        role="button"
+        tabIndex={0}
+        aria-label={`${stage.name}（${stage.enName}）：选中阶段`}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") onSelectStage(stage.id)
+        }}
+        className={`w-full h-[370px] rounded-xl glass-panel p-3.5 flex flex-col justify-between transition-all duration-200 cursor-pointer relative overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF] ${
           isSelected
             ? "border-[#00F0FF] shadow-[0_0_20px_rgba(0,240,255,0.4),0_0_30px_rgba(191,0,255,0.25)]"
             : "border-[#00F0FF]/25 hover:border-[#00F0FF]/50 shadow-[0_8px_24px_rgba(0,0,0,0.5),0_0_10px_rgba(191,0,255,0.15)]"
