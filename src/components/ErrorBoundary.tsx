@@ -14,47 +14,47 @@
  * exports: ErrorBoundary
  */
 
-import React from 'react';
-import { createTraceId, telemetry } from '../services/telemetry';
+import React from "react"
+import { createTraceId, telemetry } from "../services/telemetry"
 
 interface ErrorBoundaryProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   /** 降级区域标题（默认"视图渲染异常"） */
-  label?: string;
+  label?: string
 }
 
 interface ErrorBoundaryState {
-  error: Error | null;
-  traceId: string | null;
+  error: Error | null
+  traceId: string | null
 }
 
 export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  state: ErrorBoundaryState = { error: null, traceId: null };
+  state: ErrorBoundaryState = { error: null, traceId: null }
 
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
-    return { error };
+    return { error }
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo): void {
-    const traceId = createTraceId();
-    this.setState({ traceId });
-    telemetry.error('ui.render_error', {
+    const traceId = createTraceId()
+    this.setState({ traceId })
+    telemetry.error("ui.render_error", {
       message: error.message,
       traceId,
       data: {
         label: this.props.label,
         componentStack: info.componentStack ?? undefined,
       },
-    });
+    })
   }
 
   private handleReset = (): void => {
-    this.setState({ error: null, traceId: null });
-  };
+    this.setState({ error: null, traceId: null })
+  }
 
   render(): React.ReactNode {
-    const { error, traceId } = this.state;
-    if (!error) return this.props.children;
+    const { error, traceId } = this.state
+    if (!error) return this.props.children
 
     return (
       <div className="w-full h-full flex items-center justify-center p-8">
@@ -64,8 +64,12 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               !
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">{this.props.label ?? '视图渲染异常'}</h3>
-              <p className="text-xs text-[#9BA3B4]">该区域已隔离，其余功能不受影响</p>
+              <h3 className="text-base font-bold text-white">
+                {this.props.label ?? "视图渲染异常"}
+              </h3>
+              <p className="text-xs text-[#9BA3B4]">
+                该区域已隔离，其余功能不受影响
+              </p>
             </div>
           </div>
 
@@ -75,7 +79,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
           {traceId && (
             <p className="text-[10px] text-[#9BA3B4] font-mono-num">
-              traceId: <span className="text-[#00F0FF] select-text">{traceId}</span>
+              traceId:{" "}
+              <span className="text-[#00F0FF] select-text">{traceId}</span>
             </p>
           )}
 
@@ -87,6 +92,6 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
           </button>
         </div>
       </div>
-    );
+    )
   }
 }

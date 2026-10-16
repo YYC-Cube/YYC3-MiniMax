@@ -14,24 +14,32 @@
  * exports: StepNode
  */
 
-import { AgentAvatar } from '../AgentAvatar';
-import type { ReActStep } from '../../types';
+import { AgentAvatar } from "../AgentAvatar"
+import type { ReActStep } from "../../types"
 
 interface StepNodeProps {
-  step: ReActStep;
-  pos: { x: number; y: number };
-  isActive: boolean;
-  isSelected: boolean;
-  stageScale: number;
-  onSelect: () => void;
+  step: ReActStep
+  pos: { x: number; y: number }
+  isActive: boolean
+  isSelected: boolean
+  stageScale: number
+  onSelect: () => void
 }
 
-export function StepNode({ step, pos, isActive, isSelected, stageScale, onSelect }: StepNodeProps) {
+export function StepNode({
+  step,
+  pos,
+  isActive,
+  isSelected,
+  stageScale,
+  onSelect,
+}: StepNodeProps) {
   return (
     <div
       onClick={onSelect}
-      className={`absolute z-30 flex flex-col items-center cursor-pointer transition-transform duration-300 ${isActive ? 'z-40' : ''
-        }`}
+      className={`absolute z-30 flex flex-col items-center cursor-pointer transition-transform duration-300 ${
+        isActive ? "z-40" : ""
+      }`}
       style={{
         left: `${(pos.x / 760) * 100}%`,
         top: `${(pos.y / 760) * 100}%`,
@@ -40,21 +48,22 @@ export function StepNode({ step, pos, isActive, isSelected, stageScale, onSelect
     >
       {/* 64x64 Circle Node */}
       <div
-        className={`w-16 h-16 rounded-full flex items-center justify-center relative p-[2px] transition-all duration-300 ${isActive
-          ? 'shadow-[0_0_20px_#00F0FF,0_0_30px_#BF00FF] animate-pulse-breath scale-115'
-          : isSelected
-            ? 'shadow-[0_0_14px_rgba(255,255,255,0.4)] hover:scale-105'
-            : 'shadow-md hover:scale-105'
-          }`}
+        className={`w-16 h-16 rounded-full flex items-center justify-center relative p-[2px] transition-all duration-300 ${
+          isActive
+            ? "shadow-[0_0_20px_#00F0FF,0_0_30px_#BF00FF] animate-pulse-breath scale-115"
+            : isSelected
+              ? "shadow-[0_0_14px_rgba(255,255,255,0.4)] hover:scale-105"
+              : "shadow-md hover:scale-105"
+        }`}
         style={{
-          backgroundColor: isActive ? '#00F0FF' : step.color,
+          backgroundColor: isActive ? "#00F0FF" : step.color,
         }}
       >
         <div className="w-full h-full rounded-full bg-[#0A0C16] flex flex-col items-center justify-center p-1 relative overflow-hidden">
           {/* Step number badge */}
           <span
             className="font-mono-num text-[10px] font-extrabold"
-            style={{ color: isActive ? '#00F0FF' : step.color }}
+            style={{ color: isActive ? "#00F0FF" : step.color }}
           >
             S{step.step}
           </span>
@@ -65,7 +74,7 @@ export function StepNode({ step, pos, isActive, isSelected, stageScale, onSelect
               agentId={step.agentId}
               size={28}
               showLed={isActive}
-              overrideStatus={isActive ? 'speaking' : 'online'}
+              overrideStatus={isActive ? "speaking" : "online"}
             />
           </div>
         </div>
@@ -74,15 +83,20 @@ export function StepNode({ step, pos, isActive, isSelected, stageScale, onSelect
       {/* Step Title Label */}
       <div className="mt-1.5 text-center whitespace-nowrap">
         <span
-          className={`text-[10px] font-bold block transition-colors ${isActive ? 'text-[#00F0FF] text-glow-cyan' : isSelected ? 'text-white' : 'text-[#9BA3B4]'
-            }`}
+          className={`text-[10px] font-bold block transition-colors ${
+            isActive
+              ? "text-[#00F0FF] text-glow-cyan"
+              : isSelected
+                ? "text-white"
+                : "text-[#9BA3B4]"
+          }`}
         >
           {step.name}
         </span>
         <span className="text-[9px] text-[#9BA3B4]/70 font-mono-num block">
-          {step.agentName.split('·')[0]}
+          {step.agentName.split("·")[0]}
         </span>
       </div>
     </div>
-  );
+  )
 }

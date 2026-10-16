@@ -14,15 +14,18 @@
  * exports: ZongshiReportPanel
  */
 
-import { ArrowRight, ExternalLink, FileCheck } from 'lucide-react';
-import { GATES } from '../../domain/constants';
+import { ArrowRight, ExternalLink, FileCheck } from "lucide-react"
+import { GATES } from "../../domain/constants"
 
 interface ZongshiReportPanelProps {
-  onNavigateToP2: () => void;
-  onNavigateToP3: () => void;
+  onNavigateToP2: () => void
+  onNavigateToP3: () => void
 }
 
-export function ZongshiReportPanel({ onNavigateToP2, onNavigateToP3 }: ZongshiReportPanelProps) {
+export function ZongshiReportPanel({
+  onNavigateToP2,
+  onNavigateToP3,
+}: ZongshiReportPanelProps) {
   return (
     <div className="col-span-4 rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 flex flex-col justify-between overflow-hidden">
       <div>
@@ -42,11 +45,17 @@ export function ZongshiReportPanel({ onNavigateToP2, onNavigateToP3 }: ZongshiRe
         <div className="space-y-3 text-xs overflow-y-auto max-h-[60vh] pr-1">
           <div className="p-3 rounded-xl bg-[#0A0D18] border border-white/10 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-white font-bold">事实溯源与剧情一致性核查</span>
-              <span className="text-[10px] text-[#00FF88] font-bold">100% 溯源</span>
+              <span className="text-white font-bold">
+                事实溯源与剧情一致性核查
+              </span>
+              <span className="text-[10px] text-[#00FF88] font-bold">
+                100% 溯源
+              </span>
             </div>
             <p className="text-[11px] text-[#9BA3B4] leading-relaxed">
-              本批次 28 集成片已全部完成知识图谱反向检索，所有台词、道具设定均严格溯源至原著 Milvus 知识库向量节点，无幻觉虚构。
+              本批次 28
+              集成片已全部完成知识图谱反向检索，所有台词、道具设定均严格溯源至原著
+              Milvus 知识库向量节点，无幻觉虚构。
             </p>
             <div className="text-[10px] text-[#00F0FF] flex items-center space-x-1">
               <ExternalLink size={11} />
@@ -56,8 +65,12 @@ export function ZongshiReportPanel({ onNavigateToP2, onNavigateToP3 }: ZongshiRe
 
           <div className="p-3 rounded-xl bg-[#0A0D18] border border-white/10 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-white font-bold">复检轮次统计与容错控制</span>
-              <span className="text-[10px] text-[#00F0FF] font-mono-num font-bold">1/2 轮 (安全)</span>
+              <span className="text-white font-bold">
+                复检轮次统计与容错控制
+              </span>
+              <span className="text-[10px] text-[#00F0FF] font-mono-num font-bold">
+                1/2 轮 (安全)
+              </span>
             </div>
             <p className="text-[11px] text-[#9BA3B4] leading-relaxed">
               {`漫剧流水线严格规定最多允许 ≤${GATES.MAX_REVIEW_ROUNDS} 轮质量自动复检。当前仅分镜 #SH02 触发 1 次光影微调，二次推理特征相似度已回升至 91.2%，未超限熔断。`}
@@ -105,5 +118,5 @@ export function ZongshiReportPanel({ onNavigateToP2, onNavigateToP3 }: ZongshiRe
         </button>
       </div>
     </div>
-  );
+  )
 }

@@ -14,37 +14,37 @@
  * exports: ClockDial
  */
 
-import type { AgentId } from '../../types';
+import type { AgentId } from "../../types"
 
 interface ClockDialProps {
   /** 当前真实时间（1s 走时由父层驱动） */
-  time: Date;
-  cx: number;
-  cy: number;
-  radius: number;
+  time: Date
+  cx: number
+  cy: number
+  radius: number
   /** 8 成员角度配置（相对 12:00） */
-  members: ReadonlyArray<{ id: AgentId; angleDeg: number }>;
+  members: ReadonlyArray<{ id: AgentId; angleDeg: number }>
 }
 
 export function ClockDial({ time, cx, cy, radius, members }: ClockDialProps) {
-  const hours = time.getHours() % 12;
-  const minutes = time.getMinutes();
-  const seconds = time.getSeconds();
+  const hours = time.getHours() % 12
+  const minutes = time.getMinutes()
+  const seconds = time.getSeconds()
   // 三针角度公式（-90 使 0° 指向 12:00，与成员角度约定一致）
-  const hourAngle = ((hours * 30 + minutes * 0.5 - 90) * Math.PI) / 180;
-  const minuteAngle = ((minutes * 6 + seconds * 0.1 - 90) * Math.PI) / 180;
-  const secondAngle = ((seconds * 6 - 90) * Math.PI) / 180;
+  const hourAngle = ((hours * 30 + minutes * 0.5 - 90) * Math.PI) / 180
+  const minuteAngle = ((minutes * 6 + seconds * 0.1 - 90) * Math.PI) / 180
+  const secondAngle = ((seconds * 6 - 90) * Math.PI) / 180
 
   // 三针真实钟表比例（以表盘半径为基准，长度/尾锤各不相同）
   // 时针：最短最粗（0.42R，尾锤 0.06R）
-  const hourLen = radius * 0.42;
-  const hourTail = radius * 0.06;
+  const hourLen = radius * 0.42
+  const hourTail = radius * 0.06
   // 分针：中等（0.58R，尾锤 0.08R）
-  const minuteLen = radius * 0.58;
-  const minuteTail = radius * 0.08;
+  const minuteLen = radius * 0.58
+  const minuteTail = radius * 0.08
   // 秒针：最细最长（0.7R，长尾锤 0.16R + 轴后配重圆点）
-  const secondLen = radius * 0.7;
-  const secondTail = radius * 0.16;
+  const secondLen = radius * 0.7
+  const secondTail = radius * 0.16
 
   /** 单根指针的路径点（含尾锤），角度已含 -90 的 12:00 偏移 */
   const handLine = (angle: number, len: number, tail: number) => ({
@@ -52,20 +52,20 @@ export function ClockDial({ time, cx, cy, radius, members }: ClockDialProps) {
     y1: cy - tail * Math.sin(angle),
     x2: cx + len * Math.cos(angle),
     y2: cy + len * Math.sin(angle),
-  });
+  })
 
   // Generate 60 ticks for the clock dial
   const ticks = Array.from({ length: 60 }).map((_, i) => {
-    const angle = (i * 6 - 90) * (Math.PI / 180);
-    const isMajor = i % 5 === 0;
-    const rOuter = 385;
-    const rInner = isMajor ? 368 : 376;
-    const x1 = cx + rOuter * Math.cos(angle);
-    const y1 = cy + rOuter * Math.sin(angle);
-    const x2 = cx + rInner * Math.cos(angle);
-    const y2 = cy + rInner * Math.sin(angle);
-    return { id: i, isMajor, x1, y1, x2, y2 };
-  });
+    const angle = (i * 6 - 90) * (Math.PI / 180)
+    const isMajor = i % 5 === 0
+    const rOuter = 385
+    const rInner = isMajor ? 368 : 376
+    const x1 = cx + rOuter * Math.cos(angle)
+    const y1 = cy + rOuter * Math.sin(angle)
+    const x2 = cx + rInner * Math.cos(angle)
+    const y2 = cy + rInner * Math.sin(angle)
+    return { id: i, isMajor, x1, y1, x2, y2 }
+  })
 
   return (
     <svg
@@ -98,17 +98,17 @@ export function ClockDial({ time, cx, cy, radius, members }: ClockDialProps) {
           y1={tick.y1}
           x2={tick.x2}
           y2={tick.y2}
-          stroke={tick.isMajor ? '#00F0FF' : 'rgba(255,255,255,0.2)'}
+          stroke={tick.isMajor ? "#00F0FF" : "rgba(255,255,255,0.2)"}
           strokeWidth={tick.isMajor ? 2.5 : 1}
-          filter={tick.isMajor ? 'drop-shadow(0 0 6px #00F0FF)' : undefined}
+          filter={tick.isMajor ? "drop-shadow(0 0 6px #00F0FF)" : undefined}
         />
       ))}
 
       {/* 8 Holographic Connection Lines from Center (cx, cy) to 8 Member Nodes */}
       {members.map((member) => {
-        const rad = member.angleDeg * (Math.PI / 180);
-        const targetX = cx + radius * Math.cos(rad);
-        const targetY = cy + radius * Math.sin(rad);
+        const rad = member.angleDeg * (Math.PI / 180)
+        const targetX = cx + radius * Math.cos(rad)
+        const targetY = cy + radius * Math.sin(rad)
 
         return (
           <g key={`line-group-${member.id}`}>
@@ -126,7 +126,7 @@ export function ClockDial({ time, cx, cy, radius, members }: ClockDialProps) {
 
             {/* 10 Animated Particles (3px) moving outward along the line in 2s loop */}
             {Array.from({ length: 8 }).map((_, pIdx) => {
-              const delay = (pIdx * 0.25).toFixed(2);
+              const delay = (pIdx * 0.25).toFixed(2)
               return (
                 <circle
                   key={`part-${member.id}-${pIdx}`}
@@ -159,10 +159,10 @@ export function ClockDial({ time, cx, cy, radius, members }: ClockDialProps) {
                     repeatCount="indefinite"
                   />
                 </circle>
-              );
+              )
             })}
           </g>
-        );
+        )
       })}
 
       {/* 真实走时三针：时针最短最粗(青) / 分针中等(冰白) / 秒针最细最长(品红+尾锤)，1s ticking */}
@@ -190,7 +190,7 @@ export function ClockDial({ time, cx, cy, radius, members }: ClockDialProps) {
           strokeOpacity={0.9}
           strokeWidth={1.6}
           strokeLinecap="round"
-          style={{ filter: 'drop-shadow(0 0 4px rgba(255,0,110,0.55))' }}
+          style={{ filter: "drop-shadow(0 0 4px rgba(255,0,110,0.55))" }}
         />
         <circle
           cx={cx - (secondTail - 12) * Math.cos(secondAngle)}
@@ -202,9 +202,16 @@ export function ClockDial({ time, cx, cy, radius, members }: ClockDialProps) {
           strokeOpacity={0.9}
         />
         {/* 中心轴帽（同比缩小：外环品红 + 内芯青） */}
-        <circle cx={cx} cy={cy} r={4.2} fill="#0A0A0A" stroke="#00F0FF" strokeWidth={1.4} />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={4.2}
+          fill="#0A0A0A"
+          stroke="#00F0FF"
+          strokeWidth={1.4}
+        />
         <circle cx={cx} cy={cy} r={1.8} fill="#FF006E" />
       </g>
     </svg>
-  );
+  )
 }

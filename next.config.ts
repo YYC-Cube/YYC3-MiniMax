@@ -18,10 +18,10 @@
  * notes: 深链 redirects() 在导出模式不可用，?view= 兼容由 P3 客户端桥接实现
  */
 
-import type { NextConfig } from 'next'
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  output: "export",
   trailingSlash: true,
   images: {
     unoptimized: true,

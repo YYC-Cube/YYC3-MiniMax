@@ -14,19 +14,24 @@
  * exports: QualityQueuePanel
  */
 
-import { CheckCircle2, FileCheck, XCircle } from 'lucide-react';
-import type { StoryboardAuditItem } from '../../data/qualityData';
-import { GATES } from '../../domain/constants';
+import { CheckCircle2, FileCheck, XCircle } from "lucide-react"
+import type { StoryboardAuditItem } from "../../data/qualityData"
+import { GATES } from "../../domain/constants"
 
 interface QualityQueuePanelProps {
-  storyboards: StoryboardAuditItem[];
+  storyboards: StoryboardAuditItem[]
   /** 正在抖动告警的分镜 id（打回重跑 0.5s 动画窗口内） */
-  shakingCardId: string | null;
-  onPass: (id: string) => void;
-  onReject: (id: string) => void;
+  shakingCardId: string | null
+  onPass: (id: string) => void
+  onReject: (id: string) => void
 }
 
-export function QualityQueuePanel({ storyboards, shakingCardId, onPass, onReject }: QualityQueuePanelProps) {
+export function QualityQueuePanel({
+  storyboards,
+  shakingCardId,
+  onPass,
+  onReject,
+}: QualityQueuePanelProps) {
   return (
     <div className="col-span-4 rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 flex flex-col justify-between overflow-hidden">
       <div>
@@ -38,30 +43,32 @@ export function QualityQueuePanel({ storyboards, shakingCardId, onPass, onReject
             </h3>
           </div>
           <span className="text-[10px] font-mono-num text-[#9BA3B4]">
-            待定: {storyboards.filter((s) => s.status === 'pending').length}
+            待定: {storyboards.filter((s) => s.status === "pending").length}
           </span>
         </div>
 
         {/* Storyboard cards list */}
         <div className="space-y-3 overflow-y-auto max-h-[60vh] pr-1">
           {storyboards.map((sb) => {
-            const isPassed = sb.status === 'passed';
-            const isRejected = sb.status === 'rejected';
-            const isShaking = shakingCardId === sb.id;
-            const isBelowGate = sb.consistencyScore < GATES.CONSISTENCY;
+            const isPassed = sb.status === "passed"
+            const isRejected = sb.status === "rejected"
+            const isShaking = shakingCardId === sb.id
+            const isBelowGate = sb.consistencyScore < GATES.CONSISTENCY
 
             return (
               <div
                 key={sb.id}
-                className={`p-3 rounded-xl bg-[#0A0D18] border transition-all ${isShaking ? 'animate-alert-flash' : ''
-                  } ${isPassed
-                    ? 'border-[#00FF88]/40 bg-[#00FF88]/5'
+                className={`p-3 rounded-xl bg-[#0A0D18] border transition-all ${
+                  isShaking ? "animate-alert-flash" : ""
+                } ${
+                  isPassed
+                    ? "border-[#00FF88]/40 bg-[#00FF88]/5"
                     : isRejected
-                      ? 'border-[#FF006E]/60 bg-[#FF006E]/10'
+                      ? "border-[#FF006E]/60 bg-[#FF006E]/10"
                       : isBelowGate
-                        ? 'border-[#FF006E]/50'
-                        : 'border-white/10'
-                  }`}
+                        ? "border-[#FF006E]/50"
+                        : "border-white/10"
+                }`}
               >
                 {/* Header: Shot Code + Score */}
                 <div className="flex items-center justify-between mb-2">
@@ -76,13 +83,16 @@ export function QualityQueuePanel({ storyboards, shakingCardId, onPass, onReject
 
                   <div className="flex flex-col items-end">
                     <span
-                      className={`font-mono-num font-extrabold text-sm ${isBelowGate ? 'text-[#FF006E]' : 'text-[#00FF88]'
-                        }`}
+                      className={`font-mono-num font-extrabold text-sm ${
+                        isBelowGate ? "text-[#FF006E]" : "text-[#00FF88]"
+                      }`}
                     >
                       {sb.consistencyScore}%
                     </span>
                     <span className="text-[9px] text-[#9BA3B4]">
-                      {isBelowGate ? `未达 ${GATES.CONSISTENCY}% 门禁` : '一致性通过'}
+                      {isBelowGate
+                        ? `未达 ${GATES.CONSISTENCY}% 门禁`
+                        : "一致性通过"}
                     </span>
                   </div>
                 </div>
@@ -91,15 +101,21 @@ export function QualityQueuePanel({ storyboards, shakingCardId, onPass, onReject
                 <div className="grid grid-cols-3 gap-1 bg-black/40 p-2 rounded-lg border border-white/5 text-[9px] mb-2 font-mono-num">
                   <div className="flex justify-between">
                     <span className="text-[#9BA3B4]">五官:</span>
-                    <span className="text-white">{sb.radarScores.facialFeature}%</span>
+                    <span className="text-white">
+                      {sb.radarScores.facialFeature}%
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-[#9BA3B4]">服饰:</span>
-                    <span className="text-white">{sb.radarScores.clothingPalette}%</span>
+                    <span className="text-white">
+                      {sb.radarScores.clothingPalette}%
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-[#9BA3B4]">光影:</span>
-                    <span className="text-white">{sb.radarScores.lightingAtmosphere}%</span>
+                    <span className="text-white">
+                      {sb.radarScores.lightingAtmosphere}%
+                    </span>
                   </div>
                 </div>
 
@@ -139,7 +155,7 @@ export function QualityQueuePanel({ storyboards, shakingCardId, onPass, onReject
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
       </div>
@@ -149,5 +165,5 @@ export function QualityQueuePanel({ storyboards, shakingCardId, onPass, onReject
         <span className="text-[#00F0FF]">人物 LoRA 锚点已锁定</span>
       </div>
     </div>
-  );
+  )
 }

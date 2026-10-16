@@ -19,47 +19,57 @@
  * exports: useAgentEventStream, EVENT_STREAM_MAX_LOGS
  */
 
-import { useCallback, useEffect, useState } from 'react';
-import { INITIAL_LOGS } from '../data/logs';
-import { createEventStream, type EventStreamMode } from '../services/eventStream';
-import type { LogItem } from '../types';
-import { useLocalStorage } from './useLocalStorage';
+import { useCallback, useEffect, useState } from "react"
+import { INITIAL_LOGS } from "../data/logs"
+import {
+  createEventStream,
+  type EventStreamMode,
+} from "../services/eventStream"
+import type { LogItem } from "../types"
+import { useLocalStorage } from "./useLocalStorage"
 
 /** 事件流保留的最大实时条数（不含初始日志之外的历史） */
-export const EVENT_STREAM_MAX_LOGS = 30;
+export const EVENT_STREAM_MAX_LOGS = 30
 
 /** 事件流持久化键：刷新/断网后恢复最近事件（诊断 #15 离线恢复） */
-export const EVENT_STREAM_STORAGE_KEY = 'yyc3.p2.eventLogs';
+export const EVENT_STREAM_STORAGE_KEY = "yyc3.p2.eventLogs"
 
 interface UseAgentEventStreamOptions {
   /** WebSocket 网关地址（如 process.env.NEXT_PUBLIC_EVENT_STREAM_URL），缺省走模拟流 */
-  url?: string;
+  url?: string
   /** 模拟流节拍（ms） */
-  intervalMs?: number;
+  intervalMs?: number
 }
 
-export function useAgentEventStream({ url, intervalMs = 9000 }: UseAgentEventStreamOptions = {}) {
+export function useAgentEventStream({
+  url,
+  intervalMs = 9000,
+}: UseAgentEventStreamOptions = {}) {
   // 日志持久化：localStorage 写穿，刷新后恢复最近事件
-  const [logs, setLogs] = useLocalStorage<LogItem[]>(EVENT_STREAM_STORAGE_KEY, INITIAL_LOGS);
-  const [streamMode, setStreamMode] = useState<EventStreamMode>('simulated');
+  const [logs, setLogs] = useLocalStorage<LogItem[]>(
+    EVENT_STREAM_STORAGE_KEY,
+    INITIAL_LOGS,
+  )
+  const [streamMode, setStreamMode] = useState<EventStreamMode>("simulated")
 
   useEffect(() => {
     const handle = createEventStream({
       url,
-      onEvent: (log) => setLogs((prev) => [log, ...prev.slice(0, EVENT_STREAM_MAX_LOGS)]),
+      onEvent: (log) =>
+        setLogs((prev) => [log, ...prev.slice(0, EVENT_STREAM_MAX_LOGS)]),
       onModeChange: setStreamMode,
       intervalMs,
-    });
-    return () => handle.close();
-  }, [url, intervalMs, setLogs]);
+    })
+    return () => handle.close()
+  }, [url, intervalMs, setLogs])
 
   /** 本地插入一条日志（头部），如控制台快捷指令回显 */
   const prependLog = useCallback(
     (log: LogItem) => {
-      setLogs((prev) => [log, ...prev]);
+      setLogs((prev) => [log, ...prev])
     },
     [setLogs],
-  );
+  )
 
-  return { logs, streamMode, prependLog };
+  return { logs, streamMode, prependLog }
 }

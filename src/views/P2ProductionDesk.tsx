@@ -20,25 +20,29 @@
  * exports: P2ProductionDesk
  */
 
-import { PlayCircle, ShieldAlert } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
-import { EventStreamPanel } from '../components/p2/EventStreamPanel';
-import { GateFailureModal } from '../components/p2/GateFailureModal';
-import { KpiRibbon } from '../components/p2/KpiRibbon';
-import { StageCard } from '../components/p2/StageCard';
-import { StageDetailDrawer } from '../components/p2/StageDetailDrawer';
-import { StageTabs } from '../components/p2/StageTabs';
-import { KPI_METRICS, PIPELINE_STAGES } from '../data/pipeline';
-import { GATES, GATE_SIM_SAMPLE_SCORE, formatGatePercent } from '../domain/constants';
-import { useAgentEventStream } from '../hooks/useAgentEventStream';
-import { createTraceId, telemetry } from '../services/telemetry';
-import type { AgentId, LogItem, PipelineStageId } from '../types';
+import { PlayCircle, ShieldAlert } from "lucide-react"
+import React, { useEffect, useRef, useState } from "react"
+import { EventStreamPanel } from "../components/p2/EventStreamPanel"
+import { GateFailureModal } from "../components/p2/GateFailureModal"
+import { KpiRibbon } from "../components/p2/KpiRibbon"
+import { StageCard } from "../components/p2/StageCard"
+import { StageDetailDrawer } from "../components/p2/StageDetailDrawer"
+import { StageTabs } from "../components/p2/StageTabs"
+import { KPI_METRICS, PIPELINE_STAGES } from "../data/pipeline"
+import {
+  GATES,
+  GATE_SIM_SAMPLE_SCORE,
+  formatGatePercent,
+} from "../domain/constants"
+import { useAgentEventStream } from "../hooks/useAgentEventStream"
+import { createTraceId, telemetry } from "../services/telemetry"
+import type { AgentId, LogItem, PipelineStageId } from "../types"
 
 interface P2ProductionDeskProps {
-  onSelectAgent: (id: AgentId) => void;
-  onSendToWidget: (cmd: string) => void;
-  onNavigateToP5?: () => void;
-  highlightedStageId?: PipelineStageId | null;
+  onSelectAgent: (id: AgentId) => void
+  onSendToWidget: (cmd: string) => void
+  onNavigateToP5?: () => void
+  highlightedStageId?: PipelineStageId | null
 }
 
 export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
@@ -47,88 +51,98 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
   onNavigateToP5,
   highlightedStageId,
 }) => {
-  const stages = PIPELINE_STAGES;
-  const [selectedStageId, setSelectedStageId] = useState<PipelineStageId>(highlightedStageId || 'image');
-  const [activeTabId, setActiveTabId] = useState<PipelineStageId>('image');
-  const [isDetailDrawerOpen, setIsDetailDrawerOpen] = useState(false);
-  const [isAlertFlashing, setIsAlertFlashing] = useState(false);
-  const [gateFailureModal, setGateFailureModal] = useState(false);
+  const stages = PIPELINE_STAGES
+  const [selectedStageId, setSelectedStageId] = useState<PipelineStageId>(
+    highlightedStageId || "image",
+  )
+  const [activeTabId, setActiveTabId] = useState<PipelineStageId>("image")
+  const [isDetailDrawerOpen, setIsDetailDrawerOpen] = useState(false)
+  const [isAlertFlashing, setIsAlertFlashing] = useState(false)
+  const [gateFailureModal, setGateFailureModal] = useState(false)
   const { logs, streamMode, prependLog } = useAgentEventStream({
     url: process.env.NEXT_PUBLIC_EVENT_STREAM_URL,
-  });
+  })
 
-  const gateTestTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const gateTestTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Sync selected stage with prop if provided
   // render 期派生模式（React 官方 prop→state 同步写法，取代 effect 内同步 setState）：
   // undefined 哨兵保证挂载即携带高亮时首渲染照常触发（W1 引用卡跳转直达打开抽屉）
-  const [prevHighlighted, setPrevHighlighted] = useState<PipelineStageId | null | undefined>(undefined);
+  const [prevHighlighted, setPrevHighlighted] =
+    useState<PipelineStageId | null | undefined>(undefined)
   if (highlightedStageId && highlightedStageId !== prevHighlighted) {
-    setPrevHighlighted(highlightedStageId);
-    setSelectedStageId(highlightedStageId);
-    setActiveTabId(highlightedStageId);
-    setIsDetailDrawerOpen(true);
+    setPrevHighlighted(highlightedStageId)
+    setSelectedStageId(highlightedStageId)
+    setActiveTabId(highlightedStageId)
+    setIsDetailDrawerOpen(true)
   }
 
   // 卸载清理：门禁测试定时器（防止卸载后 setState）
   useEffect(() => {
     return () => {
-      if (gateTestTimerRef.current) clearTimeout(gateTestTimerRef.current);
-    };
-  }, []);
+      if (gateTestTimerRef.current) clearTimeout(gateTestTimerRef.current)
+    }
+  }, [])
 
-  const selectedStage = stages.find((s) => s.id === selectedStageId);
+  const selectedStage = stages.find((s) => s.id === selectedStageId)
 
   const handleSelectStage = (id: PipelineStageId) => {
-    setSelectedStageId(id);
-    setActiveTabId(id);
-  };
+    setSelectedStageId(id)
+    setActiveTabId(id)
+  }
 
   // Trigger Gate Failure Test (flashes pink 3 times then pops modal)
   const triggerGateFailureTest = () => {
     // 同链路 traceId：审计与指标可串联（可观测闭环）
-    const traceId = createTraceId();
-    telemetry.audit('gate.simulate_failure', 'image', undefined, traceId);
-    telemetry.metric('gate.consistency_pct', GATE_SIM_SAMPLE_SCORE, { unit: '%', traceId });
-    setIsAlertFlashing(true);
+    const traceId = createTraceId()
+    telemetry.audit("gate.simulate_failure", "image", undefined, traceId)
+    telemetry.metric("gate.consistency_pct", GATE_SIM_SAMPLE_SCORE, {
+      unit: "%",
+      traceId,
+    })
+    setIsAlertFlashing(true)
     try {
-      const audioBeep = new AudioContext();
-      const osc = audioBeep.createOscillator();
-      osc.frequency.setValueAtTime(440, audioBeep.currentTime);
-      osc.connect(audioBeep.destination);
-      osc.start();
-      osc.stop(audioBeep.currentTime + 0.15);
-      osc.onended = () => void audioBeep.close();
+      const audioBeep = new AudioContext()
+      const osc = audioBeep.createOscillator()
+      osc.frequency.setValueAtTime(440, audioBeep.currentTime)
+      osc.connect(audioBeep.destination)
+      osc.start()
+      osc.stop(audioBeep.currentTime + 0.15)
+      osc.onended = () => void audioBeep.close()
     } catch {
       // 音频不可用（无头环境/自动播放策略拒绝）时静默降级，门禁告警链路不受影响
     }
 
     gateTestTimerRef.current = setTimeout(() => {
-      setIsAlertFlashing(false);
-      setGateFailureModal(true);
-    }, 1500);
-  };
+      setIsAlertFlashing(false)
+      setGateFailureModal(true)
+    }, 1500)
+  }
 
   // Handle Quick Command to W1
   const handleSendCommand = (text: string) => {
-    if (!text.trim()) return;
-    onSendToWidget(text);
+    if (!text.trim()) return
+    onSendToWidget(text)
     const newLog: LogItem = {
       id: `cmd-${Date.now()}`,
-      timestamp: new Date().toLocaleTimeString('zh-CN', { hour12: false }),
-      agentId: 'tianshu',
-      agentName: '元启·天枢',
-      level: 'ACT',
+      timestamp: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
+      agentId: "tianshu",
+      agentName: "元启·天枢",
+      level: "ACT",
       message: `接收控制台快捷指令: "${text}"，已派发至 ReAct-C 执行器。`,
       traceId: createTraceId(),
-    };
-    prependLog(newLog);
-  };
+    }
+    prependLog(newLog)
+  }
 
   return (
     <div className="w-full h-full flex flex-col p-5 space-y-4 overflow-hidden select-none">
       {/* 1. TOP 6-STAGE NAVIGATION TABS */}
-      <StageTabs stages={stages} activeTabId={activeTabId} onSelectStage={handleSelectStage} />
+      <StageTabs
+        stages={stages}
+        activeTabId={activeTabId}
+        onSelectStage={handleSelectStage}
+      />
 
       {/* 2. MIDDLE MAIN AREA: 6-Stage Pipeline Array (Left) + Real-time Event Stream (Right) */}
       <div className="flex-1 grid grid-cols-12 gap-4 min-h-0">
@@ -141,12 +155,15 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
                 stage={stage}
                 showArrow={idx < stages.length - 1}
                 isSelected={selectedStageId === stage.id}
-                isBlocked={stage.status === 'blocked' || (stage.id === 'image' && isAlertFlashing)}
+                isBlocked={
+                  stage.status === "blocked" ||
+                  (stage.id === "image" && isAlertFlashing)
+                }
                 onSelectStage={handleSelectStage}
                 onSelectAgent={onSelectAgent}
                 onOpenDetail={(id) => {
-                  setSelectedStageId(id);
-                  setIsDetailDrawerOpen(true);
+                  setSelectedStageId(id)
+                  setIsDetailDrawerOpen(true)
                 }}
               />
             ))}
@@ -161,7 +178,8 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
               </span>
               <span>ReAct-C 全闭环自动化流转中</span>
               <span className="text-[10px] text-white/50">
-                | 门禁规则：一致性 {formatGatePercent(GATES.CONSISTENCY)} & SyncNet {GATES.SYNCNET}
+                | 门禁规则：一致性 {formatGatePercent(GATES.CONSISTENCY)} &
+                SyncNet {GATES.SYNCNET}
               </span>
             </div>
 
@@ -192,7 +210,10 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
 
       {/* 4. STAGE DETAIL DRAWER MODAL (When clicking "进入阶段") */}
       {isDetailDrawerOpen && selectedStage && (
-        <StageDetailDrawer stage={selectedStage} onClose={() => setIsDetailDrawerOpen(false)} />
+        <StageDetailDrawer
+          stage={selectedStage}
+          onClose={() => setIsDetailDrawerOpen(false)}
+        />
       )}
 
       {/* 5. GATE FAILURE ALERT MODAL (Triggered when consistency < gate) */}
@@ -203,5 +224,5 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
         />
       )}
     </div>
-  );
-};
+  )
+}

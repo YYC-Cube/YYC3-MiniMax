@@ -14,23 +14,31 @@
  * exports: StageCard
  */
 
-import type { LucideIcon } from 'lucide-react';
-import { ArrowRight, BookOpen, Clapperboard, FileCode2, Image as ImageIcon, Repeat, Video } from 'lucide-react';
-import { AGENTS } from '../../data/agents';
-import type { AgentId, PipelineStage, PipelineStageId } from '../../types';
-import { AgentAvatar } from '../AgentAvatar';
-import { StatusLight } from './StatusLight';
+import type { LucideIcon } from "lucide-react"
+import {
+  ArrowRight,
+  BookOpen,
+  Clapperboard,
+  FileCode2,
+  Image as ImageIcon,
+  Repeat,
+  Video,
+} from "lucide-react"
+import { AGENTS } from "../../data/agents"
+import type { AgentId, PipelineStage, PipelineStageId } from "../../types"
+import { AgentAvatar } from "../AgentAvatar"
+import { StatusLight } from "./StatusLight"
 
 interface StageCardProps {
-  stage: PipelineStage;
+  stage: PipelineStage
   /** 是否渲染到下一张卡的粒子箭头（最后一张为 false） */
-  showArrow: boolean;
-  isSelected: boolean;
+  showArrow: boolean
+  isSelected: boolean
   /** 阻塞态（含门禁告警闪烁叠加） */
-  isBlocked: boolean;
-  onSelectStage: (id: PipelineStageId) => void;
-  onSelectAgent: (id: AgentId) => void;
-  onOpenDetail: (id: PipelineStageId) => void;
+  isBlocked: boolean
+  onSelectStage: (id: PipelineStageId) => void
+  onSelectAgent: (id: AgentId) => void
+  onOpenDetail: (id: PipelineStageId) => void
 }
 
 /** 阶段图标映射（模块级常量：组件身份稳定，规避 render 期创建组件的 Compiler 规则违例） */
@@ -41,14 +49,14 @@ const STAGE_ICONS: Record<PipelineStageId, LucideIcon> = {
   video: Video,
   render: Clapperboard,
   ops: Repeat,
-};
+}
 
-const STATUS_LABEL: Record<PipelineStage['status'], string> = {
-  completed: '已达成',
-  running: '运行中',
-  blocked: '门禁告警',
-  ready: '待命',
-};
+const STATUS_LABEL: Record<PipelineStage["status"], string> = {
+  completed: "已达成",
+  running: "运行中",
+  blocked: "门禁告警",
+  ready: "待命",
+}
 
 export function StageCard({
   stage,
@@ -59,8 +67,8 @@ export function StageCard({
   onSelectAgent,
   onOpenDetail,
 }: StageCardProps) {
-  const Icon = STAGE_ICONS[stage.id];
-  const isRunning = stage.status === 'running';
+  const Icon = STAGE_ICONS[stage.id]
+  const isRunning = stage.status === "running"
 
   return (
     <div className="relative h-full flex flex-col justify-center">
@@ -68,12 +76,15 @@ export function StageCard({
       {showArrow && (
         <div className="absolute -right-3.5 top-1/2 -translate-y-1/2 z-20 pointer-events-none w-5 flex items-center justify-center">
           <div className="relative w-full flex items-center justify-center">
-            <ArrowRight size={16} className="text-[#BF00FF] drop-shadow-[0_0_6px_#BF00FF]" />
+            <ArrowRight
+              size={16}
+              className="text-[#BF00FF] drop-shadow-[0_0_6px_#BF00FF]"
+            />
             {/* Flowing particle animation */}
             <div
               className="absolute w-1.5 h-1.5 rounded-full bg-[#00F0FF] shadow-[0_0_6px_#00F0FF]"
               style={{
-                animation: 'particle-flow-cw 1.8s linear infinite',
+                animation: "particle-flow-cw 1.8s linear infinite",
               }}
             />
           </div>
@@ -83,12 +94,15 @@ export function StageCard({
       {/* 260x360 Baseline Card: rounded-12, panel-bg + blue border + 10px purple shadow */}
       <div
         onClick={() => onSelectStage(stage.id)}
-        className={`w-full h-[370px] rounded-xl glass-panel p-3.5 flex flex-col justify-between transition-all duration-200 cursor-pointer relative overflow-hidden group ${isSelected
-          ? 'border-[#00F0FF] shadow-[0_0_20px_rgba(0,240,255,0.4),0_0_30px_rgba(191,0,255,0.25)]'
-          : 'border-[#00F0FF]/25 hover:border-[#00F0FF]/50 shadow-[0_8px_24px_rgba(0,0,0,0.5),0_0_10px_rgba(191,0,255,0.15)]'
-          } ${isRunning ? 'animate-pulse-breath' : ''} ${isBlocked ? 'animate-alert-flash' : ''}`}
+        className={`w-full h-[370px] rounded-xl glass-panel p-3.5 flex flex-col justify-between transition-all duration-200 cursor-pointer relative overflow-hidden group ${
+          isSelected
+            ? "border-[#00F0FF] shadow-[0_0_20px_rgba(0,240,255,0.4),0_0_30px_rgba(191,0,255,0.25)]"
+            : "border-[#00F0FF]/25 hover:border-[#00F0FF]/50 shadow-[0_8px_24px_rgba(0,0,0,0.5),0_0_10px_rgba(191,0,255,0.15)]"
+        } ${isRunning ? "animate-pulse-breath" : ""} ${
+          isBlocked ? "animate-alert-flash" : ""
+        }`}
         style={{
-          backgroundColor: 'rgba(16, 18, 28, 0.78)',
+          backgroundColor: "rgba(16, 18, 28, 0.78)",
         }}
       >
         {/* Top Row: Stage Icon (24px, stage color) + Status Pill */}
@@ -107,7 +121,9 @@ export function StageCard({
 
             <div className="flex items-center space-x-1.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10">
               <StatusLight status={stage.status} />
-              <span className="text-[10px] text-[#9BA3B4] font-medium">{STATUS_LABEL[stage.status]}</span>
+              <span className="text-[10px] text-[#9BA3B4] font-medium">
+                {STATUS_LABEL[stage.status]}
+              </span>
             </div>
           </div>
 
@@ -134,17 +150,19 @@ export function StageCard({
                 <div
                   key={agId}
                   className="relative"
-                  title={`${AGENTS[agId]?.name} (${aIdx === 0 ? '主导' : '协作者'})`}
+                  title={`${AGENTS[agId]?.name} (${
+                    aIdx === 0 ? "主导" : "协作者"
+                  })`}
                   onClick={(e) => {
-                    e.stopPropagation();
-                    onSelectAgent(agId);
+                    e.stopPropagation()
+                    onSelectAgent(agId)
                   }}
                 >
                   <AgentAvatar agentId={agId} size={30} showLed={aIdx === 0} />
                 </div>
               ))}
               <span className="text-[10px] text-[#9BA3B4] pl-3 truncate">
-                {stage.leadAgents.map((id) => AGENTS[id]?.nick).join(' + ')}
+                {stage.leadAgents.map((id) => AGENTS[id]?.nick).join(" + ")}
               </span>
             </div>
           </div>
@@ -155,13 +173,15 @@ export function StageCard({
           <div className="bg-black/30 p-1.5 rounded border border-white/5">
             <span className="text-[9px] text-[#9BA3B4] block">在跑任务</span>
             <span className="font-mono-num font-bold text-sm text-[#00F0FF]">
-              {stage.activeTasks} <span className="text-[9px] text-[#9BA3B4]">单</span>
+              {stage.activeTasks}{" "}
+              <span className="text-[9px] text-[#9BA3B4]">单</span>
             </span>
           </div>
           <div className="bg-black/30 p-1.5 rounded border border-white/5">
             <span className="text-[9px] text-[#9BA3B4] block">队列长度</span>
             <span className="font-mono-num font-bold text-sm text-[#BF00FF]">
-              {stage.queueLength} <span className="text-[9px] text-[#9BA3B4]">单</span>
+              {stage.queueLength}{" "}
+              <span className="text-[9px] text-[#9BA3B4]">单</span>
             </span>
           </div>
           <div className="bg-black/30 p-1.5 rounded border border-white/5">
@@ -181,7 +201,9 @@ export function StageCard({
         {/* Mini Progress Bar (Linear, Cyan-Purple Gradient) + Status */}
         <div className="mt-1">
           <div className="flex justify-between text-[10px] text-[#9BA3B4] mb-1">
-            <span className="truncate pr-1 text-[9px]">{stage.keySchemaOrGate}</span>
+            <span className="truncate pr-1 text-[9px]">
+              {stage.keySchemaOrGate}
+            </span>
             <span className="font-mono-num text-white">{stage.progress}%</span>
           </div>
           <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/10">
@@ -196,8 +218,8 @@ export function StageCard({
         <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between">
           <button
             onClick={(e) => {
-              e.stopPropagation();
-              onOpenDetail(stage.id);
+              e.stopPropagation()
+              onOpenDetail(stage.id)
             }}
             className="w-full py-1.5 px-2 rounded-lg text-[11px] font-bold text-[#00F0FF] hover:text-white bg-[#00F0FF]/15 hover:bg-[#00F0FF]/30 border border-[#00F0FF]/40 hover:border-[#00F0FF] transition-all flex items-center justify-center space-x-1 cursor-pointer"
           >
@@ -207,5 +229,5 @@ export function StageCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

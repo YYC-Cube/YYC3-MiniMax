@@ -44,6 +44,9 @@
     "knip": "knip",
     "madge:circular": "madge --circular --extensions ts,tsx src",
     "depcruise": "depcruise --config .dependency-cruiser.cjs src",
+    "budget": "node scripts/bundle-budget.mjs",
+    "audit:lighthouse": "pnpm dlx @lhci/cli@0.15 autorun",
+    "soak:clinic": "pnpm dlx clinic doctor -- pnpm dev",
     "preview": "npx serve out",
     "format": "oxfmt"
   },
@@ -51,7 +54,8 @@
     "ignoreExportsUsedInFile": true,
     "ignore": [
       "docs/**",
-      "public/sw.js"
+      "public/sw.js",
+      "lighthouserc.cjs"
     ]
   },
   "dependencies": {
@@ -61,7 +65,8 @@
     "lucide-react": "^1.55.0",
     "next": "^16.4.1",
     "react": "^19.2.9",
-    "react-dom": "^19.2.9"
+    "react-dom": "^19.2.9",
+    "web-vitals": "^6.2.3"
   },
   "pnpm": {
     "overrides": {

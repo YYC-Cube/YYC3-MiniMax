@@ -13,10 +13,10 @@
  * dependencies: P1FamilyCenter, CommandCenterContext
  */
 
-'use client'
+"use client"
 
-import { P1FamilyCenter } from '@/views/P1FamilyCenter'
-import { useCommandCenter } from '../context/CommandCenterContext'
+import { P1FamilyCenter } from "@/views/P1FamilyCenter"
+import { useCommandCenter } from "../context/CommandCenterContext"
 
 export default function Page() {
   const { setActiveAgentId, setIsWidgetOpen, navigate } = useCommandCenter()

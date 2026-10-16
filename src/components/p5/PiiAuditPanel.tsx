@@ -14,20 +14,25 @@
  * exports: PiiAuditPanel
  */
 
-import { Eye, EyeOff, ShieldCheck } from 'lucide-react';
-import type { PIILogItem } from '../../data/qualityData';
+import { Eye, EyeOff, ShieldCheck } from "lucide-react"
+import type { PIILogItem } from "../../data/qualityData"
 
 interface PiiAuditPanelProps {
-  piiLogs: PIILogItem[];
+  piiLogs: PIILogItem[]
   /** 当前展开（已调取）原文的日志 id */
-  revealedPiiId: string | null;
+  revealedPiiId: string | null
   /** 受控调取的原文缓存（按日志 id） */
-  revealedRaw: Record<string, string>;
+  revealedRaw: Record<string, string>
   /** 切换某条日志的原文展开/收起（展开时触发异步调取） */
-  onToggleReveal: (logId: string) => void;
+  onToggleReveal: (logId: string) => void
 }
 
-export function PiiAuditPanel({ piiLogs, revealedPiiId, revealedRaw, onToggleReveal }: PiiAuditPanelProps) {
+export function PiiAuditPanel({
+  piiLogs,
+  revealedPiiId,
+  revealedRaw,
+  onToggleReveal,
+}: PiiAuditPanelProps) {
   return (
     <div className="col-span-4 rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 flex flex-col justify-between overflow-hidden">
       <div>
@@ -46,7 +51,7 @@ export function PiiAuditPanel({ piiLogs, revealedPiiId, revealedRaw, onToggleRev
         {/* PII Log Cards */}
         <div className="space-y-3 overflow-y-auto max-h-[60vh] pr-1">
           {piiLogs.map((log) => {
-            const isRevealed = revealedPiiId === log.id;
+            const isRevealed = revealedPiiId === log.id
 
             return (
               <div
@@ -88,7 +93,7 @@ export function PiiAuditPanel({ piiLogs, revealedPiiId, revealedRaw, onToggleRev
                         原始高危拦截数据 (Raw Dangerous · 受控调取):
                       </span>
                       <p className="font-mono-num text-[#FF006E] text-[11px] select-text">
-                        {revealedRaw[log.id] || '调取中…'}
+                        {revealedRaw[log.id] || "调取中…"}
                       </p>
                     </div>
                   )}
@@ -101,11 +106,13 @@ export function PiiAuditPanel({ piiLogs, revealedPiiId, revealedRaw, onToggleRev
                     className="text-[10px] text-[#00F0FF] hover:underline flex items-center space-x-1 cursor-pointer"
                   >
                     {isRevealed ? <EyeOff size={11} /> : <Eye size={11} />}
-                    <span>{isRevealed ? '收起敏感比对' : '查看脱敏前后对比'}</span>
+                    <span>
+                      {isRevealed ? "收起敏感比对" : "查看脱敏前后对比"}
+                    </span>
                   </button>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
       </div>
@@ -115,5 +122,5 @@ export function PiiAuditPanel({ piiLogs, revealedPiiId, revealedRaw, onToggleRev
         <span className="text-[#00FF88]">PII 审计零残留</span>
       </div>
     </div>
-  );
+  )
 }

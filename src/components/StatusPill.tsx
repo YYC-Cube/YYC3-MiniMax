@@ -14,23 +14,23 @@
  * exports: StatusPill
  */
 
-import type { StatusTone } from '../domain/opsView';
+import type { StatusTone } from "../domain/opsView"
 
 interface StatusPillProps {
-  label: string;
-  tone: StatusTone;
+  label: string
+  tone: StatusTone
 }
 
-const BASE_CLASS = 'text-[9px] px-1.5 py-0.5 rounded border shrink-0';
+const BASE_CLASS = "text-[9px] px-1.5 py-0.5 rounded border shrink-0"
 
 const TONE_CLASS: Record<StatusTone, string> = {
-  accent: 'text-[#00F0FF] border-[#00F0FF]/40',
-  ok: 'text-[#00FF88] border-[#00FF88]/40',
-  muted: 'text-[#5A6478] border-white/10',
-  warn: 'text-[#FFD700] border-[#FFD700]/40',
-  danger: 'text-[#FF006E] border-[#FF006E]/40',
-};
+  accent: "text-[#00F0FF] border-[#00F0FF]/40",
+  ok: "text-[#00FF88] border-[#00FF88]/40",
+  muted: "text-[#5A6478] border-white/10",
+  warn: "text-[#FFD700] border-[#FFD700]/40",
+  danger: "text-[#FF006E] border-[#FF006E]/40",
+}
 
 export function StatusPill({ label, tone }: StatusPillProps) {
-  return <span className={`${BASE_CLASS} ${TONE_CLASS[tone]}`}>{label}</span>;
+  return <span className={`${BASE_CLASS} ${TONE_CLASS[tone]}`}>{label}</span>
 }

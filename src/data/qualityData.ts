@@ -18,35 +18,35 @@
  * exports: AUDIT_STORYBOARDS, PII_AUDIT_LOGS, MASTER_REVIEW
  */
 
-import { GATES } from '../domain/constants';
+import { GATES } from "../domain/constants"
 
 export interface StoryboardAuditItem {
-  id: string;
-  shotCode: string;
-  episode: string;
-  sceneName: string;
-  character: string;
-  consistencyScore: number; // 0 - 100
+  id: string
+  shotCode: string
+  episode: string
+  sceneName: string
+  character: string
+  consistencyScore: number // 0 - 100
   radarScores: {
-    facialFeature: number;
-    clothingPalette: number;
-    lightingAtmosphere: number;
-    postureContinuity: number;
-    artisticStyle: number;
-  };
-  status: 'passed' | 'rejected' | 'pending';
-  thumbPrompt: string;
-  reviewRound: number; // 1 or 2
-  rejectReason?: string;
+    facialFeature: number
+    clothingPalette: number
+    lightingAtmosphere: number
+    postureContinuity: number
+    artisticStyle: number
+  }
+  status: "passed" | "rejected" | "pending"
+  thumbPrompt: string
+  reviewRound: number // 1 or 2
+  rejectReason?: string
 }
 
 export const AUDIT_STORYBOARDS: StoryboardAuditItem[] = [
   {
-    id: 'sb-101',
-    shotCode: 'EP03-SC02-SH08',
-    episode: '第3集 · 迷雾暗流',
-    sceneName: '雨夜天台对峙',
-    character: '陆明远 (主角)',
+    id: "sb-101",
+    shotCode: "EP03-SC02-SH08",
+    episode: "第3集 · 迷雾暗流",
+    sceneName: "雨夜天台对峙",
+    character: "陆明远 (主角)",
     consistencyScore: 92.4,
     radarScores: {
       facialFeature: 94,
@@ -55,16 +55,16 @@ export const AUDIT_STORYBOARDS: StoryboardAuditItem[] = [
       postureContinuity: 93,
       artisticStyle: 94,
     },
-    status: 'passed',
-    thumbPrompt: '雨幕天台 / 黑色战壕风衣 / 蓝紫霓虹反射 / 凌厉冷冽目光',
+    status: "passed",
+    thumbPrompt: "雨幕天台 / 黑色战壕风衣 / 蓝紫霓虹反射 / 凌厉冷冽目光",
     reviewRound: 1,
   },
   {
-    id: 'sb-102',
-    shotCode: 'EP03-SC02-SH09',
-    episode: '第3集 · 迷雾暗流',
-    sceneName: '手枪上膛特写',
-    character: '陆明远 (特写机位)',
+    id: "sb-102",
+    shotCode: "EP03-SC02-SH09",
+    episode: "第3集 · 迷雾暗流",
+    sceneName: "手枪上膛特写",
+    character: "陆明远 (特写机位)",
     consistencyScore: 88.6,
     radarScores: {
       facialFeature: 89,
@@ -73,16 +73,16 @@ export const AUDIT_STORYBOARDS: StoryboardAuditItem[] = [
       postureContinuity: 86,
       artisticStyle: 89,
     },
-    status: 'passed',
-    thumbPrompt: '机械特写 / 手部骨节青筋 / 雨滴飞溅 / 金属冷光',
+    status: "passed",
+    thumbPrompt: "机械特写 / 手部骨节青筋 / 雨滴飞溅 / 金属冷光",
     reviewRound: 1,
   },
   {
-    id: 'sb-103',
-    shotCode: 'EP03-SC03-SH02',
-    episode: '第3集 · 迷雾暗流',
-    sceneName: '密室阴影逆光',
-    character: '神秘线人 (配角)',
+    id: "sb-103",
+    shotCode: "EP03-SC03-SH02",
+    episode: "第3集 · 迷雾暗流",
+    sceneName: "密室阴影逆光",
+    character: "神秘线人 (配角)",
     consistencyScore: 74.8, // Below 80!
     radarScores: {
       facialFeature: 68,
@@ -91,17 +91,17 @@ export const AUDIT_STORYBOARDS: StoryboardAuditItem[] = [
       postureContinuity: 76,
       artisticStyle: 73,
     },
-    status: 'pending',
-    thumbPrompt: '百叶窗斜射阴影 / 礼帽风衣 / 面部阴影过重导致瞳孔识别失真',
+    status: "pending",
+    thumbPrompt: "百叶窗斜射阴影 / 礼帽风衣 / 面部阴影过重导致瞳孔识别失真",
     reviewRound: 1,
     rejectReason: `面部特征相似度 68% 未达 ${GATES.CONSISTENCY}% 门禁，瞳距与下颌线偏离标准资产图谱。`,
   },
   {
-    id: 'sb-104',
-    shotCode: 'EP03-SC03-SH05',
-    episode: '第3集 · 迷雾暗流',
-    sceneName: '地下通道疾跑',
-    character: '苏晚晴 (女主角)',
+    id: "sb-104",
+    shotCode: "EP03-SC03-SH05",
+    episode: "第3集 · 迷雾暗流",
+    sceneName: "地下通道疾跑",
+    character: "苏晚晴 (女主角)",
     consistencyScore: 94.1,
     radarScores: {
       facialFeature: 95,
@@ -110,61 +110,61 @@ export const AUDIT_STORYBOARDS: StoryboardAuditItem[] = [
       postureContinuity: 92,
       artisticStyle: 96,
     },
-    status: 'passed',
-    thumbPrompt: '地下暗道 / 疾驰动态模糊 / 米白风衣衣角扬起 / 科技蓝冷光',
+    status: "passed",
+    thumbPrompt: "地下暗道 / 疾驰动态模糊 / 米白风衣衣角扬起 / 科技蓝冷光",
     reviewRound: 1,
   },
-];
+]
 
 export interface PIILogItem {
-  id: string;
-  time: string;
-  stageName: string;
-  entityType: '身份证/护照' | '手机/座机' | '内网IP/密钥' | '涉密实体';
+  id: string
+  time: string
+  stageName: string
+  entityType: "身份证/护照" | "手机/座机" | "内网IP/密钥" | "涉密实体"
   /**
    * 安全契约（诊断 #21 完整版）：前端数据包不下发 rawSnippet 原文。
    * 原文仅可经 services/piiReveal.ts 从受控接口按次调取（RBAC+审计+限流）。
    */
-  maskedSnippet: string;
-  action: '已实时脱敏' | '拦截并告警' | '放行';
-  guardAgent: string;
+  maskedSnippet: string
+  action: "已实时脱敏" | "拦截并告警" | "放行"
+  guardAgent: string
 }
 
 export const PII_AUDIT_LOGS: PIILogItem[] = [
   {
-    id: 'pii-1',
-    time: '14:26:18',
-    stageName: '剧本分镜 (阶段②)',
-    entityType: '手机/座机',
-    maskedSnippet: '“这是我的保密专线：138-****-0000，不要泄露。”',
-    action: '已实时脱敏',
-    guardAgent: '智云·守护',
+    id: "pii-1",
+    time: "14:26:18",
+    stageName: "剧本分镜 (阶段②)",
+    entityType: "手机/座机",
+    maskedSnippet: "“这是我的保密专线：138-****-0000，不要泄露。”",
+    action: "已实时脱敏",
+    guardAgent: "智云·守护",
   },
   {
-    id: 'pii-2',
-    time: '14:21:40',
-    stageName: '视频合成 (阶段④)',
-    entityType: '内网IP/密钥',
-    maskedSnippet: 'API_ENDPOINT=**.**.*.*:****; KEY=****（掩码占位）',
-    action: '拦截并告警',
-    guardAgent: '智云·守护',
+    id: "pii-2",
+    time: "14:21:40",
+    stageName: "视频合成 (阶段④)",
+    entityType: "内网IP/密钥",
+    maskedSnippet: "API_ENDPOINT=**.**.*.*:****; KEY=****（掩码占位）",
+    action: "拦截并告警",
+    guardAgent: "智云·守护",
   },
   {
-    id: 'pii-3',
-    time: '14:15:02',
-    stageName: '小说立项 (阶段①)',
-    entityType: '身份证/护照',
-    maskedSnippet: '反派假证件登记号：110101********9590 (合成虚拟标记)',
-    action: '已实时脱敏',
-    guardAgent: '智云·守护',
+    id: "pii-3",
+    time: "14:15:02",
+    stageName: "小说立项 (阶段①)",
+    entityType: "身份证/护照",
+    maskedSnippet: "反派假证件登记号：110101********9590 (合成虚拟标记)",
+    action: "已实时脱敏",
+    guardAgent: "智云·守护",
   },
   {
-    id: 'pii-4',
-    time: '14:08:55',
-    stageName: '成片交付 (阶段⑤)',
-    entityType: '涉密实体',
-    maskedSnippet: '片尾字幕致谢含未公开内部研制编号: [YYC³ INDUSTRIAL DESK]',
-    action: '已实时脱敏',
-    guardAgent: '智云·守护',
+    id: "pii-4",
+    time: "14:08:55",
+    stageName: "成片交付 (阶段⑤)",
+    entityType: "涉密实体",
+    maskedSnippet: "片尾字幕致谢含未公开内部研制编号: [YYC³ INDUSTRIAL DESK]",
+    action: "已实时脱敏",
+    guardAgent: "智云·守护",
   },
-];
+]

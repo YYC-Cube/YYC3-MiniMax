@@ -20,13 +20,24 @@
  * exports: CommandCenterProvider, useCommandCenter
  */
 
-'use client'
+"use client"
 
-import type { AgentId, PipelineStageId } from '@/types'
-import type { ReactNode } from 'react'
-import { AgentProvider, useActiveAgent } from './agent'
-import { NavigationProvider, useNavigation, type ViewId } from './navigation'
-import { WidgetProvider, useWidgetCommand, type ExternalCommand } from './widget'
+/** 组合三域 Provider：导航 / Agent / W1 浮窗（挂载于 layout，跨路由常驻） */
+
+/**
+ * 组合三域 Hook：需跨域取值的消费者（CommandShell / 路由 page）使用；
+ * 仅需单域的消费者请改用 useNavigation/useActiveAgent/useWidgetCommand 缩窄订阅
+ */
+
+import type { AgentId, PipelineStageId } from "@/types"
+import type { ReactNode } from "react"
+import { AgentProvider, useActiveAgent } from "./agent"
+import { NavigationProvider, useNavigation, type ViewId } from "./navigation"
+import {
+  WidgetProvider,
+  useWidgetCommand,
+  type ExternalCommand,
+} from "./widget"
 
 interface CommandCenterValue {
   activeAgentId: AgentId
@@ -39,11 +50,9 @@ interface CommandCenterValue {
   highlightedStageId: PipelineStageId | null
   navigate: (view: ViewId) => void
   navigateToStage: (stageId: string) => void
-  scaleMode: 'fit' | '1080p'
+  scaleMode: "fit" | "1080p"
   toggleScaleMode: () => void
 }
-
-/** 组合三域 Provider：导航 / Agent / W1 浮窗（挂载于 layout，跨路由常驻） */
 export function CommandCenterProvider({ children }: { children: ReactNode }) {
   return (
     <NavigationProvider>
@@ -53,16 +62,22 @@ export function CommandCenterProvider({ children }: { children: ReactNode }) {
     </NavigationProvider>
   )
 }
-
-/**
- * 组合三域 Hook：需跨域取值的消费者（CommandShell / 路由 page）使用；
- * 仅需单域的消费者请改用 useNavigation/useActiveAgent/useWidgetCommand 缩窄订阅
- */
 export function useCommandCenter(): CommandCenterValue {
   const { activeAgentId, setActiveAgentId } = useActiveAgent()
-  const { isWidgetOpen, setIsWidgetOpen, externalCommand, clearExternalCommand, sendCommandToWidget } =
-    useWidgetCommand()
-  const { highlightedStageId, navigate, navigateToStage, scaleMode, toggleScaleMode } = useNavigation()
+  const {
+    isWidgetOpen,
+    setIsWidgetOpen,
+    externalCommand,
+    clearExternalCommand,
+    sendCommandToWidget,
+  } = useWidgetCommand()
+  const {
+    highlightedStageId,
+    navigate,
+    navigateToStage,
+    scaleMode,
+    toggleScaleMode,
+  } = useNavigation()
 
   return {
     activeAgentId,

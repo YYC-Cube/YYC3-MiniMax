@@ -14,45 +14,50 @@
  * exports: EventStreamPanel
  */
 
-import { Send } from 'lucide-react';
-import React, { useState } from 'react';
-import { AGENTS } from '../../data/agents';
-import type { EventStreamMode } from '../../services/eventStream';
-import type { AgentId, LogItem } from '../../types';
+import { Send } from "lucide-react"
+import React, { useState } from "react"
+import { AGENTS } from "../../data/agents"
+import type { EventStreamMode } from "../../services/eventStream"
+import type { AgentId, LogItem } from "../../types"
 
 interface EventStreamPanelProps {
-  logs: LogItem[];
-  streamMode: EventStreamMode;
-  onSelectAgent: (id: AgentId) => void;
+  logs: LogItem[]
+  streamMode: EventStreamMode
+  onSelectAgent: (id: AgentId) => void
   /** 快捷指令上抛（已含非空校验前的原始文本） */
-  onSendCommand: (text: string) => void;
+  onSendCommand: (text: string) => void
 }
 
 /** 日志级别配色（INFO/SUCCESS/WARN/ERROR/THINK/ACT） */
-function getLogLevelStyle(level: LogItem['level']) {
+function getLogLevelStyle(level: LogItem["level"]) {
   switch (level) {
-    case 'INFO':
-      return { color: '#9BA3B4', bg: 'rgba(155,163,180,0.1)' };
-    case 'SUCCESS':
-      return { color: '#00FF88', bg: 'rgba(0,255,136,0.12)' };
-    case 'WARN':
-      return { color: '#FFD700', bg: 'rgba(255,215,0,0.15)' };
-    case 'ERROR':
-      return { color: '#FF006E', bg: 'rgba(255,0,110,0.18)' };
-    case 'THINK':
-      return { color: '#BF00FF', bg: 'rgba(191,0,255,0.15)' };
-    case 'ACT':
-      return { color: '#00F0FF', bg: 'rgba(0,240,255,0.15)' };
+    case "INFO":
+      return { color: "#9BA3B4", bg: "rgba(155,163,180,0.1)" }
+    case "SUCCESS":
+      return { color: "#00FF88", bg: "rgba(0,255,136,0.12)" }
+    case "WARN":
+      return { color: "#FFD700", bg: "rgba(255,215,0,0.15)" }
+    case "ERROR":
+      return { color: "#FF006E", bg: "rgba(255,0,110,0.18)" }
+    case "THINK":
+      return { color: "#BF00FF", bg: "rgba(191,0,255,0.15)" }
+    case "ACT":
+      return { color: "#00F0FF", bg: "rgba(0,240,255,0.15)" }
   }
 }
 
-export function EventStreamPanel({ logs, streamMode, onSelectAgent, onSendCommand }: EventStreamPanelProps) {
-  const [logInput, setLogInput] = useState('@元启 继续下一集生产');
+export function EventStreamPanel({
+  logs,
+  streamMode,
+  onSelectAgent,
+  onSendCommand,
+}: EventStreamPanelProps) {
+  const [logInput, setLogInput] = useState("@元启 继续下一集生产")
 
   const handleSend = () => {
-    if (!logInput.trim()) return;
-    onSendCommand(logInput);
-  };
+    if (!logInput.trim()) return
+    onSendCommand(logInput)
+  }
 
   return (
     <div className="col-span-3 h-full flex flex-col rounded-xl glass-panel border border-[#00F0FF]/30 p-3 overflow-hidden">
@@ -66,12 +71,13 @@ export function EventStreamPanel({ logs, streamMode, onSelectAgent, onSendComman
         </div>
         <div className="flex items-center space-x-1.5">
           <span
-            className={`px-1.5 py-[1px] rounded text-[9px] font-bold border tracking-wide ${streamMode === 'live'
-              ? 'bg-[#00FF88]/20 text-[#00FF88] border-[#00FF88]/50'
-              : 'bg-[#00F0FF]/15 text-[#00F0FF] border-[#00F0FF]/40'
-              }`}
+            className={`px-1.5 py-[1px] rounded text-[9px] font-bold border tracking-wide ${
+              streamMode === "live"
+                ? "bg-[#00FF88]/20 text-[#00FF88] border-[#00FF88]/50"
+                : "bg-[#00F0FF]/15 text-[#00F0FF] border-[#00F0FF]/40"
+            }`}
           >
-            {streamMode === 'live' ? 'LIVE · WebSocket' : 'SIM · 模拟流'}
+            {streamMode === "live" ? "LIVE · WebSocket" : "SIM · 模拟流"}
           </span>
           <span className="text-[10px] font-mono-num text-[#9BA3B4]">
             {logs.length} Events
@@ -82,12 +88,12 @@ export function EventStreamPanel({ logs, streamMode, onSelectAgent, onSendComman
       {/* Logs List Area (11px monospace, reverse chronological) */}
       <div className="flex-1 overflow-y-auto space-y-2 pr-1 font-mono-num text-[11px]">
         {logs.map((log) => {
-          const style = getLogLevelStyle(log.level);
+          const style = getLogLevelStyle(log.level)
           return (
             <div
               key={log.id}
               className="p-2 rounded bg-[#0A0C14]/90 border border-white/5 hover:border-[#00F0FF]/30 transition-all"
-              style={{ animation: 'fade-in-up 0.2s ease-out' }}
+              style={{ animation: "fade-in-up 0.2s ease-out" }}
             >
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center space-x-1.5">
@@ -109,7 +115,7 @@ export function EventStreamPanel({ logs, streamMode, onSelectAgent, onSendComman
                 </div>
                 <span
                   className="text-[10px] font-bold cursor-pointer hover:underline"
-                  style={{ color: AGENTS[log.agentId]?.color || '#00F0FF' }}
+                  style={{ color: AGENTS[log.agentId]?.color || "#00F0FF" }}
                   onClick={() => onSelectAgent(log.agentId)}
                 >
                   @{AGENTS[log.agentId]?.nick || log.agentName}
@@ -119,7 +125,7 @@ export function EventStreamPanel({ logs, streamMode, onSelectAgent, onSendComman
                 {log.message}
               </p>
             </div>
-          );
+          )
         })}
       </div>
 
@@ -131,7 +137,7 @@ export function EventStreamPanel({ logs, streamMode, onSelectAgent, onSendComman
             value={logInput}
             onChange={(e) => setLogInput(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSend();
+              if (e.key === "Enter") handleSend()
             }}
             placeholder="@元启 继续下一集..."
             className="flex-1 bg-transparent text-xs text-white placeholder-[#9BA3B4]/50 focus:outline-none px-1"
@@ -149,5 +155,5 @@ export function EventStreamPanel({ logs, streamMode, onSelectAgent, onSendComman
         </span>
       </div>
     </div>
-  );
+  )
 }

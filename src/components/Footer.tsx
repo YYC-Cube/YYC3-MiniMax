@@ -18,18 +18,19 @@
  * exports: Footer
  */
 
-import { useNavigation, VIEW_PATHS, type ViewId } from '@/context/navigation';
-import { ArrowRight, HardDrive, Server, ShieldCheck, Zap } from 'lucide-react';
-import { usePathname } from 'next/navigation';
-import React from 'react';
+import { useNavigation, VIEW_PATHS, type ViewId } from "@/context/navigation"
+import { ArrowRight, HardDrive, Server, ShieldCheck, Zap } from "lucide-react"
+import { usePathname } from "next/navigation"
+import React from "react"
 
 export const Footer: React.FC = () => {
-  const pathname = usePathname();
-  const { navigate } = useNavigation();
+  const pathname = usePathname()
+  const { navigate } = useNavigation()
 
   /** pathname → ViewId（视图 CTA 依赖，反查 navigation 单一事实源） */
-  const currentView = (Object.entries(VIEW_PATHS).find(([, p]) => p === pathname)?.[0] ??
-    'P1') as ViewId;
+  const currentView = (Object.entries(VIEW_PATHS).find(
+    ([, p]) => p === pathname,
+  )?.[0] ?? "P1") as ViewId
 
   return (
     <footer className="h-9 px-6 border-t border-[#00F0FF]/20 bg-[#0E1018]/90 backdrop-blur-md flex items-center justify-between select-none relative z-30 text-xs">
@@ -37,14 +38,18 @@ export const Footer: React.FC = () => {
       <div className="flex items-center space-x-3 text-[#9BA3B4]">
         <div className="flex items-center space-x-1.5 bg-[#0A0A0A]/60 px-2 py-0.5 rounded border border-white/10">
           <HardDrive size={12} className="text-[#00F0FF]" />
-          <span className="font-mono-num text-[11px] text-white">/mnt/nas/yyc3_pipeline</span>
+          <span className="font-mono-num text-[11px] text-white">
+            /mnt/nas/yyc3_pipeline
+          </span>
           <span className="text-[10px] text-[#00FF88] flex items-center space-x-1 pl-1">
             <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88]" />
             <span>万兆 NFSv4.2 挂载</span>
           </span>
         </div>
         <span className="text-[11px] text-[#9BA3B4]/60">|</span>
-        <span className="text-[11px] text-[#9BA3B4]">单一事实源集群: TrueNAS Enterprise</span>
+        <span className="text-[11px] text-[#9BA3B4]">
+          单一事实源集群: TrueNAS Enterprise
+        </span>
       </div>
 
       {/* Middle: Task Queue Count */}
@@ -61,18 +66,18 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Quick jump CTA based on current view */}
-        {currentView === 'P1' && (
+        {currentView === "P1" && (
           <button
-            onClick={() => navigate('P2')}
+            onClick={() => navigate("P2")}
             className="flex items-center space-x-1 text-[11px] text-[#00F0FF] hover:text-white bg-[#00F0FF]/15 hover:bg-[#00F0FF]/30 px-2.5 py-0.5 rounded transition-all border border-[#00F0FF]/40 cursor-pointer"
           >
             <span>进入漫剧工业化生产台</span>
             <ArrowRight size={11} />
           </button>
         )}
-        {currentView === 'P2' && (
+        {currentView === "P2" && (
           <button
-            onClick={() => navigate('P3')}
+            onClick={() => navigate("P3")}
             className="flex items-center space-x-1 text-[11px] text-[#BF00FF] hover:text-white bg-[#BF00FF]/15 hover:bg-[#BF00FF]/30 px-2.5 py-0.5 rounded transition-all border border-[#BF00FF]/40 cursor-pointer"
           >
             <span>查看 ReAct-C 九步编排视图</span>
@@ -86,7 +91,9 @@ export const Footer: React.FC = () => {
         <div className="flex items-center space-x-1.5 bg-[#00FF88]/10 px-2 py-0.5 rounded border border-[#00FF88]/30">
           <Zap size={11} className="text-[#00FF88]" />
           <span className="text-[#9BA3B4] text-[11px]">8 Agent 在线率:</span>
-          <span className="font-mono-num font-bold text-[#00FF88] text-[11px]">100% (8/8 在线)</span>
+          <span className="font-mono-num font-bold text-[#00FF88] text-[11px]">
+            100% (8/8 在线)
+          </span>
         </div>
         <div className="flex items-center space-x-1 text-[11px] text-[#9BA3B4]">
           <ShieldCheck size={12} className="text-[#00F0FF]" />
@@ -94,5 +101,5 @@ export const Footer: React.FC = () => {
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}

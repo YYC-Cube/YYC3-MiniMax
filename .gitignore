@@ -29,3 +29,7 @@ logs/
 
 # 团队内部资料（含 openclaw identity/密钥形态配置样本），不入远程仓库（gitleaks 31 项告警源）
 docs/YYC3-团队通用-标准规范/
+
+# Python 编译产物（docs 内参考实现随附，非项目源码）
+__pycache__/
+*.pyc

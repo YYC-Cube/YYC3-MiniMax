@@ -22,16 +22,16 @@ import {
   Radio,
   Server,
   ShieldAlert,
-  Zap
-} from 'lucide-react';
-import React, { useState } from 'react';
-import { OPS_NODES, SYSTEM_ALERTS, SystemAlert } from '../data/opsData';
-import { memUsagePct } from '../domain/opsView';
+  Zap,
+} from "lucide-react"
+import React, { useState } from "react"
+import { OPS_NODES, SYSTEM_ALERTS, SystemAlert } from "../data/opsData"
+import { memUsagePct } from "../domain/opsView"
 
 interface P4OpsMonitoringProps {
-  onNavigateToP5: () => void;
-  onNavigateToP2: () => void;
-  onNavigateToP3: () => void;
+  onNavigateToP5: () => void
+  onNavigateToP2: () => void
+  onNavigateToP3: () => void
 }
 
 export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
@@ -39,13 +39,13 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
   onNavigateToP2,
   onNavigateToP3,
 }) => {
-  const [alerts] = useState<SystemAlert[]>(SYSTEM_ALERTS);
+  const [alerts] = useState<SystemAlert[]>(SYSTEM_ALERTS)
 
   const handleAlertAction = (alert: SystemAlert) => {
-    if (alert.targetPage === 'P5') onNavigateToP5();
-    else if (alert.targetPage === 'P2') onNavigateToP2();
-    else if (alert.targetPage === 'P3') onNavigateToP3();
-  };
+    if (alert.targetPage === "P5") onNavigateToP5()
+    else if (alert.targetPage === "P2") onNavigateToP2()
+    else if (alert.targetPage === "P3") onNavigateToP3()
+  }
 
   return (
     <div className="w-full h-full p-5 grid grid-cols-12 gap-4 overflow-hidden select-none">
@@ -80,24 +80,27 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
           {/* 4 Nodes Cards */}
           <div className="space-y-2.5">
             {OPS_NODES.map((node) => {
-              const isWarning = node.status === 'warn';
-              const memPct = memUsagePct(node.memUsed, node.memTotal);
+              const isWarning = node.status === "warn"
+              const memPct = memUsagePct(node.memUsed, node.memTotal)
 
               return (
                 <div
                   key={node.id}
-                  className={`p-3 rounded-xl bg-[#0A0D18]/90 border transition-all ${isWarning
-                    ? 'border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]'
-                    : 'border-white/10 hover:border-[#00F0FF]/40'
-                    }`}
+                  className={`p-3 rounded-xl bg-[#0A0D18]/90 border transition-all ${
+                    isWarning
+                      ? "border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]"
+                      : "border-white/10 hover:border-[#00F0FF]/40"
+                  }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center space-x-2">
                       <span
                         className="w-2 h-2 rounded-full"
                         style={{
-                          backgroundColor: isWarning ? '#FF006E' : '#00FF88',
-                          boxShadow: `0 0 6px ${isWarning ? '#FF006E' : '#00FF88'}`,
+                          backgroundColor: isWarning ? "#FF006E" : "#00FF88",
+                          boxShadow: `0 0 6px ${
+                            isWarning ? "#FF006E" : "#00FF88"
+                          }`,
                         }}
                       />
                       <span className="font-bold text-xs text-white">
@@ -110,7 +113,8 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                   </div>
 
                   <p className="text-[10px] text-[#9BA3B4] mb-2 truncate">
-                    {node.role} · <span className="text-white/60">{node.hardware}</span>
+                    {node.role} ·{" "}
+                    <span className="text-white/60">{node.hardware}</span>
                   </p>
 
                   {/* Dual Radial/Bar Gauges: GPU & VRAM */}
@@ -132,22 +136,31 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
 
                     <div className="bg-black/40 p-2 rounded-lg border border-white/5">
                       <div className="flex justify-between text-[#9BA3B4] mb-1">
-                        <span>{node.memKind === 'storage' ? '存储容量池' : '显存占用'}</span>
-                        <span className={`font-mono-num font-bold ${memPct > 90 ? 'text-[#FF006E]' : 'text-[#BF00FF]'}`}>
+                        <span>
+                          {node.memKind === "storage"
+                            ? "存储容量池"
+                            : "显存占用"}
+                        </span>
+                        <span
+                          className={`font-mono-num font-bold ${
+                            memPct > 90 ? "text-[#FF006E]" : "text-[#BF00FF]"
+                          }`}
+                        >
                           {node.memUsed} / {node.memTotal} {node.memUnit}
                         </span>
                       </div>
                       <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
                         <div
-                          className={`h-full rounded-full ${memPct > 90 ? 'bg-[#FF006E]' : 'bg-[#BF00FF]'
-                            }`}
+                          className={`h-full rounded-full ${
+                            memPct > 90 ? "bg-[#FF006E]" : "bg-[#BF00FF]"
+                          }`}
                           style={{ width: `${memPct}%` }}
                         />
                       </div>
                     </div>
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
         </div>
@@ -170,16 +183,42 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                 <Activity size={13} className="text-[#00F0FF]" />
                 <span>双 DGX GPU 利用率曲线</span>
               </span>
-              <span className="text-[10px] text-[#9BA3B4] font-mono-num">10s 采样</span>
+              <span className="text-[10px] text-[#9BA3B4] font-mono-num">
+                10s 采样
+              </span>
             </div>
 
             {/* SVG Timelines */}
             <div className="flex-1 py-1 relative">
-              <svg viewBox="0 0 200 100" className="w-full h-full overflow-visible">
+              <svg
+                viewBox="0 0 200 100"
+                className="w-full h-full overflow-visible"
+              >
                 {/* 10% Opacity Grid lines */}
-                <line x1="0" y1="20" x2="200" y2="20" stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />
-                <line x1="0" y1="50" x2="200" y2="50" stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />
-                <line x1="0" y1="80" x2="200" y2="80" stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />
+                <line
+                  x1="0"
+                  y1="20"
+                  x2="200"
+                  y2="20"
+                  stroke="rgba(255,255,255,0.08)"
+                  strokeDasharray="3 3"
+                />
+                <line
+                  x1="0"
+                  y1="50"
+                  x2="200"
+                  y2="50"
+                  stroke="rgba(255,255,255,0.08)"
+                  strokeDasharray="3 3"
+                />
+                <line
+                  x1="0"
+                  y1="80"
+                  x2="200"
+                  y2="80"
+                  stroke="rgba(255,255,255,0.08)"
+                  strokeDasharray="3 3"
+                />
 
                 {/* Line 1 (yyc3-101 Cyan) */}
                 <polyline
@@ -211,30 +250,60 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                 <Cpu size={13} className="text-[#BF00FF]" />
                 <span>显存驻留池分布 (GB)</span>
               </span>
-              <span className="text-[10px] text-[#9BA3B4] font-mono-num">Alloc / Resv</span>
+              <span className="text-[10px] text-[#9BA3B4] font-mono-num">
+                Alloc / Resv
+              </span>
             </div>
 
             {/* Custom Bar Graph */}
             <div className="flex-1 flex items-end justify-between px-2 py-2 space-x-2">
               <div className="flex-1 flex flex-col items-center">
-                <div className="w-full bg-[#FF006E] rounded-t shadow-[0_0_8px_#FF006E]" style={{ height: '92%' }} />
-                <span className="text-[9px] text-[#9BA3B4] mt-1 font-mono-num">DGX-1</span>
-                <span className="text-[9px] text-[#FF006E] font-bold font-mono-num">76G</span>
+                <div
+                  className="w-full bg-[#FF006E] rounded-t shadow-[0_0_8px_#FF006E]"
+                  style={{ height: "92%" }}
+                />
+                <span className="text-[9px] text-[#9BA3B4] mt-1 font-mono-num">
+                  DGX-1
+                </span>
+                <span className="text-[9px] text-[#FF006E] font-bold font-mono-num">
+                  76G
+                </span>
               </div>
               <div className="flex-1 flex flex-col items-center">
-                <div className="w-full bg-[#BF00FF] rounded-t" style={{ height: '62%' }} />
-                <span className="text-[9px] text-[#9BA3B4] mt-1 font-mono-num">DGX-2</span>
-                <span className="text-[9px] text-[#BF00FF] font-bold font-mono-num">49G</span>
+                <div
+                  className="w-full bg-[#BF00FF] rounded-t"
+                  style={{ height: "62%" }}
+                />
+                <span className="text-[9px] text-[#9BA3B4] mt-1 font-mono-num">
+                  DGX-2
+                </span>
+                <span className="text-[9px] text-[#BF00FF] font-bold font-mono-num">
+                  49G
+                </span>
               </div>
               <div className="flex-1 flex flex-col items-center">
-                <div className="w-full bg-[#00F0FF] rounded-t" style={{ height: '54%' }} />
-                <span className="text-[9px] text-[#9BA3B4] mt-1 font-mono-num">Mac-M4</span>
-                <span className="text-[9px] text-[#00F0FF] font-bold font-mono-num">68G</span>
+                <div
+                  className="w-full bg-[#00F0FF] rounded-t"
+                  style={{ height: "54%" }}
+                />
+                <span className="text-[9px] text-[#9BA3B4] mt-1 font-mono-num">
+                  Mac-M4
+                </span>
+                <span className="text-[9px] text-[#00F0FF] font-bold font-mono-num">
+                  68G
+                </span>
               </div>
               <div className="flex-1 flex flex-col items-center">
-                <div className="w-full bg-[#00FF88] rounded-t" style={{ height: '35%' }} />
-                <span className="text-[9px] text-[#9BA3B4] mt-1 font-mono-num">Buffer</span>
-                <span className="text-[9px] text-[#00FF88] font-bold font-mono-num">28G</span>
+                <div
+                  className="w-full bg-[#00FF88] rounded-t"
+                  style={{ height: "35%" }}
+                />
+                <span className="text-[9px] text-[#9BA3B4] mt-1 font-mono-num">
+                  Buffer
+                </span>
+                <span className="text-[9px] text-[#00FF88] font-bold font-mono-num">
+                  28G
+                </span>
               </div>
             </div>
 
@@ -254,13 +323,32 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                 <Zap size={13} className="text-[#00FF88]" />
                 <span>RoCE 200Gbps 网络吞吐</span>
               </span>
-              <span className="text-[10px] text-[#00FF88] font-mono-num">164.2 Gbps</span>
+              <span className="text-[10px] text-[#00FF88] font-mono-num">
+                164.2 Gbps
+              </span>
             </div>
 
             <div className="flex-1 py-1 relative">
-              <svg viewBox="0 0 200 100" className="w-full h-full overflow-visible">
-                <line x1="0" y1="25" x2="200" y2="25" stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />
-                <line x1="0" y1="60" x2="200" y2="60" stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />
+              <svg
+                viewBox="0 0 200 100"
+                className="w-full h-full overflow-visible"
+              >
+                <line
+                  x1="0"
+                  y1="25"
+                  x2="200"
+                  y2="25"
+                  stroke="rgba(255,255,255,0.08)"
+                  strokeDasharray="3 3"
+                />
+                <line
+                  x1="0"
+                  y1="60"
+                  x2="200"
+                  y2="60"
+                  stroke="rgba(255,255,255,0.08)"
+                  strokeDasharray="3 3"
+                />
 
                 <polygon
                   points="0,85 25,60 55,40 85,65 115,25 145,35 175,20 200,30 200,100 0,100"
@@ -295,13 +383,18 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                 <HardDrive size={13} className="text-[#FFD700]" />
                 <span>NAS IOPS 与存储池 (RAID1/6)</span>
               </span>
-              <span className="text-[10px] text-[#FFD700] font-mono-num">48,200 IOPS</span>
+              <span className="text-[10px] text-[#FFD700] font-mono-num">
+                48,200 IOPS
+              </span>
             </div>
 
             <div className="flex-1 flex items-center justify-around py-1">
               {/* Radial donut gauge for capacity */}
               <div className="relative w-24 h-24 flex items-center justify-center">
-                <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
+                <svg
+                  viewBox="0 0 36 36"
+                  className="w-full h-full transform -rotate-90"
+                >
                   <path
                     className="text-white/10"
                     strokeWidth="3.8"
@@ -319,7 +412,9 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                   />
                 </svg>
                 <div className="absolute text-center flex flex-col">
-                  <span className="font-mono-num font-extrabold text-xs text-white">78.4%</span>
+                  <span className="font-mono-num font-extrabold text-xs text-white">
+                    78.4%
+                  </span>
                   <span className="text-[8px] text-[#9BA3B4]">已用</span>
                 </div>
               </div>
@@ -366,28 +461,30 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
           {/* Alert Queue Items */}
           <div className="space-y-2.5 overflow-y-auto max-h-[72vh] pr-1">
             {alerts.map((alt) => {
-              const isCrit = alt.level === 'CRITICAL';
-              const isEvt = alt.level === 'EVENT';
+              const isCrit = alt.level === "CRITICAL"
+              const isEvt = alt.level === "EVENT"
 
               return (
                 <div
                   key={alt.id}
-                  className={`p-3 rounded-xl border text-xs transition-all ${isCrit
-                    ? 'bg-[#FF006E]/10 border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]'
-                    : isEvt
-                      ? 'bg-[#00F0FF]/10 border-[#00F0FF]/30'
-                      : 'bg-[#00FF88]/10 border-[#00FF88]/30'
-                    }`}
+                  className={`p-3 rounded-xl border text-xs transition-all ${
+                    isCrit
+                      ? "bg-[#FF006E]/10 border-[#FF006E]/60 shadow-[0_0_12px_rgba(255,0,110,0.25)]"
+                      : isEvt
+                        ? "bg-[#00F0FF]/10 border-[#00F0FF]/30"
+                        : "bg-[#00FF88]/10 border-[#00FF88]/30"
+                  }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center space-x-1.5">
                       <span
-                        className={`font-mono-num text-[9px] font-bold px-1.5 py-0.2 rounded ${isCrit
-                          ? 'bg-[#FF006E] text-white'
-                          : isEvt
-                            ? 'bg-[#00F0FF]/30 text-[#00F0FF]'
-                            : 'bg-[#00FF88]/30 text-[#00FF88]'
-                          }`}
+                        className={`font-mono-num text-[9px] font-bold px-1.5 py-0.2 rounded ${
+                          isCrit
+                            ? "bg-[#FF006E] text-white"
+                            : isEvt
+                              ? "bg-[#00F0FF]/30 text-[#00F0FF]"
+                              : "bg-[#00FF88]/30 text-[#00FF88]"
+                        }`}
                       >
                         {alt.level}
                       </span>
@@ -407,17 +504,18 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
                   <div className="flex items-center justify-end">
                     <button
                       onClick={() => handleAlertAction(alt)}
-                      className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1 cursor-pointer transition-all ${isCrit
-                        ? 'bg-[#FF006E] hover:bg-[#FF006E]/80 text-white shadow-[0_0_8px_#FF006E]'
-                        : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
-                        }`}
+                      className={`px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1 cursor-pointer transition-all ${
+                        isCrit
+                          ? "bg-[#FF006E] hover:bg-[#FF006E]/80 text-white shadow-[0_0_8px_#FF006E]"
+                          : "bg-white/10 hover:bg-white/20 text-white border border-white/20"
+                      }`}
                     >
                       <span>{alt.actionText}</span>
                       <ArrowUpRight size={11} />
                     </button>
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
         </div>
@@ -429,5 +527,5 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

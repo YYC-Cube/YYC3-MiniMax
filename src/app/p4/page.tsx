@@ -13,18 +13,18 @@
  * dependencies: P4OpsMonitoring, context/navigation
  */
 
-'use client'
+"use client"
 
-import { P4OpsMonitoring } from '@/views/P4OpsMonitoring'
-import { useNavigation } from '../../context/navigation'
+import { P4OpsMonitoring } from "@/views/P4OpsMonitoring"
+import { useNavigation } from "../../context/navigation"
 
 export default function Page() {
   const { navigate } = useNavigation()
   return (
     <P4OpsMonitoring
-      onNavigateToP5={() => navigate('P5')}
-      onNavigateToP2={() => navigate('P2')}
-      onNavigateToP3={() => navigate('P3')}
+      onNavigateToP5={() => navigate("P5")}
+      onNavigateToP2={() => navigate("P2")}
+      onNavigateToP3={() => navigate("P3")}
     />
   )
 }

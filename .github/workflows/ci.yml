@@ -66,8 +66,56 @@ jobs:
       - name: Unit tests with coverage gate (vitest)
         run: pnpm test:coverage
 
+      - name: Production build（60s 时间预算）
+        run: |
+          start=$(date +%s%3N)
+          pnpm build
+          end=$(date +%s%3N)
+          elapsed=$((end - start))
+          echo "构建耗时 ${elapsed}ms（预算 60000ms）"
+          if [ "$elapsed" -gt 60000 ]; then
+            echo "::error::构建超时间预算：${elapsed}ms > 60000ms"
+            exit 1
+          fi
+
+      - name: Bundle 预算门禁（评分卡 P1-2）
+        run: pnpm budget
+
+  lighthouse:
+    name: Lighthouse 体检（评分卡 P0-1 运行时预算）
+    needs: quality-gates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.34.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Production build
         run: pnpm build
+
+      - name: Lighthouse CI（性能/可访问性/最佳实践预算断言）
+        run: pnpm audit:lighthouse
+
+      - name: Upload Lighthouse 报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci
+          retention-days: 7
 
   deploy-pages:
     name: GitHub Pages 自动部署（minimax.yyc3.top）

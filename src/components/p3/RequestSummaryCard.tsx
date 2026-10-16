@@ -15,21 +15,26 @@
  */
 
 interface RequestSummaryCardProps {
-  activeStepIndex: number;
-  stageScale: number;
+  activeStepIndex: number
+  stageScale: number
 }
 
-export function RequestSummaryCard({ activeStepIndex, stageScale }: RequestSummaryCardProps) {
+export function RequestSummaryCard({
+  activeStepIndex,
+  stageScale,
+}: RequestSummaryCardProps) {
   return (
     <div
       className="absolute left-1/2 top-1/2 z-20 w-[260px] p-4 rounded-xl glass-panel border border-[#00F0FF]/40 shadow-[0_0_24px_rgba(0,240,255,0.3)] flex flex-col justify-between text-center"
       style={{
-        backgroundColor: 'rgba(10, 14, 24, 0.92)',
+        backgroundColor: "rgba(10, 14, 24, 0.92)",
         transform: `translate(-50%, -50%) scale(${Math.max(0.72, stageScale)})`,
       }}
     >
       <div className="flex items-center justify-between pb-2 border-b border-white/10">
-        <span className="text-[10px] text-[#9BA3B4] font-medium">当前调度工单</span>
+        <span className="text-[10px] text-[#9BA3B4] font-medium">
+          当前调度工单
+        </span>
         <span className="text-[10px] text-[#00FF88] font-bold font-mono-num flex items-center space-x-1">
           <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-ping" />
           <span>EXECUTING</span>
@@ -48,11 +53,15 @@ export function RequestSummaryCard({ activeStepIndex, stageScale }: RequestSumma
       <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px]">
         <div>
           <span className="text-[#9BA3B4] block">意图置信度</span>
-          <span className="text-[#00FF88] font-mono-num font-bold text-xs">98.6%</span>
+          <span className="text-[#00FF88] font-mono-num font-bold text-xs">
+            98.6%
+          </span>
         </div>
         <div>
           <span className="text-[#9BA3B4] block">合规风险标签</span>
-          <span className="text-[#00F0FF] font-mono-num font-bold text-xs">0-PII / LOW</span>
+          <span className="text-[#00F0FF] font-mono-num font-bold text-xs">
+            0-PII / LOW
+          </span>
         </div>
         <div>
           <span className="text-[#9BA3B4] block">当前执行步骤</span>
@@ -62,5 +71,5 @@ export function RequestSummaryCard({ activeStepIndex, stageScale }: RequestSumma
         </div>
       </div>
     </div>
-  );
+  )
 }

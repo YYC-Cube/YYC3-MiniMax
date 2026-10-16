@@ -14,40 +14,51 @@
  * exports: MessageList
  */
 
-import type { RefObject } from 'react';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
-import { AGENTS } from '../../data/agents';
-import type { AgentInfo, ChatMessage } from '../../types';
+import { ArrowUpRight, Sparkles } from "lucide-react"
+import type { RefObject } from "react"
+import { AGENTS } from "../../data/agents"
+import type { AgentInfo, ChatMessage } from "../../types"
+import { TakeoverCard } from "./TakeoverCard"
 
 interface MessageListProps {
-  messages: ChatMessage[];
-  selectedAgent: AgentInfo;
-  isThinking: boolean;
+  messages: ChatMessage[]
+  selectedAgent: AgentInfo
+  isThinking: boolean
   /** 滚动锚点（父层 hook 持有，用于新消息自动滚底） */
-  messagesEndRef: RefObject<HTMLDivElement | null>;
-  onNavigateToTask?: (stageId: string) => void;
+  messagesEndRef: RefObject<HTMLDivElement | null>
+  onNavigateToTask?: (stageId: string) => void
+  /** 人工接管裁决回调（PR7：rerun/rollback/abort → resume 续跑） */
+  onTakeoverDecision?: (messageId: string, action: "rerun" | "rollback" | "abort") => void
 }
 
-export function MessageList({ messages, selectedAgent, isThinking, messagesEndRef, onNavigateToTask }: MessageListProps) {
+export function MessageList({
+  messages,
+  selectedAgent,
+  isThinking,
+  messagesEndRef,
+  onNavigateToTask,
+  onTakeoverDecision,
+}: MessageListProps) {
   return (
     <div className="flex-1 p-3.5 overflow-y-auto space-y-3 bg-[#0A0A0A]/40">
       {messages.map((msg) => {
-        const isUser = msg.sender === 'user';
-        const senderAgent = msg.agentId ? AGENTS[msg.agentId] : selectedAgent;
+        const isUser = msg.sender === "user"
+        const senderAgent = msg.agentId ? AGENTS[msg.agentId] : selectedAgent
 
         return (
           <div
             key={msg.id}
-            className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} transition-all`}
-            style={{ animation: 'fade-in-up 0.2s ease-out' }}
+            className={`flex flex-col ${isUser ? "items-end" : "items-start"
+              } transition-all`}
+            style={{ animation: "fade-in-up 0.2s ease-out" }}
           >
             <div className="flex items-center space-x-1.5 mb-1 px-1">
               {!isUser && (
                 <span
                   className="text-[10px] font-bold font-mono-num"
-                  style={{ color: senderAgent?.color || '#00F0FF' }}
+                  style={{ color: senderAgent?.color || "#00F0FF" }}
                 >
-                  {senderAgent?.name || 'Agent'}
+                  {senderAgent?.name || "Agent"}
                 </span>
               )}
               <span className="text-[9px] text-[#9BA3B4]/60 font-mono-num">
@@ -57,23 +68,25 @@ export function MessageList({ messages, selectedAgent, isThinking, messagesEndRe
 
             <div
               className={`max-w-[90%] rounded-xl px-3 py-2 text-xs leading-relaxed select-text ${isUser
-                ? 'bg-gradient-to-r from-[#00F0FF]/25 to-[#BF00FF]/30 text-white border border-[#00F0FF]/40 rounded-br-sm'
-                : 'bg-[#101320] text-[#E0E4EC] border border-white/10 rounded-bl-sm shadow-md'
+                  ? "bg-gradient-to-r from-[#00F0FF]/25 to-[#BF00FF]/30 text-white border border-[#00F0FF]/40 rounded-br-sm"
+                  : "bg-[#101320] text-[#E0E4EC] border border-white/10 rounded-bl-sm shadow-md"
                 }`}
               style={{
-                borderLeft: !isUser ? `3px solid ${senderAgent?.color || '#00F0FF'}` : undefined,
+                borderLeft: !isUser
+                  ? `3px solid ${senderAgent?.color || "#00F0FF"}`
+                  : undefined,
               }}
             >
               {/* Render message with bold parsing */}
               <div className="whitespace-pre-wrap">
-                {msg.text.split('**').map((chunk, i) =>
+                {msg.text.split("**").map((chunk, i) =>
                   i % 2 === 1 ? (
                     <strong key={i} className="text-white font-semibold">
                       {chunk}
                     </strong>
                   ) : (
                     <span key={i}>{chunk}</span>
-                  )
+                  ),
                 )}
               </div>
 
@@ -82,7 +95,7 @@ export function MessageList({ messages, selectedAgent, isThinking, messagesEndRe
                 <div
                   onClick={() => {
                     if (onNavigateToTask) {
-                      onNavigateToTask(msg.referenceCard?.targetId || 'image');
+                      onNavigateToTask(msg.referenceCard?.targetId || "image")
                     }
                   }}
                   className="mt-2 p-2 rounded-lg bg-black/40 border border-[#00F0FF]/30 hover:border-[#00F0FF] transition-all cursor-pointer group flex items-center justify-between"
@@ -96,23 +109,37 @@ export function MessageList({ messages, selectedAgent, isThinking, messagesEndRe
                       {msg.referenceCard.desc}
                     </span>
                   </div>
-                  <ArrowUpRight size={13} className="text-[#00F0FF] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  <ArrowUpRight
+                    size={13}
+                    className="text-[#00F0FF] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                  />
                 </div>
+              )}
+
+              {/* Human Takeover Decision Card（PR7） */}
+              {msg.takeover && onTakeoverDecision && (
+                <TakeoverCard
+                  takeover={msg.takeover}
+                  messageId={msg.id}
+                  onDecision={onTakeoverDecision}
+                />
               )}
             </div>
           </div>
-        );
+        )
       })}
 
       {/* Thinking indicator */}
       {isThinking && (
         <div className="flex items-center space-x-2 text-xs text-[#00F0FF] bg-[#101320] px-3 py-1.5 rounded-lg border border-[#00F0FF]/30 w-fit">
           <div className="w-2 h-2 rounded-full bg-[#00F0FF] animate-ping" />
-          <span className="text-[11px] font-mono-num">{selectedAgent.name} 思考中...</span>
+          <span className="text-[11px] font-mono-num">
+            {selectedAgent.name} 思考中...
+          </span>
           <span className="animate-cursor">|</span>
         </div>
       )}
       <div ref={messagesEndRef} />
     </div>
-  );
+  )
 }

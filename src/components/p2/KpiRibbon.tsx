@@ -14,33 +14,33 @@
  * exports: KpiRibbon
  */
 
-import type { KPIMetric } from '../../types';
+import type { KPIMetric } from "../../types"
 
 interface KpiRibbonProps {
-  kpis: KPIMetric[];
+  kpis: KPIMetric[]
 }
 
 /** 计算 SVG 折线点集（viewBox 0 0 100 32） */
 function sparklinePoints(trend: number[]): { points: string; lastY: number } {
-  const min = Math.min(...trend);
-  const max = Math.max(...trend);
-  const range = max - min || 1;
+  const min = Math.min(...trend)
+  const max = Math.max(...trend)
+  const range = max - min || 1
   const points = trend
     .map((val, i) => {
-      const x = (i / (trend.length - 1)) * 100;
-      const y = 30 - ((val - min) / range) * 24;
-      return `${x},${y}`;
+      const x = (i / (trend.length - 1)) * 100
+      const y = 30 - ((val - min) / range) * 24
+      return `${x},${y}`
     })
-    .join(' ');
-  const lastY = 30 - ((trend[trend.length - 1] - min) / range) * 24;
-  return { points, lastY };
+    .join(" ")
+  const lastY = 30 - ((trend[trend.length - 1] - min) / range) * 24
+  return { points, lastY }
 }
 
 export function KpiRibbon({ kpis }: KpiRibbonProps) {
   return (
     <div className="h-24 grid grid-cols-6 gap-3.5">
       {kpis.map((kpi) => {
-        const { points, lastY } = sparklinePoints(kpi.trend);
+        const { points, lastY } = sparklinePoints(kpi.trend)
 
         return (
           <div
@@ -67,7 +67,9 @@ export function KpiRibbon({ kpis }: KpiRibbonProps) {
                 {kpi.value}
               </span>
               {kpi.unit && (
-                <span className="text-xs text-[#9BA3B4] font-medium">{kpi.unit}</span>
+                <span className="text-xs text-[#9BA3B4] font-medium">
+                  {kpi.unit}
+                </span>
               )}
             </div>
 
@@ -79,7 +81,10 @@ export function KpiRibbon({ kpis }: KpiRibbonProps) {
 
               {/* 7-day Mini Sparkline */}
               <div className="w-16 h-6">
-                <svg viewBox="0 0 100 32" className="w-full h-full overflow-visible">
+                <svg
+                  viewBox="0 0 100 32"
+                  className="w-full h-full overflow-visible"
+                >
                   <polyline
                     fill="none"
                     stroke={kpi.color}
@@ -87,18 +92,13 @@ export function KpiRibbon({ kpis }: KpiRibbonProps) {
                     points={points}
                     strokeLinecap="round"
                   />
-                  <circle
-                    cx="100"
-                    cy={lastY}
-                    r="3"
-                    fill={kpi.color}
-                  />
+                  <circle cx="100" cy={lastY} r="3" fill={kpi.color} />
                 </svg>
               </div>
             </div>
           </div>
-        );
+        )
       })}
     </div>
-  );
+  )
 }

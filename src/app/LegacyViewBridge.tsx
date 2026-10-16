@@ -14,11 +14,12 @@
  * exports: LegacyViewBridge
  */
 
-'use client'
+"use client"
+// 仅根路由需要桥接（子路由自身不存在 ?view= 语义）
 
-import { useEffect, Suspense } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { VIEW_IDS, VIEW_PATHS } from '../context/navigation'
+import { useEffect, Suspense } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { VIEW_IDS, VIEW_PATHS } from "../context/navigation"
 
 function Bridge() {
   const router = useRouter()
@@ -26,11 +27,10 @@ function Bridge() {
   const searchParams = useSearchParams()
 
   useEffect(() => {
-    // 仅根路由需要桥接（子路由自身不存在 ?view= 语义）
-    if (pathname !== '/') return
-    const view = searchParams.get('view')
+    if (pathname !== "/") return
+    const view = searchParams.get("view")
     if (view && (VIEW_IDS as string[]).includes(view)) {
-      router.replace(VIEW_PATHS[view as (typeof VIEW_IDS)[number]])
+      router.replace(VIEW_PATHS[(view as typeof VIEW_IDS[number])])
     }
   }, [pathname, searchParams, router])
 

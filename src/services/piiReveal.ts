@@ -35,20 +35,21 @@
  * exports: revealPiiRaw, PiiRawPayload
  */
 
-import { PII_AUDIT_LOGS } from '../data/qualityData';
-import { createTraceId, telemetry } from './telemetry';
+import { PII_AUDIT_LOGS } from "../data/qualityData"
+import { createTraceId, telemetry } from "./telemetry"
 
 export interface PiiRawPayload {
-  raw: string;
+  raw: string
 }
 
 /** 受控接口地址（构建时内联 NEXT_PUBLIC_ 前缀变量；按次读取便于测试注入） */
-const endpoint = (): string | undefined => process.env.NEXT_PUBLIC_PII_REVEAL_API;
+const endpoint = (): string | undefined =>
+  process.env.NEXT_PUBLIC_PII_REVEAL_API
 
 /** 离线降级快照：logId → 掩码文本（不含任何原文，可直接随包分发） */
 const MASKED_SNAPSHOTS = new Map<string, string>(
   PII_AUDIT_LOGS.map((log) => [log.id, log.maskedSnippet]),
-);
+)
 
 /**
  * SIM 演示原文映射（仅本地开发/演示用）。
@@ -58,11 +59,11 @@ const MASKED_SNAPSHOTS = new Map<string, string>(
  * - 生产环境必须删除本映射，原文只存在于后端受控存储，经受控接口按次下发。
  */
 const DEMO_RAW: Record<string, string> = {
-  'pii-1': '“这是我的保密专线：138-0000-0000，不要泄露。”',
-  'pii-2': 'API_ENDPOINT=<REDACTED>:8000; KEY=<REDACTED-API-KEY>',
-  'pii-3': '反派假证件登记号：110101199002299590',
-  'pii-4': '片尾字幕致谢含未公开内部研制编号: [编号已脱敏]',
-};
+  "pii-1": "“这是我的保密专线：138-0000-0000，不要泄露。”",
+  "pii-2": "API_ENDPOINT=<REDACTED>:8000; KEY=<REDACTED-API-KEY>",
+  "pii-3": "反派假证件登记号：110101199002299590",
+  "pii-4": "片尾字幕致谢含未公开内部研制编号: [编号已脱敏]",
+}
 
 /**
  * 按审计记录 ID 受控调取 PII 原文（异步契约，与生产接口签名一致）
@@ -72,41 +73,54 @@ const DEMO_RAW: Record<string, string> = {
  */
 export async function revealPiiRaw(logId: string): Promise<PiiRawPayload> {
   // 调取即审计：who/when 由遥测时间戳与用户态补全，target=logId
-  const traceId = createTraceId();
-  telemetry.audit('pii.reveal.request', logId, undefined, traceId);
+  const traceId = createTraceId()
+  telemetry.audit("pii.reveal.request", logId, undefined, traceId)
 
-  const api = endpoint();
+  const api = endpoint()
   if (api) {
-    const startedAt = Date.now();
-    let res: Response;
+    const startedAt = Date.now()
+    let res: Response
     try {
       res = await fetch(`${api}/${encodeURIComponent(logId)}`, {
-        credentials: 'include',
-        headers: { Accept: 'application/json' },
-      });
+        credentials: "include",
+        headers: { Accept: "application/json" },
+      })
     } catch {
       // 网络级失败（离线/DNS/网关未启动）：结构化告警 + 掩码快照降级，不缓存原文
-      telemetry.warn('pii.reveal.gateway_unreachable', { traceId, data: { logId } });
-      telemetry.metric('pii.reveal.available', 0, { traceId, tags: { logId } });
-      const masked = MASKED_SNAPSHOTS.get(logId);
+      telemetry.warn("pii.reveal.gateway_unreachable", {
+        traceId,
+        data: { logId },
+      })
+      telemetry.metric("pii.reveal.available", 0, { traceId, tags: { logId } })
+      const masked = MASKED_SNAPSHOTS.get(logId)
       if (masked !== undefined) {
-        return { raw: `${masked}（离线降级快照 · 网关不可达，恢复后可调取原文）` };
+        return {
+          raw: `${masked}（离线降级快照 · 网关不可达，恢复后可调取原文）`,
+        }
       }
-      throw new Error(`PII 网关不可达且无降级快照: ${logId}`);
+      throw new Error(`PII 网关不可达且无降级快照: ${logId}`)
     }
     if (!res.ok) {
-      telemetry.warn('pii.reveal.denied', { traceId, data: { logId, status: res.status } });
-      telemetry.metric('pii.reveal.available', 0, { traceId, tags: { logId, status: res.status } });
-      throw new Error(`PII 原文调取被拒绝（HTTP ${res.status}）`);
+      telemetry.warn("pii.reveal.denied", {
+        traceId,
+        data: { logId, status: res.status },
+      })
+      telemetry.metric("pii.reveal.available", 0, {
+        traceId,
+        tags: { logId, status: res.status },
+      })
+      throw new Error(`PII 原文调取被拒绝（HTTP ${res.status}）`)
     }
-    telemetry.metric('pii.reveal.latency_ms', Date.now() - startedAt, { traceId });
-    telemetry.metric('pii.reveal.available', 1, { traceId });
-    return (await res.json()) as PiiRawPayload;
+    telemetry.metric("pii.reveal.latency_ms", Date.now() - startedAt, {
+      traceId,
+    })
+    telemetry.metric("pii.reveal.available", 1, { traceId })
+    return (await res.json()) as PiiRawPayload
   }
 
   // SIM：微任务级异步，保持与生产路径一致的 await 语义
-  await Promise.resolve();
-  const demo = DEMO_RAW[logId];
-  if (!demo) throw new Error(`未知 PII 审计记录: ${logId}`);
-  return { raw: `${demo}（SIM 演示原文 · 生产环境由受控接口下发）` };
+  await Promise.resolve()
+  const demo = DEMO_RAW[logId]
+  if (!demo) throw new Error(`未知 PII 审计记录: ${logId}`)
+  return { raw: `${demo}（SIM 演示原文 · 生产环境由受控接口下发）` }
 }

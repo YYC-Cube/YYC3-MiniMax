@@ -14,32 +14,34 @@
  * exports: ClockCenter
  */
 
-const DAY_LABELS = ['日', '一', '二', '三', '四', '五', '六'] as const;
+const DAY_LABELS = ["日", "一", "二", "三", "四", "五", "六"] as const
 
 /** yy/mm/dd + 星期（周末粉色） */
-function formatDateInfo(date: Date): { dateStr: string; dayLabel: string; isWeekend: boolean } {
-  const yy = String(date.getFullYear()).slice(2);
-  const mm = String(date.getMonth() + 1).padStart(2, '0');
-  const dd = String(date.getDate()).padStart(2, '0');
-  const dayIdx = date.getDay(); // 0=日, 6=六
+function formatDateInfo(
+  date: Date,
+): { dateStr: string; dayLabel: string; isWeekend: boolean } {
+  const yy = String(date.getFullYear()).slice(2)
+  const mm = String(date.getMonth() + 1).padStart(2, "0")
+  const dd = String(date.getDate()).padStart(2, "0")
+  const dayIdx = date.getDay() // 0=日, 6=六
   return {
     dateStr: `${yy}/${mm}/${dd}`,
     dayLabel: DAY_LABELS[dayIdx],
     isWeekend: dayIdx === 0 || dayIdx === 6,
-  };
+  }
 }
 
 interface ClockCenterProps {
   /** 当前真实时间（1s 走时由父层驱动） */
-  time: Date;
+  time: Date
   /** 舞台缩放因子：900 viewBox 设计稿 → 实际渲染尺寸，用于字号自适应 */
-  scale: number;
-  onNavigateToP2: () => void;
+  scale: number
+  onNavigateToP2: () => void
 }
 
 export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
-  const timeStr = time.toLocaleTimeString('zh-CN', { hour12: false });
-  const { dateStr, dayLabel, isWeekend } = formatDateInfo(time);
+  const timeStr = time.toLocaleTimeString("zh-CN", { hour12: false })
+  const { dateStr, dayLabel, isWeekend } = formatDateInfo(time)
 
   return (
     <div className="absolute z-20 flex flex-col items-center pointer-events-none">
@@ -76,9 +78,9 @@ export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
         className="font-mono-num font-bold text-center whitespace-nowrap"
         style={{
           fontSize: Math.max(11, Math.round(18 * scale)),
-          color: '#00F0FF',
-          textShadow: '0 0 10px rgba(0,240,255,0.4)',
-          letterSpacing: '2px',
+          color: "#00F0FF",
+          textShadow: "0 0 10px rgba(0,240,255,0.4)",
+          letterSpacing: "2px",
         }}
       >
         {timeStr}
@@ -87,13 +89,13 @@ export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
       {/* yy/mm/dd + 星期（周末粉色霓虹） */}
       <div
         className="font-mono-num flex items-center justify-center gap-1 whitespace-nowrap"
-        style={{ marginTop: '3px' }}
+        style={{ marginTop: "3px" }}
       >
         <span
           style={{
             fontSize: Math.max(9, Math.round(12 * scale)),
-            color: 'rgba(0,240,255,0.4)',
-            letterSpacing: '1px',
+            color: "rgba(0,240,255,0.4)",
+            letterSpacing: "1px",
           }}
         >
           {dateStr}
@@ -101,14 +103,14 @@ export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
         <span
           style={{
             fontSize: Math.max(9, Math.round(12 * scale)),
-            color: isWeekend ? '#FF006E' : 'rgba(0,240,255,0.4)',
-            textShadow: isWeekend ? '0 0 6px rgba(255,0,110,0.4)' : 'none',
-            letterSpacing: '1px',
+            color: isWeekend ? "#FF006E" : "rgba(0,240,255,0.4)",
+            textShadow: isWeekend ? "0 0 6px rgba(255,0,110,0.4)" : "none",
+            letterSpacing: "1px",
           }}
         >
           {dayLabel}
         </span>
       </div>
     </div>
-  );
+  )
 }

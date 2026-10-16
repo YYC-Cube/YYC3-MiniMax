@@ -14,90 +14,103 @@
  * exports: P5QualitySecurity
  */
 
+import { CheckCircle2, Key, ShieldCheck, Sparkles } from "lucide-react"
+import React, { useState } from "react"
+import { GateCard } from "../components/p5/GateCard"
+import { PiiAuditPanel } from "../components/p5/PiiAuditPanel"
+import { QualityQueuePanel } from "../components/p5/QualityQueuePanel"
+import { ZongshiReportPanel } from "../components/p5/ZongshiReportPanel"
 import {
-  CheckCircle2,
-  Key,
-  ShieldCheck,
-  Sparkles
-} from 'lucide-react';
-import React, { useState } from 'react';
-import { GateCard } from '../components/p5/GateCard';
-import { PiiAuditPanel } from '../components/p5/PiiAuditPanel';
-import { QualityQueuePanel } from '../components/p5/QualityQueuePanel';
-import { ZongshiReportPanel } from '../components/p5/ZongshiReportPanel';
-import { AUDIT_STORYBOARDS, PII_AUDIT_LOGS, PIILogItem, StoryboardAuditItem } from '../data/qualityData';
-import { formatGateDecimal, formatGatePercent, GATES } from '../domain/constants';
-import { revealPiiRaw } from '../services/piiReveal';
-import { telemetry } from '../services/telemetry';
+  AUDIT_STORYBOARDS,
+  PII_AUDIT_LOGS,
+  PIILogItem,
+  StoryboardAuditItem,
+} from "../data/qualityData"
+import {
+  formatGateDecimal,
+  formatGatePercent,
+  GATES,
+} from "../domain/constants"
+import { revealPiiRaw } from "../services/piiReveal"
+import { telemetry } from "../services/telemetry"
 
 interface P5QualitySecurityProps {
-  onNavigateToP2: () => void;
-  onNavigateToP3: () => void;
+  onNavigateToP2: () => void
+  onNavigateToP3: () => void
 }
 
 export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
   onNavigateToP2,
   onNavigateToP3,
 }) => {
-  const [storyboards, setStoryboards] = useState<StoryboardAuditItem[]>(AUDIT_STORYBOARDS);
-  const [piiLogs] = useState<PIILogItem[]>(PII_AUDIT_LOGS);
-  const [shakingCardId, setShakingCardId] = useState<string | null>(null);
-  const [revealedPiiId, setRevealedPiiId] = useState<string | null>(null);
+  const [storyboards, setStoryboards] =
+    useState<StoryboardAuditItem[]>(AUDIT_STORYBOARDS)
+  const [piiLogs] = useState<PIILogItem[]>(PII_AUDIT_LOGS)
+  const [shakingCardId, setShakingCardId] = useState<string | null>(null)
+  const [revealedPiiId, setRevealedPiiId] = useState<string | null>(null)
   // 受控调取态：原文按次异步拉取（诊断 #21），缓存避免重复调取
-  const [revealedRaw, setRevealedRaw] = useState<Record<string, string>>({});
-  const [revealingPiiId, setRevealingPiiId] = useState<string | null>(null);
+  const [revealedRaw, setRevealedRaw] = useState<Record<string, string>>({})
+  const [revealingPiiId, setRevealingPiiId] = useState<string | null>(null)
 
   // 受控调取 PII 原文（异步契约与生产接口一致；审计由服务层自动留痕）
   const handleRevealPii = async (logId: string) => {
-    if (revealingPiiId) return;
-    setRevealingPiiId(logId);
+    if (revealingPiiId) return
+    setRevealingPiiId(logId)
     try {
-      const { raw } = await revealPiiRaw(logId);
-      setRevealedRaw((prev) => ({ ...prev, [logId]: raw }));
-      setRevealedPiiId(logId);
+      const { raw } = await revealPiiRaw(logId)
+      setRevealedRaw((prev) => ({ ...prev, [logId]: raw }))
+      setRevealedPiiId(logId)
     } catch {
       // 调取失败（拒绝/网络）：保持收起态，服务层已上报审计事件
-      setRevealedPiiId(null);
+      setRevealedPiiId(null)
     } finally {
-      setRevealingPiiId(null);
+      setRevealingPiiId(null)
     }
-  };
+  }
 
   // 展开/收起敏感原文对比（展开时触发受控调取）
   const togglePiiReveal = (logId: string) => {
     if (revealedPiiId === logId) {
-      setRevealedPiiId(null);
+      setRevealedPiiId(null)
     } else {
-      void handleRevealPii(logId);
+      void handleRevealPii(logId)
     }
-  };
+  }
 
   // Handle pass action (green checkmark pop)
   const handlePass = (id: string) => {
-    const item = storyboards.find((sb) => sb.id === id);
+    const item = storyboards.find((sb) => sb.id === id)
     // 审计留痕（诊断 #22）：质检操作可追溯 who/when/what/target
-    telemetry.audit('gate.pass', id, { shotCode: item?.shotCode, reviewRound: item?.reviewRound });
+    telemetry.audit("gate.pass", id, {
+      shotCode: item?.shotCode,
+      reviewRound: item?.reviewRound,
+    })
     setStoryboards((prev) =>
       prev.map((sb) =>
-        sb.id === id ? { ...sb, status: 'passed' as const } : sb
-      )
-    );
-  };
+        sb.id === id ? { ...sb, status: "passed" as const } : sb,
+      ),
+    )
+  }
 
   // Handle reject action (pink border shake 0.5s)
   const handleReject = (id: string) => {
-    const item = storyboards.find((sb) => sb.id === id);
-    telemetry.audit('gate.reject', id, { shotCode: item?.shotCode, reviewRound: item?.reviewRound });
-    setShakingCardId(id);
+    const item = storyboards.find((sb) => sb.id === id)
+    telemetry.audit("gate.reject", id, {
+      shotCode: item?.shotCode,
+      reviewRound: item?.reviewRound,
+    })
+    setShakingCardId(id)
     setTimeout(() => {
       setStoryboards((prev) =>
         prev.map((item) =>
-          item.id === id ? { ...item, status: 'rejected' as const, reviewRound: 2 } : item
-        )
-      );
-      setShakingCardId(null);
-    }, 500);
-  };
+          item.id === id
+            ? { ...item, status: "rejected" as const, reviewRound: 2 }
+            : item,
+        ),
+      )
+      setShakingCardId(null)
+    }, 500)
+  }
 
   return (
     <div className="w-full h-full p-5 flex flex-col space-y-4 overflow-hidden select-none">
@@ -165,5 +178,5 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
         />
       </div>
     </div>
-  );
-};
+  )
+}

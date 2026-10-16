@@ -11,102 +11,98 @@
  * 迁移注记：v2 起适配 App Router 多路由目录形态（trailingSlash）；
  * 旧版单页缓存键（v1）在 activate 阶段整体清除，防止「离线旧站」。
  */
-const SW_VERSION = 'yyc3-v2-nextjs';
-const SHELL_CACHE = `shell-${SW_VERSION}`;
-const ASSET_CACHE = `asset-${SW_VERSION}`;
+const SW_VERSION = "yyc3-v2-nextjs"
+const SHELL_CACHE = `shell-${SW_VERSION}`
+const ASSET_CACHE = `asset-${SW_VERSION}`
 const PRECACHE_URLS = [
-  '/',
-  '/p2/',
-  '/p3/',
-  '/p4/',
-  '/p5/',
-  '/404.html',
-  '/manifest.webmanifest',
-  '/yyc3-icons/brand/logo-transparent-256.png',
-  '/yyc3-icons/brand/icon-192.png',
-  '/yyc3-icons/brand/icon-512.png',
-  '/yyc3-icons/brand/icon-maskable-512.png',
-  '/yyc3-icons/brand/apple-touch-icon-180.png',
-  '/yyc3-icons/brand/favicon-32.png',
-];
+  "/",
+  "/p2/",
+  "/p3/",
+  "/p4/",
+  "/p5/",
+  "/404.html",
+  "/manifest.webmanifest",
+  "/yyc3-icons/brand/logo-transparent-256.png",
+  "/yyc3-icons/brand/icon-192.png",
+  "/yyc3-icons/brand/icon-512.png",
+  "/yyc3-icons/brand/icon-maskable-512.png",
+  "/yyc3-icons/brand/apple-touch-icon-180.png",
+  "/yyc3-icons/brand/favicon-32.png",
+]
 
 /** 导航 URL → 归一化缓存键（目录形态以尾斜杠为路由身份） */
 function navCacheKey(url) {
-  const path = url.pathname;
-  return path.endsWith('/') ? path : `${path}/`;
+  const path = url.pathname
+  return path.endsWith("/") ? path : `${path}/`
 }
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(SHELL_CACHE).then(async (cache) => {
+self.addEventListener("install", (event) => {
+  event.waitUntil(caches.open(SHELL_CACHE).then(async (cache) => {
       // 逐项预缓存（容错）：任一资源 404/网络抖动仅记录并跳过，绝不阻断 SW 安装，
       // 避免单个缺失资源导致离线首屏整体失效（降级为「缓存可得部分」）
       await Promise.all(
-        PRECACHE_URLS.map((url) =>
-          cache.add(url).catch((err) => {
-            console.warn('[sw] precache 跳过不可达资源:', url, err);
-          }),
-        ),
-      );
-      await self.skipWaiting();
-    }),
-  );
-});
+        PRECACHE_URLS.map((url) => cache.add(url).catch((err) => {
+            console.warn("[sw] precache 跳过不可达资源:", url, err)
+          })),
+      )
+      await self.skipWaiting()
+    }))
+})
 
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
       .then((keys) =>
         Promise.all(
-          keys.filter((k) => ![SHELL_CACHE, ASSET_CACHE].includes(k)).map((k) => caches.delete(k)),
+          keys
+            .filter((k) => ![SHELL_CACHE, ASSET_CACHE].includes(k))
+            .map((k) => caches.delete(k)),
         ),
       )
       .then(() => self.clients.claim()),
-  );
-});
+  )
+})
 
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
-  if (req.method !== 'GET') return;
-  const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return; // 跨域直连
+self.addEventListener("fetch", (event) => {
+  const req = event.request
+  if (req.method !== "GET") return
+  const url = new URL(req.url)
+  if (url.origin !== self.location.origin) return // 跨域直连
 
   // 导航：network-first → 本路由缓存 → 根外壳兜底
-  if (req.mode === 'navigate') {
-    const key = navCacheKey(url);
+  if (req.mode === "navigate") {
+    const key = navCacheKey(url)
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(SHELL_CACHE).then((c) => c.put(key, copy));
-          return res;
+          const copy = res.clone()
+          caches.open(SHELL_CACHE).then((c) => c.put(key, copy))
+          return res
         })
         .catch(() =>
           caches
             .match(key)
-            .then((r) => r || caches.match('/'))
-            .then((r) => r || caches.match('/index.html')),
+            .then((r) => r || caches.match("/"))
+            .then((r) => r || caches.match("/index.html")),
         ),
-    );
-    return;
+    )
+    return
   }
 
   // 静态资源：stale-while-revalidate（含 _next/static 内容哈希分包）
-  if (req.destination && req.destination !== '') {
-    event.respondWith(
-      caches.match(req).then((cached) => {
+  if (req.destination && req.destination !== "") {
+    event.respondWith(caches.match(req).then((cached) => {
         const network = fetch(req)
           .then((res) => {
             if (res && res.status === 200) {
-              const copy = res.clone();
-              caches.open(ASSET_CACHE).then((c) => c.put(req, copy));
+              const copy = res.clone()
+              caches.open(ASSET_CACHE).then((c) => c.put(req, copy))
             }
-            return res;
+            return res
           })
-          .catch(() => cached);
-        return cached || network;
-      }),
-    );
+          .catch(() => cached)
+        return cached || network
+      }))
   }
-});
+})

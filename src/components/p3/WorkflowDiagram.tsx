@@ -14,20 +14,20 @@
  * exports: WorkflowDiagram
  */
 
-import { GATES } from '../../domain/constants';
-import type { ReactNodePosition } from '../../hooks/useReActGeometry';
+import { GATES } from "../../domain/constants"
+import type { ReactNodePosition } from "../../hooks/useReActGeometry"
 
 interface WorkflowDiagramProps {
-  cx: number;
-  cy: number;
-  radius: number;
-  nodePositions: ReactNodePosition[];
-  activeStepIndex: number;
-  isLoopingBack: boolean;
-  loopbackPath: string;
-  step5Pos: { x: number; y: number };
-  loopbackControlX: number;
-  loopbackControlY: number;
+  cx: number
+  cy: number
+  radius: number
+  nodePositions: ReactNodePosition[]
+  activeStepIndex: number
+  isLoopingBack: boolean
+  loopbackPath: string
+  step5Pos: { x: number; y: number }
+  loopbackControlX: number
+  loopbackControlY: number
 }
 
 export function WorkflowDiagram({
@@ -70,8 +70,8 @@ export function WorkflowDiagram({
 
       {/* Connecting lines between sequential steps (0->1->...->8->0) */}
       {nodePositions.map((pos, i) => {
-        const nextPos = nodePositions[(i + 1) % 9];
-        const isPassing = i === activeStepIndex;
+        const nextPos = nodePositions[(i + 1) % 9]
+        const isPassing = i === activeStepIndex
 
         return (
           <g key={`seq-line-${i}`}>
@@ -80,16 +80,16 @@ export function WorkflowDiagram({
               y1={pos.y}
               x2={nextPos.x}
               y2={nextPos.y}
-              stroke={isPassing ? '#00F0FF' : '#BF00FF'}
-              strokeWidth={isPassing ? '2.5' : '1.5'}
-              strokeOpacity={isPassing ? '0.9' : '0.45'}
-              strokeDasharray={isPassing ? '6 4' : undefined}
+              stroke={isPassing ? "#00F0FF" : "#BF00FF"}
+              strokeWidth={isPassing ? "2.5" : "1.5"}
+              strokeOpacity={isPassing ? "0.9" : "0.45"}
+              strokeDasharray={isPassing ? "6 4" : undefined}
             />
 
             {/* Flowing particle along line */}
             <circle
               r="3"
-              fill={isPassing ? '#00F0FF' : '#BF00FF'}
+              fill={isPassing ? "#00F0FF" : "#BF00FF"}
               filter="url(#p3Glow)"
             >
               <animate
@@ -108,11 +108,11 @@ export function WorkflowDiagram({
               />
             </circle>
           </g>
-        );
+        )
       })}
 
       {/* Step 7 不达标 → 虚线红色回环到 Step 5 (标注"复检≤2轮") */}
-      <g className={isLoopingBack ? 'animate-pulse' : ''}>
+      <g className={isLoopingBack ? "animate-pulse" : ""}>
         <path
           d={loopbackPath}
           fill="none"
@@ -120,7 +120,7 @@ export function WorkflowDiagram({
           strokeWidth="2.5"
           strokeDasharray="6 4"
           filter="url(#p3Glow)"
-          opacity={isLoopingBack ? '1' : '0.7'}
+          opacity={isLoopingBack ? "1" : "0.7"}
         />
 
         {/* Loopback Arrowhead Marker */}
@@ -144,5 +144,5 @@ export function WorkflowDiagram({
         </text>
       </g>
     </svg>
-  );
+  )
 }

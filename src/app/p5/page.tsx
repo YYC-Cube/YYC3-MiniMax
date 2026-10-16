@@ -13,17 +13,17 @@
  * dependencies: P5QualitySecurity, context/navigation
  */
 
-'use client'
+"use client"
 
-import { P5QualitySecurity } from '@/views/P5QualitySecurity'
-import { useNavigation } from '../../context/navigation'
+import { P5QualitySecurity } from "@/views/P5QualitySecurity"
+import { useNavigation } from "../../context/navigation"
 
 export default function Page() {
   const { navigate } = useNavigation()
   return (
     <P5QualitySecurity
-      onNavigateToP2={() => navigate('P2')}
-      onNavigateToP3={() => navigate('P3')}
+      onNavigateToP2={() => navigate("P2")}
+      onNavigateToP3={() => navigate("P3")}
     />
   )
 }

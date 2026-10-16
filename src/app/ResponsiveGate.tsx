@@ -17,18 +17,18 @@
  * exports: useResponsiveGate
  */
 
-'use client'
-
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { useSyncExternalStore } from 'react'
+"use client"
 
 /** 空订阅：mounted 为纯挂载信号，无外部数据源 */
-const emptySubscribe = () => () => {}
 
 /** @returns [isMobile, mounted]：mounted=false 期间调用方必须按桌面分支渲染 */
+// 服务端/首帧快照 false（与 SSR 桌面渲染对齐），挂载后翻 true——等价原 setMounted effect，零级联渲染
+
+import { useMediaQuery } from "@/hooks/useMediaQuery"
+import { useSyncExternalStore } from "react"
+const emptySubscribe = () => () => {}
 export function useResponsiveGate(): [boolean, boolean] {
-  const isMobile = useMediaQuery('(max-width: 767px)')
-  // 服务端/首帧快照 false（与 SSR 桌面渲染对齐），挂载后翻 true——等价原 setMounted effect，零级联渲染
+  const isMobile = useMediaQuery("(max-width: 767px)")
   const mounted = useSyncExternalStore(
     emptySubscribe,
     () => true,

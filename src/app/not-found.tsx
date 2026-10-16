@@ -14,7 +14,7 @@
  * exports: default（Next 约定导出）
  */
 
-import Link from 'next/link'
+import Link from "next/link"
 
 export default function NotFound() {
   return (
@@ -22,7 +22,9 @@ export default function NotFound() {
       <div className="max-w-md w-full text-center space-y-4 rounded-2xl glass-panel border border-[#00F0FF]/40 p-8">
         <p className="text-5xl font-bold text-[#00F0FF] font-mono-num">404</p>
         <h2 className="text-base font-bold text-white">航线未收录</h2>
-        <p className="text-xs text-[#9BA3B4]">该视图不在指挥舱航图内，请返回中枢</p>
+        <p className="text-xs text-[#9BA3B4]">
+          该视图不在指挥舱航图内，请返回中枢
+        </p>
         <Link
           href="/"
           className="inline-block px-4 py-1.5 rounded-lg bg-[#00F0FF]/20 hover:bg-[#00F0FF]/30 text-[#00F0FF] font-bold text-xs border border-[#00F0FF]/50 transition-all"

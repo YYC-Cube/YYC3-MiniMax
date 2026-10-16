@@ -14,18 +14,23 @@
  * exports: StepDetailPanel
  */
 
-import { AlertTriangle, ArrowRight, Cpu } from 'lucide-react';
-import { GATES } from '../../domain/constants';
-import type { AgentId, ReActStep } from '../../types';
+import { AlertTriangle, ArrowRight, Cpu } from "lucide-react"
+import { GATES } from "../../domain/constants"
+import type { AgentId, ReActStep } from "../../types"
 
 interface StepDetailPanelProps {
-  currentStep: ReActStep;
-  selectedStepIndex: number;
-  activeStepIndex: number;
-  onSelectAgent: (id: AgentId) => void;
+  currentStep: ReActStep
+  selectedStepIndex: number
+  activeStepIndex: number
+  onSelectAgent: (id: AgentId) => void
 }
 
-export function StepDetailPanel({ currentStep, selectedStepIndex, activeStepIndex, onSelectAgent }: StepDetailPanelProps) {
+export function StepDetailPanel({
+  currentStep,
+  selectedStepIndex,
+  activeStepIndex,
+  onSelectAgent,
+}: StepDetailPanelProps) {
   return (
     <div className="w-full lg:w-[340px] xl:w-[380px] lg:shrink-0 rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 lg:p-5 flex flex-col gap-4 overflow-hidden">
       <div>
@@ -49,7 +54,7 @@ export function StepDetailPanel({ currentStep, selectedStepIndex, activeStepInde
           </div>
 
           <span className="px-2 py-0.5 rounded text-[10px] font-mono-num bg-white/5 border border-white/10 text-[#00FF88]">
-            {selectedStepIndex === activeStepIndex ? '● RUNNING' : 'COMPLETED'}
+            {selectedStepIndex === activeStepIndex ? "● RUNNING" : "COMPLETED"}
           </span>
         </div>
 
@@ -77,13 +82,17 @@ export function StepDetailPanel({ currentStep, selectedStepIndex, activeStepInde
         {/* Metrics Grid: Tokens in/out, Duration */}
         <div className="grid grid-cols-3 gap-2 mb-4">
           <div className="p-2.5 rounded-lg bg-black/30 border border-white/5">
-            <span className="text-[10px] text-[#9BA3B4] block">Input Tokens</span>
+            <span className="text-[10px] text-[#9BA3B4] block">
+              Input Tokens
+            </span>
             <span className="font-mono-num font-bold text-sm text-[#00F0FF] mt-0.5 block">
               {currentStep.tokensIn}
             </span>
           </div>
           <div className="p-2.5 rounded-lg bg-black/30 border border-white/5">
-            <span className="text-[10px] text-[#9BA3B4] block">Output Tokens</span>
+            <span className="text-[10px] text-[#9BA3B4] block">
+              Output Tokens
+            </span>
             <span className="font-mono-num font-bold text-sm text-[#BF00FF] mt-0.5 block">
               {currentStep.tokensOut}
             </span>
@@ -98,7 +107,9 @@ export function StepDetailPanel({ currentStep, selectedStepIndex, activeStepInde
 
         {/* Step Narrative Description */}
         <div className="mb-4">
-          <span className="text-[11px] text-[#9BA3B4] block mb-1">步骤动作规约:</span>
+          <span className="text-[11px] text-[#9BA3B4] block mb-1">
+            步骤动作规约:
+          </span>
           <p className="text-xs text-[#E0E4EC] leading-relaxed bg-[#0A0D17] p-3 rounded-lg border border-white/10">
             {currentStep.description}
           </p>
@@ -124,10 +135,10 @@ export function StepDetailPanel({ currentStep, selectedStepIndex, activeStepInde
           onClick={() => onSelectAgent(currentStep.agentId)}
           className="w-full py-2 rounded-xl bg-gradient-to-r from-[#00F0FF]/20 to-[#BF00FF]/20 hover:from-[#00F0FF]/30 hover:to-[#BF00FF]/30 text-white text-xs font-bold border border-[#00F0FF]/40 transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-md"
         >
-          <span>唤起 {currentStep.agentName.split('·')[0]} 交互会话</span>
+          <span>唤起 {currentStep.agentName.split("·")[0]} 交互会话</span>
           <ArrowRight size={13} />
         </button>
       </div>
     </div>
-  );
+  )
 }

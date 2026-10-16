@@ -13,123 +13,121 @@
  * exports: AgentId, AgentInfo, LogItem, PipelineStage, KPIMetric, ReActStep, OpsNode, ChatMessage 等
  */
 
-export type AgentId =
-  | 'tianshu' 
-  | 'shouhu' 
-  | 'zongshi' 
-  | 'lingyun' 
-  | 'qianxing' 
-  | 'wanwu' 
-  | 'xianzhi' 
-  | 'bole';
+export type AgentId = "tianshu" | "shouhu" | "zongshi" | "lingyun" | "qianxing" | "wanwu" | "xianzhi" | "bole"
 
 export interface AgentInfo {
-  id: AgentId;
-  name: string;
-  nick: string;
-  title: string;
-  color: string;
-  clockPosition: string; // e.g. "12:00", "01:30"
-  angleDeg: number; // 0deg at 12:00, 45, 90, 135, 180, 225, 270, 315
-  status: 'online' | 'speaking' | 'idle' | 'offline';
-  lastActive: string;
-  role: string;
-  description: string;
-  primaryStage: string;
-  model: string;
-  avatarSeed: string;
+  id: AgentId
+  name: string
+  nick: string
+  title: string
+  color: string
+  clockPosition: string // e.g. "12:00", "01:30"
+  angleDeg: number // 0deg at 12:00, 45, 90, 135, 180, 225, 270, 315
+  status: "online" | "speaking" | "idle" | "offline"
+  lastActive: string
+  role: string
+  description: string
+  primaryStage: string
+  model: string
+  avatarSeed: string
 }
 
-export type PipelineStageId = 
-  | 'novel' 
-  | 'storyboard' 
-  | 'image' 
-  | 'video' 
-  | 'render' 
-  | 'ops';
+export type PipelineStageId = "novel" | "storyboard" | "image" | "video" | "render" | "ops"
 
 export interface PipelineStage {
-  id: PipelineStageId;
-  stepNum: number;
-  name: string;
-  enName: string;
-  color: string;
-  status: 'ready' | 'running' | 'blocked' | 'completed';
-  activeTasks: number;
-  queueLength: number;
-  avgDuration: string;
-  passRate: string;
-  progress: number;
-  leadAgents: AgentId[];
-  keySchemaOrGate: string;
-  description: string;
+  id: PipelineStageId
+  stepNum: number
+  name: string
+  enName: string
+  color: string
+  status: "ready" | "running" | "blocked" | "completed"
+  activeTasks: number
+  queueLength: number
+  avgDuration: string
+  passRate: string
+  progress: number
+  leadAgents: AgentId[]
+  keySchemaOrGate: string
+  description: string
 }
 
 export interface ReActStep {
-  step: number;
-  name: string;
-  enName: string;
-  agentId: AgentId;
-  agentName: string;
-  color: string;
-  model: string;
-  tokensIn: number;
-  tokensOut: number;
-  durationMs: number;
-  description: string;
-  status: 'pending' | 'running' | 'completed' | 'loopback';
+  step: number
+  name: string
+  enName: string
+  agentId: AgentId
+  agentName: string
+  color: string
+  model: string
+  tokensIn: number
+  tokensOut: number
+  durationMs: number
+  description: string
+  status: "pending" | "running" | "completed" | "loopback"
 }
 
 export interface LogItem {
-  id: string;
-  timestamp: string;
-  agentId: AgentId;
-  agentName: string;
-  level: 'INFO' | 'SUCCESS' | 'WARN' | 'ERROR' | 'THINK' | 'ACT';
-  message: string;
-  tag?: string;
+  id: string
+  timestamp: string
+  agentId: AgentId
+  agentName: string
+  level: "INFO" | "SUCCESS" | "WARN" | "ERROR" | "THINK" | "ACT"
+  message: string
+  tag?: string
   /** 链路追踪 ID：live 模式透传网关值，sim 模式本地生成，用于前后端日志关联 */
-  traceId?: string;
+  traceId?: string
 }
 
 export interface KPIMetric {
-  id: string;
-  label: string;
-  value: string | number;
-  unit?: string;
-  target: string;
-  color: string;
-  trend: number[]; // 7-day trend values
-  changePct: string;
-  isPositive: boolean;
+  id: string
+  label: string
+  value: string | number
+  unit?: string
+  target: string
+  color: string
+  trend: number[] // 7-day trend values
+  changePct: string
+  isPositive: boolean
 }
 
 export interface OpsNode {
-  id: string;
-  name: string;
-  role: string;
-  hardware: string;
-  ip: string;
-  linkType: string;
-  status: 'online' | 'warn' | 'critical';
-  gpuUtil: number; // 0 - 100
-  memKind: 'vram' | 'storage'; // 指标语义：显存占用 / 存储容量池
-  memUsed: number; // 与 memUnit 同单位
-  memTotal: number;
-  memUnit: 'GB' | 'TB';
-  tempC: number;
+  id: string
+  name: string
+  role: string
+  hardware: string
+  ip: string
+  linkType: string
+  status: "online" | "warn" | "critical"
+  gpuUtil: number // 0 - 100
+  memKind: "vram" | "storage" // 指标语义：显存占用 / 存储容量池
+  memUsed: number // 与 memUnit 同单位
+  memTotal: number
+  memUnit: "GB" | "TB"
+  tempC: number
 }
 
 export interface ChatMessage {
-  id: string;
-  sender: 'user' | 'agent' | 'system';
-  agentId?: AgentId;
-  timestamp: string;
-  text: string;
+  id: string
+  sender: "user" | "agent" | "system"
+  agentId?: AgentId
+  timestamp: string
+  text: string
   referenceCard?: {
-    type: 'task' | 'stage' | 'image' | 'audit';
-    targetId: string;
-    title: string;
-    desc: string;
-  };
+    type: "task" | "stage" | "image" | "audit"
+    targetId: string
+    title: string
+    desc: string
+  }
+  /** 链路追踪 ID：编排任务回复/接管卡片与遥测事件可串联（PR6/PR7） */
+  traceId?: string
+  /** 人工接管卡片数据（复检耗尽时由编排回流渲染，三键裁决触发 resume） */
+  takeover?: {
+    taskId: string
+    traceId: string
+    step: number
+    attempt: number
+    reason: string
+    /** 裁决后置位：卡片按钮随之处于禁用态，防重复裁决 */
+    resolvedAction?: "rerun" | "rollback" | "abort"
+  }
 }

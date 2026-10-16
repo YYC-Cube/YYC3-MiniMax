@@ -17,21 +17,24 @@
  * exports: useMediaQuery
  */
 
-import { useCallback, useSyncExternalStore } from 'react';
+import { useCallback, useSyncExternalStore } from "react"
 
 /** 响应式媒体查询 Hook（移动端降级视图切换依据） */
 export function useMediaQuery(query: string): boolean {
   const subscribe = useCallback(
     (onChange: () => void) => {
-      const mql = window.matchMedia(query);
-      mql.addEventListener('change', onChange);
-      return () => mql.removeEventListener('change', onChange);
+      const mql = window.matchMedia(query)
+      mql.addEventListener("change", onChange)
+      return () => mql.removeEventListener("change", onChange)
     },
     [query],
-  );
+  )
 
-  const getSnapshot = useCallback(() => window.matchMedia(query).matches, [query]);
+  const getSnapshot = useCallback(
+    () => window.matchMedia(query).matches,
+    [query],
+  )
 
   // 服务端快照恒 false：与原实现 typeof window 兜底一致
-  return useSyncExternalStore(subscribe, getSnapshot, () => false);
+  return useSyncExternalStore(subscribe, getSnapshot, () => false)
 }

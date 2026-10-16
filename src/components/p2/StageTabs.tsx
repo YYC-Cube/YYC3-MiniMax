@@ -14,36 +14,45 @@
  * exports: StageTabs
  */
 
-import React from 'react';
-import type { PipelineStage, PipelineStageId } from '../../types';
-import { StatusLight } from './StatusLight';
+import React from "react"
+import type { PipelineStage, PipelineStageId } from "../../types"
+import { StatusLight } from "./StatusLight"
 
 interface StageTabsProps {
-  stages: PipelineStage[];
-  activeTabId: PipelineStageId;
-  onSelectStage: (id: PipelineStageId) => void;
+  stages: PipelineStage[]
+  activeTabId: PipelineStageId
+  onSelectStage: (id: PipelineStageId) => void
 }
 
-export function StageTabs({ stages, activeTabId, onSelectStage }: StageTabsProps) {
+export function StageTabs({
+  stages,
+  activeTabId,
+  onSelectStage,
+}: StageTabsProps) {
   return (
     <div className="grid grid-cols-6 gap-2 bg-[#0E111C]/90 p-1.5 rounded-xl border border-white/10 shadow-lg">
       {stages.map((stage) => {
-        const isActive = activeTabId === stage.id;
+        const isActive = activeTabId === stage.id
 
         return (
           <button
             key={stage.id}
             onClick={() => onSelectStage(stage.id)}
-            className={`relative py-2.5 px-3 rounded-lg flex items-center justify-between transition-all duration-200 cursor-pointer ${isActive
-              ? 'bg-gradient-to-r from-[#00F0FF]/15 to-[#BF00FF]/15 border border-[#00F0FF]/50 shadow-[0_0_12px_rgba(0,240,255,0.2)]'
-              : 'bg-black/20 hover:bg-white/5 border border-transparent'
-              } ${stage.status === 'blocked' ? 'animate-alert-flash' : ''}`}
+            className={`relative py-2.5 px-3 rounded-lg flex items-center justify-between transition-all duration-200 cursor-pointer ${
+              isActive
+                ? "bg-gradient-to-r from-[#00F0FF]/15 to-[#BF00FF]/15 border border-[#00F0FF]/50 shadow-[0_0_12px_rgba(0,240,255,0.2)]"
+                : "bg-black/20 hover:bg-white/5 border border-transparent"
+            } ${stage.status === "blocked" ? "animate-alert-flash" : ""}`}
           >
             <div className="flex items-center space-x-2 truncate">
               <span className="font-mono-num font-bold text-xs text-[#00F0FF] bg-[#00F0FF]/15 w-5 h-5 rounded flex items-center justify-center">
                 {stage.stepNum}
               </span>
-              <span className={`text-xs font-bold truncate ${isActive ? 'text-white' : 'text-[#9BA3B4]'}`}>
+              <span
+                className={`text-xs font-bold truncate ${
+                  isActive ? "text-white" : "text-[#9BA3B4]"
+                }`}
+              >
                 {stage.name}
               </span>
             </div>
@@ -60,8 +69,8 @@ export function StageTabs({ stages, activeTabId, onSelectStage }: StageTabsProps
               <div className="absolute bottom-0 left-2 right-2 h-[2.5px] bg-gradient-to-r from-[#00F0FF] via-[#BF00FF] to-[#FF006E] rounded-full shadow-[0_0_8px_#00F0FF]" />
             )}
           </button>
-        );
+        )
       })}
     </div>
-  );
+  )
 }

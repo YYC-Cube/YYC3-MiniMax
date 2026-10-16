@@ -15,29 +15,40 @@
  * exports: NavigationProvider, useNavigation, ViewId, VIEW_IDS, VIEW_PATHS
  */
 
-'use client'
-
-import type { PipelineStageId } from '@/types'
-import { useRouter } from 'next/navigation'
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react'
-
-export type ViewId = 'P1' | 'P2' | 'P3' | 'P4' | 'P5'
-export const VIEW_IDS: ViewId[] = ['P1', 'P2', 'P3', 'P4', 'P5']
+"use client"
 
 /** 视图 → 静态导出路由（trailingSlash 目录形态，与 next.config.ts 对齐） */
+
+/** W1 引用卡 → 指定路由并高亮流水线阶段卡 */
+
+/** 通用视图跳转（Header/Footer/各视图 CTA 统一入口） */
+
+import type { PipelineStageId } from "@/types"
+import { useRouter } from "next/navigation"
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react"
+
+export type ViewId = "P1" | "P2" | "P3" | "P4" | "P5"
+export const VIEW_IDS: ViewId[] = ["P1", "P2", "P3", "P4", "P5"]
 export const VIEW_PATHS: Record<ViewId, `/${string}`> = {
-  P1: '/',
-  P2: '/p2/',
-  P3: '/p3/',
-  P4: '/p4/',
-  P5: '/p5/',
+  P1: "/",
+  P2: "/p2/",
+  P3: "/p3/",
+  P4: "/p4/",
+  P5: "/p5/",
 }
 
 interface NavigationValue {
   highlightedStageId: PipelineStageId | null
   navigate: (view: ViewId) => void
   navigateToStage: (stageId: string) => void
-  scaleMode: 'fit' | '1080p'
+  scaleMode: "fit" | "1080p"
   toggleScaleMode: () => void
 }
 
@@ -45,10 +56,9 @@ const NavigationContext = createContext<NavigationValue | null>(null)
 
 export function NavigationProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
-  const [highlightedStageId, setHighlightedStageId] = useState<PipelineStageId | null>(null)
-  const [scaleMode, setScaleMode] = useState<'fit' | '1080p'>('fit')
-
-  /** W1 引用卡 → 指定路由并高亮流水线阶段卡 */
+  const [highlightedStageId, setHighlightedStageId] =
+    useState<PipelineStageId | null>(null)
+  const [scaleMode, setScaleMode] = useState<"fit" | "1080p">("fit")
   const navigateToStage = useCallback(
     (stageId: string) => {
       router.push(VIEW_PATHS.P2)
@@ -56,8 +66,6 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
     },
     [router],
   )
-
-  /** 通用视图跳转（Header/Footer/各视图 CTA 统一入口） */
   const navigate = useCallback(
     (view: ViewId) => {
       router.push(VIEW_PATHS[view])
@@ -66,19 +74,29 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
   )
 
   const toggleScaleMode = useCallback(() => {
-    setScaleMode((m) => (m === 'fit' ? '1080p' : 'fit'))
+    setScaleMode((m) => (m === "fit" ? "1080p" : "fit"))
   }, [])
 
   const value = useMemo<NavigationValue>(
-    () => ({ highlightedStageId, navigate, navigateToStage, scaleMode, toggleScaleMode }),
+    () => ({
+      highlightedStageId,
+      navigate,
+      navigateToStage,
+      scaleMode,
+      toggleScaleMode,
+    }),
     [highlightedStageId, navigate, navigateToStage, scaleMode, toggleScaleMode],
   )
 
-  return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>
+  return (
+    <NavigationContext.Provider value={value}>
+      {children}
+    </NavigationContext.Provider>
+  )
 }
 
 export function useNavigation(): NavigationValue {
   const ctx = useContext(NavigationContext)
-  if (!ctx) throw new Error('useNavigation 必须在 NavigationProvider 内使用')
+  if (!ctx) throw new Error("useNavigation 必须在 NavigationProvider 内使用")
   return ctx
 }

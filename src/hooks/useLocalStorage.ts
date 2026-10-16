@@ -19,33 +19,33 @@
  * exports: useLocalStorage
  */
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react"
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [stored, setStored] = useState<T>(() => {
     try {
-      const raw = localStorage.getItem(key);
-      return raw !== null ? (JSON.parse(raw) as T) : initialValue;
+      const raw = localStorage.getItem(key)
+      return raw !== null ? JSON.parse(raw) as T : initialValue
     } catch {
       // 坏 JSON / 存储禁用：回退初始值
-      return initialValue;
+      return initialValue
     }
-  });
+  })
 
   const setValue = useCallback(
     (value: T | ((prev: T) => T)) => {
       setStored((prev) => {
-        const next = value instanceof Function ? value(prev) : value;
+        const next = value instanceof Function ? value(prev) : value
         try {
-          localStorage.setItem(key, JSON.stringify(next));
+          localStorage.setItem(key, JSON.stringify(next))
         } catch {
           // 配额耗尽/隐私模式：放弃持久化，内存态继续工作
         }
-        return next;
-      });
+        return next
+      })
     },
     [key],
-  );
+  )
 
-  return [stored, setValue] as const;
+  return [stored, setValue] as const
 }

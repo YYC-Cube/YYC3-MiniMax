@@ -14,9 +14,17 @@
  * exports: WidgetProvider, useWidgetCommand, ExternalCommand
  */
 
-'use client'
+"use client"
 
-import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react"
 
 export interface ExternalCommand {
   id: number
@@ -35,7 +43,8 @@ const WidgetContext = createContext<WidgetValue | null>(null)
 
 export function WidgetProvider({ children }: { children: ReactNode }) {
   const [isWidgetOpen, setIsWidgetOpen] = useState(false)
-  const [externalCommand, setExternalCommand] = useState<ExternalCommand | null>(null)
+  const [externalCommand, setExternalCommand] =
+    useState<ExternalCommand | null>(null)
   const commandSeqRef = useRef(0)
 
   const clearExternalCommand = useCallback(() => setExternalCommand(null), [])
@@ -57,11 +66,13 @@ export function WidgetProvider({ children }: { children: ReactNode }) {
     [isWidgetOpen, externalCommand, clearExternalCommand, sendCommandToWidget],
   )
 
-  return <WidgetContext.Provider value={value}>{children}</WidgetContext.Provider>
+  return (
+    <WidgetContext.Provider value={value}>{children}</WidgetContext.Provider>
+  )
 }
 
 export function useWidgetCommand(): WidgetValue {
   const ctx = useContext(WidgetContext)
-  if (!ctx) throw new Error('useWidgetCommand 必须在 WidgetProvider 内使用')
+  if (!ctx) throw new Error("useWidgetCommand 必须在 WidgetProvider 内使用")
   return ctx
 }

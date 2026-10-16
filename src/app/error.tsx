@@ -14,10 +14,12 @@
  * exports: default（Next 约定导出）
  */
 
-'use client'
+"use client"
+// traceId 经微任务派发：telemetry 同步上报不变，UI 更新错开同步 setState
+// （React Compiler 规则：effect 内禁同步 setState 级联；错误边界为冷路径，延迟不可感知）
 
-import { useEffect, useState } from 'react'
-import { createTraceId, telemetry } from '@/services/telemetry'
+import { useEffect, useState } from "react"
+import { createTraceId, telemetry } from "@/services/telemetry"
 
 export default function Error({
   error,
@@ -30,13 +32,11 @@ export default function Error({
 
   useEffect(() => {
     const tid = createTraceId()
-    telemetry.error('ui.render_error', {
+    telemetry.error("ui.render_error", {
       message: error.message,
       traceId: tid,
-      data: { digest: error.digest, label: '路由段渲染异常' },
+      data: { digest: error.digest, label: "路由段渲染异常" },
     })
-    // traceId 经微任务派发：telemetry 同步上报不变，UI 更新错开同步 setState
-    // （React Compiler 规则：effect 内禁同步 setState 级联；错误边界为冷路径，延迟不可感知）
     let cancelled = false
     queueMicrotask(() => {
       if (!cancelled) setTraceId(tid)
@@ -55,7 +55,9 @@ export default function Error({
           </div>
           <div>
             <h3 className="text-base font-bold text-white">页面渲染异常</h3>
-            <p className="text-xs text-[#9BA3B4]">该视图已隔离，可返回首页恢复</p>
+            <p className="text-xs text-[#9BA3B4]">
+              该视图已隔离，可返回首页恢复
+            </p>
           </div>
         </div>
 
@@ -65,7 +67,8 @@ export default function Error({
 
         {traceId && (
           <p className="text-[10px] text-[#9BA3B4] font-mono-num">
-            traceId: <span className="text-[#00F0FF] select-text">{traceId}</span>
+            traceId:{" "}
+            <span className="text-[#00F0FF] select-text">{traceId}</span>
           </p>
         )}
 

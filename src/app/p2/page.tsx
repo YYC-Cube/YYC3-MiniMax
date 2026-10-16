@@ -13,10 +13,10 @@
  * dependencies: P2ProductionDesk, CommandCenterContext
  */
 
-'use client'
+"use client"
 
-import { P2ProductionDesk } from '@/views/P2ProductionDesk'
-import { useCommandCenter } from '../../context/CommandCenterContext'
+import { P2ProductionDesk } from "@/views/P2ProductionDesk"
+import { useCommandCenter } from "../../context/CommandCenterContext"
 
 export default function Page() {
   const {
@@ -33,7 +33,7 @@ export default function Page() {
         setIsWidgetOpen(true)
       }}
       onSendToWidget={sendCommandToWidget}
-      onNavigateToP5={() => navigate('P5')}
+      onNavigateToP5={() => navigate("P5")}
       highlightedStageId={highlightedStageId}
     />
   )

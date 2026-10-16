@@ -14,10 +14,16 @@
  * exports: AgentProvider, useActiveAgent
  */
 
-'use client'
+"use client"
 
-import type { AgentId } from '@/types'
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react'
+import type { AgentId } from "@/types"
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react"
 
 interface AgentValue {
   activeAgentId: AgentId
@@ -27,7 +33,7 @@ interface AgentValue {
 const AgentContext = createContext<AgentValue | null>(null)
 
 export function AgentProvider({ children }: { children: ReactNode }) {
-  const [activeAgentId, setActiveAgentId] = useState<AgentId>('tianshu')
+  const [activeAgentId, setActiveAgentId] = useState<AgentId>("tianshu")
 
   const value = useMemo<AgentValue>(
     () => ({ activeAgentId, setActiveAgentId }),
@@ -39,6 +45,6 @@ export function AgentProvider({ children }: { children: ReactNode }) {
 
 export function useActiveAgent(): AgentValue {
   const ctx = useContext(AgentContext)
-  if (!ctx) throw new Error('useActiveAgent 必须在 AgentProvider 内使用')
+  if (!ctx) throw new Error("useActiveAgent 必须在 AgentProvider 内使用")
   return ctx
 }
