@@ -31,10 +31,16 @@ import { ErrorBoundary } from "@/components/ErrorBoundary"
 import { Footer } from "@/components/Footer"
 import { Header } from "@/components/Header"
 import { UniversalWidget } from "@/components/UniversalWidget"
-import { MobileFallback } from "@/views/MobileFallback"
-import { useEffect, useState, type ReactNode } from "react"
+import { lazy, Suspense, useEffect, useState, type ReactNode } from "react"
 import { useCommandCenter } from "../context/CommandCenterContext"
 import { useResponsiveGate } from "./ResponsiveGate"
+
+// 移动降级分支懒加载（第八轮重实施；vitest 5.0.3 动态 import 死锁已在 5.0.5 修复，探针实证）：
+// <768px 挂载守卫后才渲染，chunk 按需拉取——桌面端每页阻塞 JS 实测 −14.5KB。
+// mounted 守卫保证静态导出预渲染期不执行，无 SSR 空壳影响。
+const MobileFallback = lazy(() =>
+  import("@/views/MobileFallback").then((m) => ({ default: m.MobileFallback })),
+)
 
 export function CommandShell({ children }: { children: ReactNode }) {
   const {
@@ -78,12 +84,14 @@ export function CommandShell({ children }: { children: ReactNode }) {
         <div className="noise-overlay" />
         <div className="relative z-10 w-full h-full">
           <ErrorBoundary key="mobile" label="移动视图">
-            <MobileFallback
-              onSelectAgent={(id) => {
-                setActiveAgentId(id)
-                setIsWidgetOpen(true)
-              }}
-            />
+            <Suspense fallback={null}>
+              <MobileFallback
+                onSelectAgent={(id) => {
+                  setActiveAgentId(id)
+                  setIsWidgetOpen(true)
+                }}
+              />
+            </Suspense>
           </ErrorBoundary>
         </div>
         <UniversalWidget

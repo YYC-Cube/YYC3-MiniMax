@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
  * file: bundle-budget.mjs
- * description: 构建产物预算门禁 v2 · 每页实际加载量口径（解析静态导出 HTML 的 JS 引用）
+ * description: 构建产物预算门禁 v2.1 · 每页实际加载量口径（解析静态导出 HTML 的 JS 引用）
  * author: YanYuCloudCube Team
- * version: v2.0.0
+ * version: v2.1.1
  * created: 2026-10-16
  * updated: 2026-10-16
  * status: active
@@ -21,11 +21,19 @@
   * 全站总和与单页体验脱钩（共享 vendor chunk 重复计入），且 848.9 / 850KB 余量 0.13 %
  * 已实质阻塞功能迭代；v2 改为「每页实际加载量」——解析各 index.html / 404.html 的
   * <script src> 与 <link as="script"> 引用去重求和，忠实反映用户单页 JS 下载数
+    * - 口径演进 v2→v2.1（2026-10-16，route 级分割评估衍生）：排除 `noModule` 脚本。
+    *   Next.js 对传统浏览器 polyfill（core-js，实测 112KB）以 <script nomodule> 注入，
+    *   ES module 兼容浏览器（Chrome 61+/Safari 11+/FF 60+）按规范不下载该脚本——
+    *   v2 将其计入每页实载，导致每页虚高 112KB（15.5%）、利用率 96.6% 系测量伪影。
+    *   v2.1 修复后基线按新口径重建（只收紧不放松，对齐棘轮语义）
     * - 全站总和降级为防膨胀护栏（MAX_TOTAL_GUARD，宽松值），不再作为体验门禁
     * - 棘轮语义：MAX_PAGE 基线取 2026-10-16 实测最大页并写死，只降不升；
     *   上调 = 显式修改本脚本 + 注释记录论证（对齐 coverage 棘轮先例）
     * - max-chunk 语义不变（单文件体积上限，防 vendor 膨胀）
-    */
+ * - 新增运行时依赖流程（v2.1.1 · 第八轮决策，冻结令放宽为流程约束）：
+ *   新依赖合入前必须 `node scripts/bundle-budget.mjs --observe --max-page=<现基线>` 预演，
+ *   将每页实载增量写入 PR/commit 说明并确认门禁判定通过——违者预算棘轮会阻断合入
+ */
 
 import { readFileSync, readdirSync, statSync } from "node:fs"
 import { extname, join, relative } from "node:path"
@@ -53,10 +61,12 @@ function argValue(flag, fallback) {
 }
 
 const OBSERVE = process.argv.includes("--observe")
-// 棘轮基线：v2 重建于 2026-10-16。实测最大页 /p2 = 723.6KB（五页共享度极高：
-// 全局壳/context/vendor 全在共享 chunk，页间差仅 ~23KB），基线 = 实测 + 3.6% 应急余量。
-// 注意：实测证明单页阻塞执行 JS 即 ~700KB+（11 refs 全为 script src，preload 仅 1），
-// 「每页口径」价值在真实可信而非解压——解压仍需供给侧优化（数据外置/依赖审计）。
+// 棘轮基线：v2 设立于 2026-10-16（723.6KB 实测 + 3.6% 应急余量）。
+// v2.1（2026-10-16，nomodule 口径修复）**保留 750KB 不重建**——修复揭示旧口径把
+// 传统浏览器 polyfill（112KB）计入实载，现代浏览器真实最大页仅 614.4KB（81.9% 利用率）；
+// 释放的 135.6KB 真实余量即 route 级分割评估的治理成果（该字节从未被现代浏览器下载）。
+// 750 基线继续阻断向历史包络回潮；>90%（675KB）仍有 ⚠逼近 提示；上调走「显式修改 + 论证」。
+// 注意：页间差仅 ~23KB（全局壳/context/vendor 全在共享 chunk），route 级分割已被框架用尽。
 const MAX_PAGE = argValue("--max-page", Math.round(750 * KB))
 const MAX_CHUNK = argValue("--max-chunk", Math.round(280 * KB))
 // 防膨胀护栏（宽松）：全站总和防无意识增长，非单页体验口径
@@ -77,12 +87,16 @@ function walk(dir, base = dir, acc = { html: [], js: new Map() }) {
   return acc
 }
 
-/** 解析页面 HTML 引用的 JS：script[src] + link[href][as=script]（去重，含预载 chunk） */
+/** 解析页面 HTML 引用的 JS：script[src]（排除 noModule）+ link[href][as=script]（去重） */
 function pageJsRefs(htmlPath) {
   const html = readFileSync(htmlPath, "utf8")
   const refs = new Set()
-  for (const m of html.matchAll(/<script[^>]*\ssrc="([^"]+\.js)"/g))
-    refs.add(m[1])
+  for (const m of html.matchAll(/<script\b[^>]*>/g)) {
+    // noModule（polyfill-nomodule）在 ES module 兼容浏览器中不下载，不计入实载
+    if (/\bnoModule\b/i.test(m[0])) continue
+    const src = /\ssrc="([^"]+\.js)"/.exec(m[0])
+    if (src) refs.add(src[1])
+  }
   for (const m of html.matchAll(/<link[^>]*\shref="([^"]+\.js)"[^>]*\sas="script"/g))
     refs.add(m[1])
   for (const m of html.matchAll(/<link[^>]*\sas="script"[^>]*\shref="([^"]+\.js)"/g))
@@ -131,7 +145,7 @@ const pages = [...new Map(
 const total = [...acc.js.values()].reduce((s, b) => s + b, 0)
 const biggest = Math.max(...acc.js.values())
 
-console.log("Bundle 预算门禁 v2（每页实际加载量口径）")
+console.log("Bundle 预算门禁 v2.1（每页实际加载量口径 · 排除 noModule）")
 for (const p of pages) {
   const mark =
     p.bytes > MAX_PAGE ? " ✗超基线" : p.bytes > MAX_PAGE * 0.9 ? " ⚠逼近" : ""

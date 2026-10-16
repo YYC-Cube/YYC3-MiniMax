@@ -309,19 +309,23 @@ describe("CommandShell 桌面编排（P1-P5 路由架构）", () => {
 
 describe("CommandShell 移动降级分支（<768px）", () => {
   beforeEach(() => {
+    // 顶层 beforeEach 开启 fake timers；MobileFallback 为 React.lazy 懒加载，
+    // 异步挂载的 findBy 轮询需真实 timers（vitest 5.0.5 死锁已修复，第八轮重实施）
+    vi.useRealTimers()
     media.flip(true)
   })
 
-  it("移动视图渲染：MobileFallback + W1 收起，桌面 Header/Footer 卸载", () => {
+  it("移动视图渲染：MobileFallback + W1 收起，桌面 Header/Footer 卸载", async () => {
     render(renderShell("P1"))
-    expect(screen.getByText(/点击成员即可唤醒 W1/)).toBeTruthy()
+    expect(await screen.findByText(/点击成员即可唤醒 W1/)).toBeTruthy()
     expect(screen.queryByText("P1 时钟环中心")).toBeNull()
     expect(screen.queryByText("/mnt/nas/yyc3_pipeline")).toBeNull()
     expect(screen.getByTitle("展开 Universal Agent AI 浮窗")).toBeTruthy()
   })
 
-  it("移动成员唤起 W1；引用卡在移动分支仅改内部状态（无桌面视图可切）", () => {
+  it("移动成员唤起 W1；引用卡在移动分支仅改内部状态（无桌面视图可切）", async () => {
     render(renderShell("P1"))
+    await screen.findByText(/点击成员即可唤醒 W1/)
     const memberBtns = screen.getAllByRole("button", { name: /·/ })
     fireEvent.click(memberBtns[0]!)
     expect(screen.getByText("UNIVERSAL AGENT WIDGET (W1)")).toBeTruthy()
@@ -331,9 +335,9 @@ describe("CommandShell 移动降级分支（<768px）", () => {
     expect(screen.getByText("UNIVERSAL AGENT WIDGET (W1)")).toBeTruthy()
   })
 
-  it("视口动态拉宽：移动 → 桌面实时切换（matchMedia change 订阅生效）", () => {
+  it("视口动态拉宽：移动 → 桌面实时切换（matchMedia change 订阅生效）", async () => {
     render(renderShell("P1"))
-    expect(screen.getByText(/点击成员即可唤醒 W1/)).toBeTruthy()
+    await screen.findByText(/点击成员即可唤醒 W1/)
 
     act(() => {
       media.flip(false)
