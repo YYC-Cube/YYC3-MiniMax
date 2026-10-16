@@ -33,6 +33,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { BrandMark } from "./BrandMark"
+import { LocaleToggle } from "./LocaleToggle"
 import { PwaInstallButton } from "./PwaInstallButton"
 
 interface HeaderProps {
@@ -131,6 +132,8 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Right: Live Clock & Global Status LEDs */}
       <div className="flex items-center space-x-5">
+        {/* 语言切换（zh-CN ⇄ en · localStorage 持久化 · 跨 Tab 同步） */}
+        <LocaleToggle />
         {/* PWA 安装入口（浏览器可安装时才出现） */}
         <PwaInstallButton />
         {/* Real-time Clock */}

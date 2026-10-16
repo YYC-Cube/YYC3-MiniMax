@@ -25,6 +25,7 @@ import {
 import React, { useEffect, useState } from "react"
 import { AgentAvatar } from "../components/AgentAvatar"
 import { BrandMark } from "../components/BrandMark"
+import { LocaleToggle } from "../components/LocaleToggle"
 import { PwaInstallButton } from "../components/PwaInstallButton"
 import { StatusPill } from "../components/StatusPill"
 import { AGENT_LIST } from "../data/agents"
@@ -57,12 +58,12 @@ const TABS: Array<{
   label: string
   icon: React.FC<{ size?: number; className?: string }>
 }> = [
-  { id: "family", label: "家族", icon: Sparkles },
-  { id: "pipeline", label: "流水线", icon: Workflow },
-  { id: "react", label: "ReAct", icon: GitBranch },
-  { id: "ops", label: "算力", icon: Cpu },
-  { id: "security", label: "质安", icon: ShieldAlert },
-]
+    { id: "family", label: "家族", icon: Sparkles },
+    { id: "pipeline", label: "流水线", icon: Workflow },
+    { id: "react", label: "ReAct", icon: GitBranch },
+    { id: "ops", label: "算力", icon: Cpu },
+    { id: "security", label: "质安", icon: ShieldAlert },
+  ]
 
 /**
  * 移动端降级视图（< 768px 自动切换）
@@ -116,6 +117,7 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({
             <span className="hidden min-[420px]:inline px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/40">
               PWA 移动版
             </span>
+            <LocaleToggle variant="mobile" />
             <PwaInstallButton variant="mobile" />
             {timeStr && (
               <span className="px-1.5 py-0.5 rounded text-[10px] font-mono-num font-bold text-[#00F0FF] bg-[#0A0A0A]/80 border border-[#00F0FF]/30">
@@ -135,11 +137,10 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({
               key={id}
               onClick={() => setTab(id)}
               aria-pressed={tab === id}
-              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-md text-[11px] font-medium whitespace-nowrap transition-colors ${
-                tab === id
+              className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-md text-[11px] font-medium whitespace-nowrap transition-colors ${tab === id
                   ? "bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/40"
                   : "text-[#9BA3B4] border border-transparent hover:text-white"
-              }`}
+                }`}
             >
               <Icon size={12} />
               <span>{label}</span>
@@ -228,14 +229,13 @@ export const MobileFallback: React.FC<MobileFallbackProps> = ({
                 className="flex items-center space-x-2.5 p-2.5 rounded-lg glass-panel border border-white/10"
               >
                 <span
-                  className={`w-8 h-8 shrink-0 rounded-md flex items-center justify-center text-[10px] font-black font-mono-num border ${
-                    step.status === "running"
+                  className={`w-8 h-8 shrink-0 rounded-md flex items-center justify-center text-[10px] font-black font-mono-num border ${step.status === "running"
                       ? "bg-[#00F0FF]/20 text-[#00F0FF] border-[#00F0FF]/50"
                       : step.status === "completed" ||
-                          step.status === "loopback"
+                        step.status === "loopback"
                         ? "bg-[#00FF88]/15 text-[#00FF88] border-[#00FF88]/40"
                         : "bg-white/5 text-[#5A6478] border-white/10"
-                  }`}
+                    }`}
                 >
                   {step.step}
                 </span>

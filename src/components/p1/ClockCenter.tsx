@@ -10,11 +10,12 @@
  *
  * brief: 中心 150px 慢旋环 + 102px 品牌核心（点击进 P2），下方 HH:MM:SS + yy/mm/dd 星期
  *
- * dependencies: react, services/i18n
+ * dependencies: react, hooks/useI18nLocale, services/i18n
  * exports: ClockCenter
  */
 
-import { formatWeekdayLabel, getI18n } from "../../services/i18n";
+import { useI18nLocale } from "../../hooks/useI18nLocale";
+import { formatWeekdayLabel } from "../../services/i18n";
 
 /** yy/mm/dd + 星期（周末粉色）；星期标签经 i18n 服务本地化（zh narrow 单字与历史版式一致） */
 function formatDateInfo(
@@ -42,7 +43,7 @@ interface ClockCenterProps {
 
 export function ClockCenter({ time, scale, onNavigateToP2 }: ClockCenterProps) {
   const timeStr = time.toLocaleTimeString("zh-CN", { hour12: false })
-  const { locale } = getI18n()
+  const { locale } = useI18nLocale()
   const { dateStr, dayLabel, isWeekend } = formatDateInfo(time, locale)
 
   return (

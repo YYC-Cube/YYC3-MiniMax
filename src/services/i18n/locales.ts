@@ -25,12 +25,20 @@ export const DICTIONARIES: Record<Locale, Dictionary> = {
       labelMobile: "安装",
       labelDesktop: "安装应用",
     },
+    locale: {
+      switchTitle: "切换界面语言至 English",
+      switchLabel: "EN",
+    },
   },
   en: {
     install: {
       title: "Install to desktop / home screen (offline-ready PWA)",
       labelMobile: "Install",
       labelDesktop: "Install App",
+    },
+    locale: {
+      switchTitle: "Switch interface language to 中文",
+      switchLabel: "中文",
     },
   },
 }

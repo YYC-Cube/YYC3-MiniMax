@@ -50,7 +50,7 @@ keywords:
 ![Static Export](https://img.shields.io/badge/Static%20Export-SSG-black?logo=nextdotjs&logoColor=white)
 
 [![YYC³ Quality Gates & Pages Deploy](https://github.com/YYC-Cube/YYC3-MiniMax/actions/workflows/ci.yml/badge.svg)](https://github.com/YYC-Cube/YYC3-MiniMax/actions/workflows/ci.yml)
-![Tests](https://img.shields.io/badge/tests-445%20passing-6E9F18?logo=vitest&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-454%20passing-6E9F18?logo=vitest&logoColor=white)
 ![Coverage](https://img.shields.io/badge/coverage-lines%2096%25-00C853?logo=vitest&logoColor=white)
 ![Bundle](https://img.shields.io/badge/bundle-%E2%89%A4850KB-2088FF)
 ![Code Style](https://img.shields.io/badge/code_style-oxfmt-4B5563)
@@ -94,6 +94,7 @@ keywords:
 - **真实走时时钟环**：P1 时分秒三针 1s ticking（真实角度公式/差异化长短配色）+ 中心数字时间与星期
 - **PWA 可安装**：manifest + Service Worker（离线开屏/外壳缓存）+ 多端品牌图标，桌面与移动一键安装
 - **双语就绪 i18n**：自研轻量核（键一致/插值/复数/嵌套/缺省回退），zh-CN 缺省 + en 全量键镜像，键一致性测试门禁
+- **运行时语言切换**：Header/移动端一键 zh-CN ⇄ en（useSyncExternalStore 外部 Store，localStorage 持久化 + 跨 Tab 同步 + `<html lang>` 联动，水合安全零闪烁降级）
 - **全端覆盖**：桌面指挥舱 + PWA 移动版五视图 + 全平台图标（Android/iOS/Web/macOS/watchOS）
 
 > 「**_Words Initiate Quadrants, Language Serves as Core for the Future_**」
@@ -141,7 +142,7 @@ keywords:
 | 实时流 | 原生 WebSocket + 指数退避重连 | `src/services/eventStream.ts`，无后端自动降级模拟 |
 | 编排 | 六边形架构（core 纯核 + workers 桥 + ports 契约 + adapters 适配器） | 8 Agent 六元组端口、ReAct-C 状态机、P0>P1>P2 队列、traceId 全链留痕、人工接管三键 |
 | 元信息 | Metadata / Viewport API | layout.tsx 声明式 head（12 项），robots index 已启用 |
-| 测试 | Vitest 5 + happy-dom + Testing Library | 数据/服务/组件/契约/编排/图标/i18n 七类单测（445 例 / 33 文件） |
+| 测试 | Vitest 5 + happy-dom + Testing Library | 数据/服务/组件/契约/编排/图标/i18n/语言切换 八类单测（454 例 / 34 文件） |
 | 质量 | tsc + eslint + knip + madge + dependency-cruiser + vitest 覆盖率 + bundle 预算 + gitleaks + Lighthouse | CI 全门禁（0 error；覆盖率棘轮 lines 96/branches 87/functions 93/statements 94，仅升不降） |
 
 ### 工程原则（五高五标五化落地）
