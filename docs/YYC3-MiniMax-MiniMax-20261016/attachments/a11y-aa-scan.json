@@ -1,0 +1,39 @@
+{
+  "p1": {
+    "violations": [
+      {
+        "r": 1,
+        "min": 3,
+        "fs": 30,
+        "t": "YYC³"
+      }
+    ],
+    "unnamed": [],
+    "tabUniqueStops": 22,
+    "tabStalled": true
+  },
+  "p2": {
+    "violations": [],
+    "unnamed": [],
+    "tabUniqueStops": 34,
+    "tabStalled": false
+  },
+  "p3": {
+    "violations": [],
+    "unnamed": [],
+    "tabUniqueStops": 15,
+    "tabStalled": true
+  },
+  "p4": {
+    "violations": [],
+    "unnamed": [],
+    "tabUniqueStops": 15,
+    "tabStalled": true
+  },
+  "p5": {
+    "violations": [],
+    "unnamed": [],
+    "tabUniqueStops": 12,
+    "tabStalled": true
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "p1": {
+    "pureBlack": 0,
+    "microFont": [],
+    "maxFont": {
+      "v": 32,
+      "t": "21:46:55"
+    },
+    "tightGaps": 2,
+    "bodyBg": "rgb(10, 22, 40)"
+  },
+  "p2": {
+    "pureBlack": 0,
+    "microFont": [],
+    "maxFont": {
+      "v": 32,
+      "t": "28"
+    },
+    "tightGaps": 7,
+    "bodyBg": "rgb(10, 22, 40)"
+  },
+  "p3": {
+    "pureBlack": 0,
+    "microFont": [],
+    "maxFont": {
+      "v": 18,
+      "t": "4"
+    },
+    "tightGaps": 2,
+    "bodyBg": "rgb(10, 22, 40)"
+  },
+  "p4": {
+    "pureBlack": 0,
+    "microFont": [],
+    "maxFont": {
+      "v": 32,
+      "t": "98.6"
+    },
+    "tightGaps": 1,
+    "bodyBg": "rgb(10, 22, 40)"
+  },
+  "p5": {
+    "pureBlack": 0,
+    "microFont": [],
+    "maxFont": {
+      "v": 48,
+      "t": "4/4"
+    },
+    "tightGaps": 5,
+    "bodyBg": "rgb(10, 22, 40)"
+  }
+}
