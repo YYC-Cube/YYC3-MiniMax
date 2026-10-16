@@ -15,7 +15,7 @@ import redis
 load_dotenv()
 
 # -------------------------- 全局配置 --------------------------
-REDIS_HOST = os.getenv("REDIS_HOST", "10.0.0.12")
+REDIS_HOST = os.getenv("REDIS_HOST", "192.0.2.12")  # RFC 5737 文档保留段，部署时经环境变量注入真实地址
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
 

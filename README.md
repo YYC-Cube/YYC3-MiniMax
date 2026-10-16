@@ -67,8 +67,6 @@ keywords:
 | ---------------------------| ----------------------------------------------------|
 | **GitHub 主仓**　　　　　 | <https://github.com/YYC-Cube/YYC3-MiniMax>　　　　 |
 | **线上地址（Pages）**　　 | <https://minimax.yyc3.top>（自定义域，HTTPS 强制） |
-| **内网镜像（GitBucket）** | <http://192.168.3.45:8080/git/root/YYC3-MiniMax>　 |
-| **远程名约定**　　　　　　| `github` = GitHub 主仓 · `origin` = 内网镜像　　　 |
 
 ---
 
@@ -340,7 +338,7 @@ GitHub Topics 命名规范：全小写、连字符分词、不超过 20 个标�
 | 场景 | `command-center` · `realtime-dashboard` · `data-visualization` · `svg-animation` |
 | 平台/品牌 | `github-pages` · `ai-family` · `yyc3` |
 
-> GitHub 仓库页 → About ⚙ 可查看已配置的 Topics；内网 GitBucket 镜像按同一清单手动同步。
+> GitHub 仓库页 → About ⚙ 可查看已配置的 Topics。
 
 ---
 

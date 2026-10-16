@@ -87,7 +87,6 @@ $ npm view next@latest peerDependencies.engines --json
 1. `feat/nextjs16` → `main` 合并（--no-ff 保留迁移史）
 2. push github main → CI 全绿 → Pages 自动部署 `out/`
 3. 线上复检：五路由 200 / 404.html / sw v2 生效 / 无 noindex
-4. 内网 GitBucket 恢复后 `git push origin main` 镜像同步
 
 ---
 **P0 状态**: ✅ 完成

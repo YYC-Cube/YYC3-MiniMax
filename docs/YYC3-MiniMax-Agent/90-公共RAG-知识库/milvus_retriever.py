@@ -22,13 +22,13 @@ class MilvusRetriever:
         # 连接Milvus（DGX1查询节点地址）
         connections.connect(
             alias="default",
-            host=os.getenv("MILVUS_HOST", "10.0.0.11"),
+            host=os.getenv("MILVUS_HOST", "192.0.2.11"),  # RFC 5737 文档保留段，部署时经环境变量注入真实地址
             port=int(os.getenv("MILVUS_PORT", 19530)),
         )
 
         # 初始化嵌入模型客户端（密钥经环境变量注入，不落字面量）
         self.embed_client = OpenAI(
-            base_url=os.getenv("DGX1_EMBED_URL", "http://10.0.0.11:8001/v1"),
+            base_url=os.getenv("DGX1_EMBED_URL", "http://192.0.2.11:8001/v1"),  # RFC 5737 占位
             api_key=os.getenv("DGX1_EMBED_API_KEY", ""),
         )
         self.embed_model_name = "nemotron-3-embed-1b"
