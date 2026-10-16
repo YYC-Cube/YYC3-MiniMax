@@ -33,3 +33,6 @@ docs/YYC3-团队通用-标准规范/
 # Python 编译产物（docs 内参考实现随附，非项目源码）
 __pycache__/
 *.pyc
+
+# 团队示例设计基准代码（本地参考，不入远程仓库）
+docs/AIFamilyPage.tsx
