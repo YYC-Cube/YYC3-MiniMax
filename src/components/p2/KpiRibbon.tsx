@@ -44,7 +44,7 @@ function sparklinePoints(trend: number[]): { points: string; lastY: number } {
 
 export function KpiRibbon({ kpis, onKpiClick }: KpiRibbonProps) {
   return (
-    <div className="h-24 grid grid-cols-6 gap-3.5">
+    <div className="h-24 grid grid-cols-6 gap-5">
       {kpis.map((kpi) => {
         const { points, lastY } = sparklinePoints(kpi.trend)
         const cardCls =

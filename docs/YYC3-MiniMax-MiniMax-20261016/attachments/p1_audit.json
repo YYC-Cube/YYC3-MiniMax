@@ -1,0 +1,108 @@
+{
+ "pureBlack": [],
+ "glows": [
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "hidden md:block absolute top-5 right-6 z-40 w-[280px] rounded-2xl glass-panel border borde"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "flex items-center space-x-3 px-4 py-2.5 rounded-xl glass-panel-hover glass-panel cursor-po"
+  }
+ ],
+ "textTiers": {
+  "14px/w800": 1,
+  "10px/w400": 16,
+  "10px/w500": 9,
+  "12px/w500": 5,
+  "10px/w700": 5,
+  "14px/w700": 1,
+  "11px/w400": 12,
+  "20px/w900": 1,
+  "8px/w500": 1,
+  "7px/w400": 1,
+  "18px/w700": 1,
+  "12px/w400": 2,
+  "12px/w700": 10,
+  "11px/w700": 5
+ },
+ "bigTexts": [],
+ "paddings": [
+  {
+   "radius": "3.35544e+07px",
+   "minPad": 0,
+   "w": 840,
+   "h": 840,
+   "cls": "w-[840px] h-[840px] rounded-full border border-white/5"
+  },
+  {
+   "radius": "3.35544e+07px",
+   "minPad": 0,
+   "w": 862,
+   "h": 862,
+   "cls": "absolute w-[680px] h-[680px] rounded-full border border-[#00"
+  },
+  {
+   "radius": "3.35544e+07px",
+   "minPad": 0,
+   "w": 590,
+   "h": 590,
+   "cls": "absolute w-[590px] h-[590px] rounded-full border border-[#BF"
+  },
+  {
+   "radius": "3.35544e+07px",
+   "minPad": 0,
+   "w": 360,
+   "h": 360,
+   "cls": "absolute w-[360px] h-[360px] rounded-full border border-[#00"
+  },
+  {
+   "radius": "3.35544e+07px",
+   "minPad": 0,
+   "w": 190,
+   "h": 190,
+   "cls": "absolute inset-0 rounded-full border border-[#00F0FF]/30 bor"
+  },
+  {
+   "radius": "16px",
+   "minPad": 16,
+   "w": 280,
+   "h": 187,
+   "cls": "hidden md:block absolute top-5 right-6 z-40 w-[280px] rounde"
+  }
+ ],
+ "tightGaps": [],
+ "containerGaps": [
+  {
+   "gap": "4px",
+   "n": 2,
+   "cls": "flex items-center gap-1 rounded-md border border-[#BF00FF]/4"
+  },
+  {
+   "gap": "4px",
+   "n": 2,
+   "cls": "font-mono-num flex items-center justify-center gap-1 whitesp"
+  }
+ ],
+ "svgFill": 9,
+ "svgStroke": 39,
+ "radii": {
+  "3.35544e+07px": 5,
+  "16px": 1
+ },
+ "hues": {
+  "cyan": 12,
+  "purple": 3,
+  "blue": 37,
+  "red": 10,
+  "green": 4,
+  "yellow": 1,
+  "magenta": 1
+ },
+ "pagePad": 0,
+ "cardSamples": []
+}

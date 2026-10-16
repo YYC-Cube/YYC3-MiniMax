@@ -19,33 +19,31 @@ interface GateOverviewCardProps {
   passed: number
   /** 门禁总数 */
   total: number
-  /** 今日放行率（演示数据与页面其余指标同源静态） */
-  releaseRate?: string
+  /** 放行率文案（由视图从质检队列实时推导，domain/gateEvaluation.releaseRatePct） */
+  releaseRate: string
 }
 
 export function GateOverviewCard({
   passed,
   total,
-  releaseRate = "96.2%",
+  releaseRate,
 }: GateOverviewCardProps) {
   const allPass = passed === total
 
   return (
     <div
-      className={`col-span-4 rounded-2xl glass-panel p-4 flex flex-col justify-between border ${
-        allPass
+      className={`col-span-4 rounded-2xl glass-panel p-4 flex flex-col justify-between border ${allPass
           ? "border-[#00FF88]/50 shadow-[0_0_16px_rgba(0,255,136,0.15)]"
           : "border-[#FF006E]/60 animate-alert-flash"
-      }`}
+        }`}
     >
       <span className="text-xs text-[#9BA3B4] font-medium">
         门禁总览 · 全链路放行判定
       </span>
       <div className="flex items-baseline space-x-2">
         <span
-          className={`font-mono-num font-black text-5xl leading-none ${
-            allPass ? "text-[#00FF88]" : "text-[#FF006E]"
-          }`}
+          className={`font-mono-num font-black text-5xl leading-none ${allPass ? "text-[#00FF88]" : "text-[#FF006E]"
+            }`}
         >
           {passed}/{total}
         </span>

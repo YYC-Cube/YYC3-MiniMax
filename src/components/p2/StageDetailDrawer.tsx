@@ -110,7 +110,7 @@ export function StageDetailDrawer({ stage, onClose }: StageDetailDrawerProps) {
                 </span>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="p-3 rounded-lg bg-[#0A1628]/40 border border-white/10 text-center">
                   <span className="text-[10px] text-[#9BA3B4] block">
                     主导执行 Agent

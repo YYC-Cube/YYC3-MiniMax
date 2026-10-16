@@ -21,17 +21,14 @@ import { GateOverviewCard } from "../components/p5/GateOverviewCard"
 import { PiiAuditPanel } from "../components/p5/PiiAuditPanel"
 import { QualityQueuePanel } from "../components/p5/QualityQueuePanel"
 import { ZongshiReportPanel } from "../components/p5/ZongshiReportPanel"
+import { KPI_METRICS } from "../data/pipeline"
 import {
   AUDIT_STORYBOARDS,
   PII_AUDIT_LOGS,
-  PIILogItem,
   StoryboardAuditItem,
 } from "../data/qualityData"
-import {
-  formatGateDecimal,
-  formatGatePercent,
-  GATES,
-} from "../domain/constants"
+import { GATES } from "../domain/constants"
+import { evaluateQualityGates, releaseRatePct } from "../domain/gateEvaluation"
 import { revealPiiRaw } from "../services/piiReveal"
 import { telemetry } from "../services/telemetry"
 
@@ -49,7 +46,7 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
 }) => {
   const [storyboards, setStoryboards] =
     useState<StoryboardAuditItem[]>(AUDIT_STORYBOARDS)
-  const [piiLogs] = useState<PIILogItem[]>(PII_AUDIT_LOGS)
+  const [piiLogs] = useState(PII_AUDIT_LOGS)
   const [shakingCardId, setShakingCardId] = useState<string | null>(null)
   const [revealedPiiId, setRevealedPiiId] = useState<string | null>(null)
   // 受控调取态：原文按次异步拉取（诊断 #21），缓存避免重复调取
@@ -124,22 +121,41 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
     }, 500)
   }
 
+  // 四道门禁真实数据判定（domain 单一事实源）：1/2 源 KPI 实时值、3 源 PII 审计、4 为 gitleaks 上报位
+  const kpiNum = (id: string) => {
+    const kpi = KPI_METRICS.find((k) => k.id === id)
+    const v = kpi?.value
+    return typeof v === "number" ? v : parseFloat(v ?? "0")
+  }
+  const gateResults = evaluateQualityGates({
+    consistency: kpiNum("consistency_score"),
+    syncnet: kpiNum("syncnet_score"),
+    piiBypassCount: piiLogs.filter((l) => l.action === "放行").length,
+    secretIncidents: 0, // gitleaks 周期门禁上报位：运行时无事故数据源，零事件即达标
+  })
+  const passedCount = gateResults.filter((g) => g.passed).length
+  // 放行率随质检队列实时联动（passed/total，队列操作即刻刷新）
+  const releaseRate = releaseRatePct(
+    storyboards.filter((s) => s.status === "passed").length,
+    storyboards.length,
+  )
+
   return (
     <div className="w-full h-full p-6 flex flex-col space-y-6 overflow-hidden select-none">
       {/* 1. TOP GATE OVERVIEW: 总览主卡（H1 锚点）+ 4 Medium GateCards */}
       <div className="grid grid-cols-12 gap-6">
         {/* Gate 0: 全链路放行判定（主焦大卡） */}
-        <GateOverviewCard passed={4} total={4} />
+        <GateOverviewCard passed={passedCount} total={gateResults.length} releaseRate={releaseRate} />
 
         {/* Gate 1-4（中卡层级，收进 8 栏次级区） */}
-        <div className="col-span-8 grid grid-cols-4 gap-4 min-w-0">
+        <div className="col-span-8 grid grid-cols-4 gap-5 min-w-0">
           {/* Gate 1: 一致性 >= 80% */}
           <GateCard
             icon={CheckCircle2}
             variant="green"
             title="门禁 1 · 角色面部一致性"
-            value="91.4%"
-            threshold={`${formatGatePercent(GATES.CONSISTENCY)} 达标`}
+            value={gateResults[0].value}
+            threshold={gateResults[0].threshold}
           />
 
           {/* Gate 2: SyncNet >= 0.75 */}
@@ -147,8 +163,8 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
             icon={Sparkles}
             variant="cyan"
             title="门禁 2 · SyncNet 唇形吻合"
-            value="0.84"
-            threshold={`${formatGateDecimal(GATES.SYNCNET)} 达标`}
+            value={gateResults[1].value}
+            threshold={gateResults[1].threshold}
           />
 
           {/* Gate 3: PII 0 泄漏 */}
@@ -156,8 +172,8 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
             icon={ShieldCheck}
             variant="green"
             title="门禁 3 · 敏感隐私实体"
-            value="0 泄漏"
-            threshold="三级脱敏拦截"
+            value={gateResults[2].value}
+            threshold={gateResults[2].threshold}
           />
 
           {/* Gate 4: 密钥零入库 */}
@@ -165,8 +181,8 @@ export const P5QualitySecurity: React.FC<P5QualitySecurityProps> = ({
             icon={Key}
             variant="purple"
             title="门禁 4 · 密钥凭据防泄漏"
-            value="零入库"
-            threshold="AST 静态阻断"
+            value={gateResults[3].value}
+            threshold={gateResults[3].threshold}
           />
         </div>
       </div>

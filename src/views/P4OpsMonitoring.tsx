@@ -193,7 +193,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
       {/* MIDDLE COLUMN (4 Cols): 2x2 Telemetry Charts */}
       <div className="col-span-4 flex flex-col justify-between space-y-3">
         {/* Row 1: Chart 1 (GPU Utilization Timelines) + Chart 2 (VRAM Bar Allocation) */}
-        <div className="flex-1 grid grid-cols-2 gap-3 min-h-[240px]">
+        <div className="flex-1 grid grid-cols-2 gap-4 min-h-[240px]">
           {/* Chart 1: Dual DGX GPU Util Timelines */}
           <div className="rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between">
             <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-sm">
@@ -333,7 +333,7 @@ export const P4OpsMonitoring: React.FC<P4OpsMonitoringProps> = ({
         </div>
 
         {/* Row 2: Chart 3 (RoCE 200Gbps Throughput) + Chart 4 (NAS IOPS & Capacity Pie) */}
-        <div className="flex-1 grid grid-cols-2 gap-3 min-h-[240px]">
+        <div className="flex-1 grid grid-cols-2 gap-4 min-h-[240px]">
           {/* Chart 3: RoCE 200Gbps Network Throughput */}
           <div className="rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between">
             <div className="flex items-center justify-between pb-1.5 border-b border-white/10 text-sm">

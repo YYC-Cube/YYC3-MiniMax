@@ -1,0 +1,254 @@
+{
+ "pureBlack": [],
+ "glows": [
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "rounded-xl glass-panel p-3.5 flex items-center justify-between border border-[#00FF88]/40 "
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "rounded-xl glass-panel p-3.5 flex items-center justify-between border border-[#00F0FF]/40 "
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "rounded-xl glass-panel p-3.5 flex items-center justify-between border border-[#00FF88]/40 "
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "rounded-xl glass-panel p-3.5 flex items-center justify-between border border-[#BF00FF]/40 "
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "col-span-4 rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 flex flex-col justify-be"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "col-span-4 rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 flex flex-col justify-be"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "col-span-4 rounded-2xl glass-panel border border-[#00F0FF]/30 p-4 flex flex-col justify-be"
+  }
+ ],
+ "textTiers": {
+  "14px/w800": 5,
+  "10px/w400": 47,
+  "10px/w500": 5,
+  "12px/w500": 5,
+  "10px/w700": 20,
+  "14px/w700": 1,
+  "11px/w400": 16,
+  "20px/w800": 4,
+  "12px/w700": 10,
+  "9px/w400": 32,
+  "9px/w700": 4,
+  "11px/w700": 2
+ },
+ "bigTexts": [],
+ "paddings": [
+  {
+   "radius": "12px",
+   "minPad": 14,
+   "w": 458,
+   "h": 73,
+   "cls": "rounded-xl glass-panel p-3.5 flex items-center justify-betwe"
+  },
+  {
+   "radius": "12px",
+   "minPad": 14,
+   "w": 458,
+   "h": 73,
+   "cls": "rounded-xl glass-panel p-3.5 flex items-center justify-betwe"
+  },
+  {
+   "radius": "12px",
+   "minPad": 14,
+   "w": 458,
+   "h": 73,
+   "cls": "rounded-xl glass-panel p-3.5 flex items-center justify-betwe"
+  },
+  {
+   "radius": "12px",
+   "minPad": 14,
+   "w": 458,
+   "h": 73,
+   "cls": "rounded-xl glass-panel p-3.5 flex items-center justify-betwe"
+  },
+  {
+   "radius": "16px",
+   "minPad": 16,
+   "w": 616,
+   "h": 859,
+   "cls": "col-span-4 rounded-2xl glass-panel border border-[#00F0FF]/3"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 171,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border transition-all  border-[#"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 171,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border transition-all  border-[#"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 206,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border transition-all  border-[#"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 171,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border transition-all  border-[#"
+  },
+  {
+   "radius": "16px",
+   "minPad": 16,
+   "w": 616,
+   "h": 859,
+   "cls": "col-span-4 rounded-2xl glass-panel border border-[#00F0FF]/3"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 139,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border border-white/10 hover:bor"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 139,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border border-white/10 hover:bor"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 139,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border border-white/10 hover:bor"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 139,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border border-white/10 hover:bor"
+  },
+  {
+   "radius": "16px",
+   "minPad": 16,
+   "w": 616,
+   "h": 859,
+   "cls": "col-span-4 rounded-2xl glass-panel border border-[#00F0FF]/3"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 107,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border border-white/10 space-y-2"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 86,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border border-white/10 space-y-2"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 578,
+   "h": 109,
+   "cls": "p-3 rounded-xl bg-[#0A0D18] border border-white/10 space-y-2"
+  }
+ ],
+ "tightGaps": [],
+ "containerGaps": [
+  {
+   "gap": "4px",
+   "n": 2,
+   "cls": "flex items-center gap-1 rounded-md border border-[#BF00FF]/4"
+  },
+  {
+   "gap": "16px",
+   "n": 4,
+   "cls": "grid grid-cols-4 gap-4"
+  },
+  {
+   "gap": "16px",
+   "n": 3,
+   "cls": "flex-1 grid grid-cols-12 gap-4 min-h-0"
+  },
+  {
+   "gap": "4px",
+   "n": 3,
+   "cls": "grid grid-cols-3 gap-1 bg-black/40 p-2 rounded-lg border bor"
+  },
+  {
+   "gap": "4px",
+   "n": 3,
+   "cls": "grid grid-cols-3 gap-1 bg-black/40 p-2 rounded-lg border bor"
+  },
+  {
+   "gap": "4px",
+   "n": 3,
+   "cls": "grid grid-cols-3 gap-1 bg-black/40 p-2 rounded-lg border bor"
+  },
+  {
+   "gap": "4px",
+   "n": 3,
+   "cls": "grid grid-cols-3 gap-1 bg-black/40 p-2 rounded-lg border bor"
+  },
+  {
+   "gap": "10px",
+   "n": 2,
+   "cls": "flex items-center gap-2.5"
+  },
+  {
+   "gap": "8px",
+   "n": 4,
+   "cls": "grid grid-cols-2 gap-2 text-[10px] font-mono-num"
+  }
+ ],
+ "svgFill": 0,
+ "svgStroke": 38,
+ "radii": {
+  "12px": 15,
+  "16px": 3
+ },
+ "hues": {
+  "cyan": 13,
+  "purple": 4,
+  "blue": 67,
+  "red": 36,
+  "green": 20,
+  "magenta": 10
+ },
+ "pagePad": 0,
+ "cardSamples": []
+}

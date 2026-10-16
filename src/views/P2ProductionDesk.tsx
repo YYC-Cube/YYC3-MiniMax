@@ -139,7 +139,7 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
   }
 
   return (
-    <div className="w-full h-full flex flex-col p-5 space-y-4 overflow-hidden select-none">
+    <div className="w-full h-full flex flex-col p-6 space-y-6 overflow-hidden select-none">
       {/* 1. TOP 6-STAGE NAVIGATION TABS */}
       <StageTabs
         stages={stages}
@@ -148,10 +148,10 @@ export const P2ProductionDesk: React.FC<P2ProductionDeskProps> = ({
       />
 
       {/* 2. MIDDLE MAIN AREA: 6-Stage Pipeline Array (Left) + Real-time Event Stream (Right) */}
-      <div className="flex-1 grid grid-cols-12 gap-4 min-h-0">
+      <div className="flex-1 grid grid-cols-12 gap-6 min-h-0">
         {/* Left 9 Columns: Six Stage Cards Array + Simulation Trigger Bar */}
         <div className="col-span-9 flex flex-col justify-between overflow-x-auto overflow-y-hidden pb-1">
-          <div className="grid grid-cols-6 gap-3.5 h-full items-center relative">
+          <div className="grid grid-cols-6 gap-4 h-full items-center relative">
             {stages.map((stage, idx) => (
               <StageCard
                 key={stage.id}

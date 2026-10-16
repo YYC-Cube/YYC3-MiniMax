@@ -1,0 +1,224 @@
+{
+ "pureBlack": [],
+ "glows": [
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "col-span-4 flex flex-col justify-between rounded-2xl glass-panel border border-[#00F0FF]/3"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex flex-col justify-between"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "col-span-3 flex flex-col justify-between rounded-2xl glass-panel border border-[#00F0FF]/3"
+  }
+ ],
+ "textTiers": {
+  "14px/w800": 1,
+  "10px/w400": 28,
+  "10px/w500": 1,
+  "12px/w500": 5,
+  "10px/w700": 21,
+  "14px/w700": 1,
+  "11px/w400": 15,
+  "12px/w700": 10,
+  "9px/w400": 26,
+  "9px/w700": 9,
+  "12px/w800": 1,
+  "8px/w400": 1,
+  "11px/w700": 2
+ },
+ "bigTexts": [],
+ "paddings": [
+  {
+   "radius": "16px",
+   "minPad": 16,
+   "w": 616,
+   "h": 948,
+   "cls": "col-span-4 flex flex-col justify-between rounded-2xl glass-p"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 582,
+   "h": 118,
+   "cls": "p-3 rounded-xl bg-[#0A0D18]/90 border transition-all border-"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 582,
+   "h": 118,
+   "cls": "p-3 rounded-xl bg-[#0A0D18]/90 border transition-all border-"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 582,
+   "h": 118,
+   "cls": "p-3 rounded-xl bg-[#0A0D18]/90 border transition-all border-"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 582,
+   "h": 118,
+   "cls": "p-3 rounded-xl bg-[#0A0D18]/90 border transition-all border-"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 381,
+   "h": 468,
+   "cls": "rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex f"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 381,
+   "h": 468,
+   "cls": "rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex f"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 381,
+   "h": 468,
+   "cls": "rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex f"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 381,
+   "h": 468,
+   "cls": "rounded-xl glass-panel border border-[#00F0FF]/25 p-3 flex f"
+  },
+  {
+   "radius": "16px",
+   "minPad": 16,
+   "w": 458,
+   "h": 948,
+   "cls": "col-span-3 flex flex-col justify-between rounded-2xl glass-p"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 420,
+   "h": 95,
+   "cls": "p-3 rounded-xl border text-xs transition-all bg-[#FF006E]/10"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 420,
+   "h": 95,
+   "cls": "p-3 rounded-xl border text-xs transition-all bg-[#FF006E]/10"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 420,
+   "h": 97,
+   "cls": "p-3 rounded-xl border text-xs transition-all bg-[#00F0FF]/10"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 420,
+   "h": 97,
+   "cls": "p-3 rounded-xl border text-xs transition-all bg-[#00F0FF]/10"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 420,
+   "h": 97,
+   "cls": "p-3 rounded-xl border text-xs transition-all bg-[#00FF88]/10"
+  }
+ ],
+ "tightGaps": [],
+ "containerGaps": [
+  {
+   "gap": "4px",
+   "n": 2,
+   "cls": "flex items-center gap-1 rounded-md border border-[#BF00FF]/4"
+  },
+  {
+   "gap": "16px",
+   "n": 3,
+   "cls": "w-full h-full p-5 grid grid-cols-12 gap-4 overflow-hidden se"
+  },
+  {
+   "gap": "8px",
+   "n": 2,
+   "cls": "grid grid-cols-2 gap-2 text-[10px]"
+  },
+  {
+   "gap": "8px",
+   "n": 2,
+   "cls": "grid grid-cols-2 gap-2 text-[10px]"
+  },
+  {
+   "gap": "8px",
+   "n": 2,
+   "cls": "grid grid-cols-2 gap-2 text-[10px]"
+  },
+  {
+   "gap": "8px",
+   "n": 2,
+   "cls": "grid grid-cols-2 gap-2 text-[10px]"
+  },
+  {
+   "gap": "12px",
+   "n": 2,
+   "cls": "flex-1 grid grid-cols-2 gap-3 min-h-[240px]"
+  },
+  {
+   "gap": "12px",
+   "n": 2,
+   "cls": "flex-1 grid grid-cols-2 gap-3 min-h-[240px]"
+  }
+ ],
+ "svgFill": 1,
+ "svgStroke": 30,
+ "radii": {
+  "16px": 2,
+  "12px": 13
+ },
+ "hues": {
+  "cyan": 11,
+  "purple": 7,
+  "blue": 51,
+  "red": 24,
+  "green": 12,
+  "yellow": 2,
+  "magenta": 4
+ },
+ "pagePad": 0,
+ "cardSamples": []
+}

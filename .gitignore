@@ -36,3 +36,6 @@ __pycache__/
 
 # 团队示例设计基准代码（本地参考，不入远程仓库）
 docs/AIFamilyPage.tsx
+
+# 视觉审计截图（15MB 本地留档，不入库；量化证据见同目录 *.json）
+docs/YYC3-MiniMax-MiniMax-20261016/attachments/*.png

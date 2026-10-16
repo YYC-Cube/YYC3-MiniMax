@@ -1,0 +1,137 @@
+{
+ "pureBlack": [],
+ "glows": [
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "flex-1 min-h-0 flex flex-col justify-between rounded-2xl glass-panel border border-[#00F0F"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "absolute left-1/2 top-1/2 z-20 w-[260px] p-4 rounded-xl glass-panel border border-[#00F0FF"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 30,
+   "alpha": 255,
+   "cls": "w-16 h-16 rounded-full flex items-center justify-center relative p-[2px] transition-all du"
+  },
+  {
+   "prop": "boxShadow",
+   "blur": 32,
+   "alpha": 0.45,
+   "cls": "w-full lg:w-[340px] xl:w-[380px] lg:shrink-0 rounded-2xl glass-panel border border-[#00F0F"
+  }
+ ],
+ "textTiers": {
+  "14px/w800": 1,
+  "10px/w400": 11,
+  "10px/w500": 2,
+  "12px/w500": 7,
+  "10px/w700": 14,
+  "14px/w700": 6,
+  "11px/w400": 14,
+  "12px/w700": 7,
+  "12px/w400": 7,
+  "10px/w800": 9,
+  "9px/w400": 9,
+  "11px/w700": 2
+ },
+ "bigTexts": [],
+ "paddings": [
+  {
+   "radius": "16px",
+   "minPad": 20,
+   "w": 1480,
+   "h": 948,
+   "cls": "flex-1 min-h-0 flex flex-col justify-between rounded-2xl gla"
+  },
+  {
+   "radius": "12px",
+   "minPad": 16,
+   "w": 275,
+   "h": 172,
+   "cls": "absolute left-1/2 top-1/2 z-20 w-[260px] p-4 rounded-xl glas"
+  },
+  {
+   "radius": "16px",
+   "minPad": 20,
+   "w": 380,
+   "h": 948,
+   "cls": "w-full lg:w-[340px] xl:w-[380px] lg:shrink-0 rounded-2xl gla"
+  },
+  {
+   "radius": "12px",
+   "minPad": 12,
+   "w": 338,
+   "h": 76,
+   "cls": "p-3 rounded-xl bg-black/40 border border-white/10 mb-4"
+  },
+  {
+   "radius": "8px",
+   "minPad": 12,
+   "w": 338,
+   "h": 65,
+   "cls": "text-xs text-[#E0E4EC] leading-relaxed bg-[#0A0D17] p-3 roun"
+  }
+ ],
+ "tightGaps": [],
+ "containerGaps": [
+  {
+   "gap": "4px",
+   "n": 2,
+   "cls": "flex items-center gap-1 rounded-md border border-[#BF00FF]/4"
+  },
+  {
+   "gap": "20px",
+   "n": 2,
+   "cls": "w-full h-full flex flex-col lg:flex-row p-3 lg:p-5 gap-3 lg:"
+  },
+  {
+   "gap": "8px",
+   "n": 2,
+   "cls": "flex flex-wrap items-center justify-between gap-2 pb-3 borde"
+  },
+  {
+   "gap": "8px",
+   "n": 2,
+   "cls": "flex flex-wrap items-center justify-between gap-2 pt-3 borde"
+  },
+  {
+   "gap": "4px 8px",
+   "n": 4,
+   "cls": "flex flex-wrap items-center gap-x-2 gap-y-1"
+  },
+  {
+   "gap": "16px",
+   "n": 2,
+   "cls": "w-full lg:w-[340px] xl:w-[380px] lg:shrink-0 rounded-2xl gla"
+  },
+  {
+   "gap": "8px",
+   "n": 3,
+   "cls": "grid grid-cols-3 gap-2 mb-4"
+  }
+ ],
+ "svgFill": 10,
+ "svgStroke": 41,
+ "radii": {
+  "16px": 2,
+  "12px": 2,
+  "8px": 1
+ },
+ "hues": {
+  "cyan": 12,
+  "purple": 5,
+  "blue": 37,
+  "red": 12,
+  "green": 9,
+  "magenta": 2,
+  "yellow": 1
+ },
+ "pagePad": 0,
+ "cardSamples": []
+}
