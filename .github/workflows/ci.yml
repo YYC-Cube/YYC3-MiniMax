@@ -129,6 +129,8 @@ jobs:
           name: lighthouse-reports
           path: .lighthouseci
           retention-days: 7
+          # .lighthouseci 为点前缀隐藏目录，upload-artifact@v4 默认排除隐藏文件
+          include-hidden-files: true
 
   deploy-pages:
     name: GitHub Pages 自动部署（minimax.yyc3.top）
