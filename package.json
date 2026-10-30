@@ -88,7 +88,7 @@
     "eslint": "^10.12.0",
     "eslint-config-next": "^16.4.1",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "happy-dom": "^20.14.6",
+    "happy-dom": "^21.0.4",
     "knip": "^6.41.0",
     "madge": "^8.0.0",
     "oxfmt": "^0.2.0",
